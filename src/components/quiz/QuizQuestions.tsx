@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { QuizSelections } from "@/types/quiz";
+import QuizTabContent from "./QuizTabContent";
 
 interface QuizQuestionsProps {
   selections: QuizSelections;
@@ -17,8 +18,10 @@ const QuizQuestions = ({
   handleSelection,
   getRecommendations,
 }: QuizQuestionsProps) => {
-  const isSelected = (category: keyof QuizSelections, item: string) =>
-    selections[category].includes(item);
+  const makeupTypes = ["Foundation", "Concealer", "Blush", "Bronzer", "Eyeshadow", "Mascara", "Lipstick"];
+  const skinTypes = ["Dry", "Oily", "Combination", "Normal", "Sensitive"];
+  const skinConcerns = ["Acne", "Redness", "Dark spots", "Fine lines", "Uneven texture"];
+  const preferences = ["Fragrance-free", "Oil-free", "Non-comedogenic", "Natural ingredients", "Cruelty-free"];
 
   return (
     <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
@@ -29,83 +32,37 @@ const QuizQuestions = ({
         <TabsTrigger value="preferences" className="flex-1">Preferences</TabsTrigger>
       </TabsList>
 
-      <TabsContent value="makeup" className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {["Foundation", "Concealer", "Blush", "Bronzer", "Eyeshadow", "Mascara", "Lipstick"].map((type) => (
-            <Button
-              key={type}
-              variant={isSelected("makeupType", type) ? "default" : "outline"}
-              className={`h-auto p-4 text-left justify-start ${
-                isSelected("makeupType", type)
-                  ? "bg-mai-coral text-white hover:bg-mai-coral/90"
-                  : "hover:bg-mai-rose/20"
-              }`}
-              onClick={() => handleSelection("makeupType", type)}
-            >
-              {type}
-            </Button>
-          ))}
-        </div>
-      </TabsContent>
+      <QuizTabContent
+        value="makeup"
+        options={makeupTypes}
+        category="makeupType"
+        selections={selections}
+        handleSelection={handleSelection}
+      />
 
-      <TabsContent value="type" className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {["Dry", "Oily", "Combination", "Normal", "Sensitive"].map((type) => (
-            <Button
-              key={type}
-              variant={isSelected("skinType", type) ? "default" : "outline"}
-              className={`h-auto p-4 text-left justify-start ${
-                isSelected("skinType", type)
-                  ? "bg-mai-coral text-white hover:bg-mai-coral/90"
-                  : "hover:bg-mai-rose/20"
-              }`}
-              onClick={() => handleSelection("skinType", type)}
-            >
-              {type}
-            </Button>
-          ))}
-        </div>
-      </TabsContent>
+      <QuizTabContent
+        value="type"
+        options={skinTypes}
+        category="skinType"
+        selections={selections}
+        handleSelection={handleSelection}
+      />
 
-      <TabsContent value="concerns" className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {["Acne", "Redness", "Dark spots", "Fine lines", "Uneven texture"].map((concern) => (
-            <Button
-              key={concern}
-              variant={isSelected("concerns", concern) ? "default" : "outline"}
-              className={`h-auto p-4 text-left justify-start ${
-                isSelected("concerns", concern)
-                  ? "bg-mai-coral text-white hover:bg-mai-coral/90"
-                  : "hover:bg-mai-rose/20"
-              }`}
-              onClick={() => handleSelection("concerns", concern)}
-            >
-              {concern}
-            </Button>
-          ))}
-        </div>
-      </TabsContent>
+      <QuizTabContent
+        value="concerns"
+        options={skinConcerns}
+        category="concerns"
+        selections={selections}
+        handleSelection={handleSelection}
+      />
 
-      <TabsContent value="preferences" className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          {["Fragrance-free", "Oil-free", "Non-comedogenic", "Natural ingredients", "Cruelty-free"].map(
-            (pref) => (
-              <Button
-                key={pref}
-                variant={isSelected("preferences", pref) ? "default" : "outline"}
-                className={`h-auto p-4 text-left justify-start ${
-                  isSelected("preferences", pref)
-                    ? "bg-mai-coral text-white hover:bg-mai-coral/90"
-                    : "hover:bg-mai-rose/20"
-                }`}
-                onClick={() => handleSelection("preferences", pref)}
-              >
-                {pref}
-              </Button>
-            )
-          )}
-        </div>
-      </TabsContent>
+      <QuizTabContent
+        value="preferences"
+        options={preferences}
+        category="preferences"
+        selections={selections}
+        handleSelection={handleSelection}
+      />
 
       <div className="mt-8 flex justify-end">
         <Button
