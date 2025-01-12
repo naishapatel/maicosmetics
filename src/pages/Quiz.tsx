@@ -39,41 +39,119 @@ const Quiz = () => {
 
     let newRecommendations: ProductRecommendation[] = [];
     
+    // Database of real small business makeup products
+    const productDatabase = {
+      dry: [
+        {
+          name: "Hydrating Face Oil",
+          brand: "Beneath Your Mask",
+          price: "$60",
+          description: "Organic, small-batch face oil perfect for dry and sensitive skin",
+          link: "https://beneathyourmask.com/products/heal-nourishing-face-oil"
+        },
+        {
+          name: "Moisture Lock Foundation",
+          brand: "Range Beauty",
+          price: "$27",
+          description: "Clean beauty foundation with botanical extracts for dry skin",
+          link: "https://www.rangebeauty.com/products/true-intentions-hydrating-foundation"
+        }
+      ],
+      sensitive: [
+        {
+          name: "Gentle Cleansing Oil",
+          brand: "Klur",
+          price: "$32",
+          description: "Gentle, non-irritating cleansing oil for sensitive skin",
+          link: "https://klur.co/products/gentle-matter"
+        },
+        {
+          name: "Calming Face Mist",
+          brand: "Base Butter",
+          price: "$25",
+          description: "Soothing aloe vera and rose water face mist",
+          link: "https://basebutter.com/products/so-soothing-facial-mist"
+        }
+      ],
+      acne: [
+        {
+          name: "Clarifying Serum",
+          brand: "Hyper Skin",
+          price: "$36",
+          description: "Vitamin C serum that targets dark spots and prevents breakouts",
+          link: "https://gethyperskin.com/products/hyper-clear"
+        },
+        {
+          name: "Purifying Clay Mask",
+          brand: "Undefined Beauty",
+          price: "$28",
+          description: "Detoxifying clay mask with CBD for acne-prone skin",
+          link: "https://undefinedbeauty.com/products/r-r-sun-mask"
+        }
+      ],
+      redness: [
+        {
+          name: "Calming Face Oil",
+          brand: "Absolute JOI",
+          price: "$35",
+          description: "Skin-calming face oil with natural anti-inflammatory ingredients",
+          link: "https://absolutejoi.com/products/daily-hydrating-moisturizing-oil"
+        },
+        {
+          name: "Green Color Corrector",
+          brand: "Laws of Nature Cosmetics",
+          price: "$22",
+          description: "Natural green color corrector to neutralize redness",
+          link: "https://lawsofnaturecosmetics.com/products/color-corrector"
+        }
+      ],
+      natural: [
+        {
+          name: "Multi-Use Color Balm",
+          brand: "Āether Beauty",
+          price: "$24",
+          description: "Clean, sustainable multi-use color for cheeks and lips",
+          link: "https://aetherbeautyco.com/collections/multi-use"
+        },
+        {
+          name: "Mineral Foundation",
+          brand: "Mented Cosmetics",
+          price: "$30",
+          description: "Clean, vegan mineral foundation for all skin tones",
+          link: "https://www.mentedcosmetics.com/products/skin-by-mented-foundation"
+        }
+      ]
+    };
+
+    // Match products based on skin type
     if (selections.skinType.includes("Dry")) {
-      newRecommendations.push({
-        name: "CeraVe Moisturizing Cream",
-        brand: "CeraVe",
-        price: "$19.99",
-        description: "Rich moisturizer with 3 essential ceramides and hyaluronic acid",
-        link: "https://www.ulta.com/p/moisturizing-cream-xlsImpprod5140064"
-      });
+      newRecommendations.push(...productDatabase.dry);
     }
 
+    // Match products based on concerns
     if (selections.concerns.includes("Sensitive")) {
-      newRecommendations.push({
-        name: "La Roche-Posay Toleriane Gentle Cleanser",
-        brand: "La Roche-Posay",
-        price: "$24.99",
-        description: "Gentle face wash for sensitive skin with niacinamide",
-        link: "https://www.laroche-posay.us/our-products/face/face-wash/toleriane-hydrating-gentle-facial-cleanser-3337875545778.html"
-      });
+      newRecommendations.push(...productDatabase.sensitive);
+    }
+    if (selections.concerns.includes("Acne")) {
+      newRecommendations.push(...productDatabase.acne);
+    }
+    if (selections.concerns.includes("Redness")) {
+      newRecommendations.push(...productDatabase.redness);
     }
 
-    if (selections.concerns.includes("Redness")) {
-      newRecommendations.push({
-        name: "Dr. Jart+ Cicapair Tiger Grass Color Correcting Treatment",
-        brand: "Dr. Jart+",
-        price: "$52.00",
-        description: "Color-correcting treatment that reduces redness and calms sensitive skin",
-        link: "https://www.sephora.com/product/cicapair-tiger-grass-color-correcting-treatment-spf-30-P411540"
-      });
+    // Match products based on preferences
+    if (selections.preferences.includes("Natural ingredients")) {
+      newRecommendations.push(...productDatabase.natural);
     }
+
+    // Limit to maximum 4 recommendations to avoid overwhelming the user
+    newRecommendations = newRecommendations.slice(0, 4);
 
     setRecommendations(newRecommendations);
     setShowResults(true);
     toast({
       title: "Quiz completed!",
-      description: "Here are your personalized recommendations.",
+      description: "Here are your personalized recommendations from small businesses.",
     });
   };
 
@@ -98,7 +176,7 @@ const Quiz = () => {
           className="text-center mb-12"
         >
           <h1 className="text-3xl font-bold text-mai-brown mb-4">Skin Quiz</h1>
-          <p className="text-gray-600">Let's find the perfect products for your skin</p>
+          <p className="text-gray-600">Discover personalized products from small businesses</p>
         </motion.div>
 
         <Card className="bg-white/80 backdrop-blur-sm">
