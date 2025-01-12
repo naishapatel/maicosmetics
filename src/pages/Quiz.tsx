@@ -4,12 +4,19 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useState } from "react";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 interface QuizSelections {
   skinType: string[];
   concerns: string[];
   preferences: string[];
+}
+
+interface ProductRecommendation {
+  name: string;
+  brand: string;
+  price: string;
+  description: string;
 }
 
 const Quiz = () => {
@@ -21,6 +28,7 @@ const Quiz = () => {
   });
   const [showResults, setShowResults] = useState(false);
   const [currentTab, setCurrentTab] = useState("type");
+  const [recommendations, setRecommendations] = useState<ProductRecommendation[]>([]);
 
   const handleSelection = (category: keyof QuizSelections, item: string) => {
     setSelections(prev => ({
@@ -42,10 +50,10 @@ const Quiz = () => {
     }
 
     // Simple recommendation logic based on selections
-    let recommendations = [];
+    let newRecommendations: ProductRecommendation[] = [];
     
     if (selections.skinType.includes("Dry")) {
-      recommendations.push({
+      newRecommendations.push({
         name: "Hydrating Face Cream",
         brand: "Natural Beauty",
         price: "$29.99",
@@ -54,7 +62,7 @@ const Quiz = () => {
     }
 
     if (selections.concerns.includes("Sensitive")) {
-      recommendations.push({
+      newRecommendations.push({
         name: "Gentle Cleansing Balm",
         brand: "Pure Skin Co",
         price: "$24.99",
@@ -63,7 +71,7 @@ const Quiz = () => {
     }
 
     if (selections.concerns.includes("Redness")) {
-      recommendations.push({
+      newRecommendations.push({
         name: "Soothing Serum",
         brand: "Eco Glow",
         price: "$34.99",
@@ -71,6 +79,7 @@ const Quiz = () => {
       });
     }
 
+    setRecommendations(newRecommendations);
     setShowResults(true);
     toast({
       title: "Quiz completed!",
@@ -196,6 +205,7 @@ const Quiz = () => {
                       concerns: [],
                       preferences: [],
                     });
+                    setRecommendations([]);
                   }}
                   className="mt-6 bg-mai-coral hover:bg-mai-brown text-white transition-colors"
                 >
