@@ -28,14 +28,6 @@ const QuizResults = ({ recommendations, resetQuiz }: QuizResultsProps) => {
             <p className="text-sm text-gray-500 mb-2">{product.brand}</p>
             <p className="text-mai-coral font-semibold mb-2">{product.price}</p>
             <p className="text-gray-600 text-sm mb-4">{product.description}</p>
-            <a
-              href={product.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block bg-mai-coral hover:bg-mai-brown text-white px-4 py-2 rounded transition-colors"
-            >
-              Shop Now
-            </a>
           </motion.div>
         ))}
       </div>
