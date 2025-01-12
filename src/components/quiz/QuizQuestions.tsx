@@ -23,10 +23,30 @@ const QuizQuestions = ({
   return (
     <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
       <TabsList className="w-full mb-8">
+        <TabsTrigger value="makeup" className="flex-1">Makeup Type</TabsTrigger>
         <TabsTrigger value="type" className="flex-1">Skin Type</TabsTrigger>
         <TabsTrigger value="concerns" className="flex-1">Skin Concerns</TabsTrigger>
         <TabsTrigger value="preferences" className="flex-1">Preferences</TabsTrigger>
       </TabsList>
+
+      <TabsContent value="makeup" className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {["Foundation", "Concealer", "Blush", "Bronzer", "Eyeshadow", "Mascara", "Lipstick"].map((type) => (
+            <Button
+              key={type}
+              variant={isSelected("makeupType", type) ? "default" : "outline"}
+              className={`h-auto p-4 text-left justify-start ${
+                isSelected("makeupType", type)
+                  ? "bg-mai-coral text-white hover:bg-mai-coral/90"
+                  : "hover:bg-mai-rose/20"
+              }`}
+              onClick={() => handleSelection("makeupType", type)}
+            >
+              {type}
+            </Button>
+          ))}
+        </div>
+      </TabsContent>
 
       <TabsContent value="type" className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
