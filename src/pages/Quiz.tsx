@@ -17,6 +17,7 @@ interface ProductRecommendation {
   brand: string;
   price: string;
   description: string;
+  link: string;
 }
 
 const Quiz = () => {
@@ -49,33 +50,35 @@ const Quiz = () => {
       return;
     }
 
-    // Simple recommendation logic based on selections
     let newRecommendations: ProductRecommendation[] = [];
     
     if (selections.skinType.includes("Dry")) {
       newRecommendations.push({
-        name: "Hydrating Face Cream",
-        brand: "Natural Beauty",
-        price: "$29.99",
-        description: "Rich moisturizer with natural ingredients for dry skin",
+        name: "CeraVe Moisturizing Cream",
+        brand: "CeraVe",
+        price: "$19.99",
+        description: "Rich moisturizer with 3 essential ceramides and hyaluronic acid",
+        link: "https://www.ulta.com/p/moisturizing-cream-xlsImpprod5140064"
       });
     }
 
     if (selections.concerns.includes("Sensitive")) {
       newRecommendations.push({
-        name: "Gentle Cleansing Balm",
-        brand: "Pure Skin Co",
+        name: "La Roche-Posay Toleriane Gentle Cleanser",
+        brand: "La Roche-Posay",
         price: "$24.99",
-        description: "A gentle, vegan cleansing balm perfect for sensitive skin",
+        description: "Gentle face wash for sensitive skin with niacinamide",
+        link: "https://www.laroche-posay.us/our-products/face/face-wash/toleriane-hydrating-gentle-facial-cleanser-3337875545778.html"
       });
     }
 
     if (selections.concerns.includes("Redness")) {
       newRecommendations.push({
-        name: "Soothing Serum",
-        brand: "Eco Glow",
-        price: "$34.99",
-        description: "Calming serum with plant extracts for sensitive skin",
+        name: "Dr. Jart+ Cicapair Tiger Grass Color Correcting Treatment",
+        brand: "Dr. Jart+",
+        price: "$52.00",
+        description: "Color-correcting treatment that reduces redness and calms sensitive skin",
+        link: "https://www.sephora.com/product/cicapair-tiger-grass-color-correcting-treatment-spf-30-P411540"
       });
     }
 
@@ -193,7 +196,15 @@ const Quiz = () => {
                       <h4 className="text-lg font-semibold text-mai-brown">{product.name}</h4>
                       <p className="text-sm text-gray-500 mb-2">{product.brand}</p>
                       <p className="text-mai-coral font-semibold mb-2">{product.price}</p>
-                      <p className="text-gray-600 text-sm">{product.description}</p>
+                      <p className="text-gray-600 text-sm mb-4">{product.description}</p>
+                      <a 
+                        href={product.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-block bg-mai-coral hover:bg-mai-brown text-white px-4 py-2 rounded transition-colors"
+                      >
+                        Shop Now
+                      </a>
                     </motion.div>
                   ))}
                 </div>
