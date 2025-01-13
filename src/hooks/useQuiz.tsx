@@ -12,7 +12,7 @@ export const useQuiz = () => {
     makeupType: [],
   });
   const [showResults, setShowResults] = useState(false);
-  const [currentTab, setCurrentTab] = useState("type");
+  const [currentTab, setCurrentTab] = useState("makeup");  // Changed from "type" to "makeup"
   const [recommendations, setRecommendations] = useState<ProductRecommendation[]>([]);
 
   const handleSelection = (category: keyof QuizSelections, item: string) => {

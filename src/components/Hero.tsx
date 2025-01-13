@@ -31,7 +31,7 @@ export const Hero = () => {
             transition={{ duration: 0.8, delay: 0.4 }}
             className="max-w-2xl mx-auto text-lg text-gray-600 mb-12 leading-relaxed"
           >
-            Discover vegan makeup recommendations tailored to your unique skin condition. We curate products from small businesses that understand and care for sensitive skin.
+            Discover makeup recommendations tailored to your unique skin conditions. We support small businesses that support your ethical preferences and understand your unique skin needs.
           </motion.p>
           <motion.div
             initial={{ opacity: 0, y: 20 }}

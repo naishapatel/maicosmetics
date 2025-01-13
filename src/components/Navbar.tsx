@@ -19,6 +19,9 @@ export const Navbar = () => {
             <Link to="/businesses" className="text-gray-600 hover:text-mai-coral transition-colors">
               Small Businesses
             </Link>
+            <Link to="/about" className="text-gray-600 hover:text-mai-coral transition-colors">
+              About Us
+            </Link>
           </div>
           <Button variant="ghost" className="text-mai-coral hover:text-mai-brown transition-colors">
             Get Started

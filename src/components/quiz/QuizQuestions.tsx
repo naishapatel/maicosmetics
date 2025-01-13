@@ -21,7 +21,7 @@ const QuizQuestions = ({
   const makeupTypes = ["Foundation", "Concealer", "Blush", "Bronzer", "Eyeshadow", "Mascara", "Lipstick"];
   const skinTypes = ["Dry", "Oily", "Combination", "Normal", "Sensitive"];
   const skinConcerns = ["Acne", "Redness", "Dark spots", "Fine lines", "Uneven texture"];
-  const preferences = ["Fragrance-free", "Oil-free", "Non-comedogenic", "Natural ingredients", "Cruelty-free"];
+  const preferences = ["Fragrance-free", "Oil-free", "Non-comedogenic", "Natural ingredients", "Cruelty-free", "None"];
 
   return (
     <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
