@@ -6,9 +6,38 @@ import { ArrowRight, Sparkles, Heart, Shield } from "lucide-react";
 export const Hero = () => {
   return (
     <div className="relative min-h-screen overflow-hidden">
+      {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-b from-mai-cream via-mai-rose to-white opacity-50" />
       
-      {/* Decorative elements */}
+      {/* Decorative floating images */}
+      <motion.img
+        src="https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=300"
+        alt="Ethical makeup products"
+        className="absolute top-20 right-[5%] w-48 h-48 object-cover rounded-full shadow-xl opacity-90"
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8 }}
+      />
+      
+      <motion.img
+        src="https://images.unsplash.com/photo-1571875257727-256c39da42af?auto=format&fit=crop&w=300"
+        alt="Natural ingredients"
+        className="absolute bottom-32 left-[8%] w-36 h-36 object-cover rounded-full shadow-xl opacity-85"
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.2 }}
+      />
+      
+      <motion.img
+        src="https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?auto=format&fit=crop&w=300"
+        alt="Sustainable beauty"
+        className="absolute top-40 left-[15%] w-24 h-24 object-cover rounded-full shadow-xl opacity-80"
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8, delay: 0.4 }}
+      />
+
+      {/* Animated decorative elements */}
       <motion.div
         animate={{ rotate: 360 }}
         transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
@@ -105,9 +134,9 @@ export const Hero = () => {
               <motion.div
                 key={index}
                 whileHover={{ y: -5 }}
-                className="p-6 bg-white/80 backdrop-blur-sm rounded-2xl shadow-sm border border-mai-sage"
+                className="glass-card p-6 hover:shadow-2xl transition-all duration-300"
               >
-                <div className="w-12 h-12 bg-mai-rose/20 rounded-full flex items-center justify-center mb-4">
+                <div className="w-12 h-12 bg-mai-rose/20 rounded-full flex items-center justify-center mb-4 mx-auto">
                   {feature.icon}
                 </div>
                 <h3 className="text-lg font-semibold text-mai-brown mb-2">
