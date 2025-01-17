@@ -31,17 +31,20 @@ export const HeroFeatures = () => {
         <motion.div
           key={index}
           whileHover={{ y: -5 }}
-          className="glass-card p-6 hover:shadow-2xl transition-all duration-300"
+          className="relative group"
         >
-          <div className="w-12 h-12 bg-mai-rose/20 rounded-full flex items-center justify-center mb-4 mx-auto">
-            {feature.icon}
+          <div className="glass-card p-8 hover:shadow-2xl transition-all duration-300 border border-white/20 backdrop-blur-md relative z-10">
+            <div className="w-12 h-12 bg-gradient-to-br from-mai-rose/30 to-mai-coral/20 rounded-xl flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
+              {feature.icon}
+            </div>
+            <h3 className="text-lg font-semibold text-mai-brown mb-3">
+              {feature.title}
+            </h3>
+            <p className="text-gray-600">
+              {feature.description}
+            </p>
           </div>
-          <h3 className="text-lg font-semibold text-mai-brown mb-2">
-            {feature.title}
-          </h3>
-          <p className="text-gray-600">
-            {feature.description}
-          </p>
+          <div className="absolute inset-0 bg-gradient-to-br from-mai-sage/20 to-mai-rose/20 blur-xl opacity-0 group-hover:opacity-70 transition-opacity duration-300" />
         </motion.div>
       ))}
     </motion.div>
