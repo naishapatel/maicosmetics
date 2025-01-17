@@ -5,7 +5,7 @@ import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/Navbar";
 import { motion } from "framer-motion";
-import { Heart, Leaf } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -21,27 +21,40 @@ const Auth = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-mai-cream to-white">
+    <div className="min-h-screen bg-gradient-to-br from-mai-cream via-mai-rose to-mai-sage">
       <Navbar />
-      <div className="max-w-7xl mx-auto px-4 pt-32 pb-16">
-        <div className="relative">
+      <div className="max-w-7xl mx-auto px-4 pt-20 pb-16 relative">
+        <div className="absolute inset-0 bg-white/5 backdrop-blur-[2px]" />
+        
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          className="relative z-10 max-w-md mx-auto"
+        >
+          <div className="text-center mb-8">
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="inline-block mb-4"
+            >
+              <Sparkles className="w-12 h-12 text-mai-coral" />
+            </motion.div>
+            <h1 className="text-4xl font-serif font-light text-mai-brown mb-3">
+              Welcome to mai
+            </h1>
+            <p className="text-mai-brown/80 text-lg">
+              Join our community of conscious beauty enthusiasts
+            </p>
+          </div>
+
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-            className="absolute -top-16 left-1/2 transform -translate-x-1/2 flex gap-4"
+            transition={{ delay: 0.3, duration: 0.8 }}
+            className="bg-white/90 backdrop-blur-xl rounded-2xl shadow-xl p-8 border border-white/40"
           >
-            <Heart className="text-mai-coral w-8 h-8" />
-            <Leaf className="text-mai-coral w-8 h-8" />
-          </motion.div>
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="max-w-md mx-auto bg-white/80 backdrop-blur-md rounded-3xl shadow-xl p-8 border border-mai-sage/20"
-          >
-            <h1 className="text-3xl font-bold text-mai-brown mb-2 text-center">Welcome to mai.</h1>
-            <p className="text-gray-600 text-center mb-8">Join our community of conscious beauty enthusiasts</p>
             <SupabaseAuth 
               supabaseClient={supabase}
               appearance={{ 
@@ -49,38 +62,54 @@ const Auth = () => {
                 variables: {
                   default: {
                     colors: {
-                      brand: '#FF9494',
-                      brandAccent: '#4A3F35',
-                      defaultButtonBackground: '#FF9494',
-                      defaultButtonBackgroundHover: '#4A3F35',
+                      brand: '#4A3F35',
+                      brandAccent: '#FF9494',
+                      defaultButtonBackground: '#4A3F35',
+                      defaultButtonBackgroundHover: '#FF9494',
                       inputBackground: 'white',
                       inputBorder: '#E7F3EF',
                       inputBorderHover: '#FF9494',
                       inputBorderFocus: '#4A3F35',
                     },
                     borderWidths: {
-                      buttonBorderWidth: '0px',
-                      inputBorderWidth: '2px',
+                      buttonBorderWidth: '1px',
+                      inputBorderWidth: '1px',
                     },
                     radii: {
-                      borderRadiusButton: '9999px',
-                      buttonBorderRadius: '9999px',
-                      inputBorderRadius: '12px',
+                      borderRadiusButton: '8px',
+                      buttonBorderRadius: '8px',
+                      inputBorderRadius: '8px',
+                    },
+                    space: {
+                      inputPadding: '12px',
+                      buttonPadding: '12px',
+                    },
+                    fonts: {
+                      bodyFontFamily: `ui-serif, Georgia, Cambria, "Times New Roman", Times, serif`,
+                      buttonFontFamily: `ui-serif, Georgia, Cambria, "Times New Roman", Times, serif`,
+                      inputFontFamily: `ui-serif, Georgia, Cambria, "Times New Roman", Times, serif`,
                     },
                   }
                 },
                 className: {
-                  container: 'auth-container',
-                  button: 'auth-button',
-                  input: 'auth-input',
+                  container: 'space-y-4',
+                  button: 'w-full transition-all duration-200 hover:transform hover:translate-y-[-2px] active:translate-y-[1px]',
+                  input: 'w-full transition-colors duration-200',
+                  label: 'text-mai-brown font-serif',
+                  loader: 'text-mai-coral',
                 }
               }}
               providers={[]}
             />
           </motion.div>
-        </div>
+        </motion.div>
       </div>
-      <div className="fixed inset-0 -z-10 bg-[url('/pattern.svg')] bg-repeat opacity-5" />
+      
+      {/* Decorative elements */}
+      <div className="fixed inset-0 -z-10">
+        <div className="absolute top-20 left-1/4 w-64 h-64 bg-mai-rose/20 rounded-full blur-3xl" />
+        <div className="absolute bottom-20 right-1/4 w-64 h-64 bg-mai-sage/20 rounded-full blur-3xl" />
+      </div>
     </div>
   );
 };
