@@ -60,16 +60,25 @@ const ProductSection = ({ title, items }: { title: string; items: typeof product
     transition={{ duration: 0.5 }}
     className="mb-12"
   >
-    <h2 className="text-2xl font-semibold text-mai-brown mb-6">{title}</h2>
+    <h2 className="text-2xl font-semibold text-mai-brown mb-6 relative inline-block">
+      <span className="relative z-10">{title}</span>
+      <motion.div
+        className="absolute -bottom-1 left-0 w-full h-1 bg-mai-coral/30"
+        initial={{ width: 0 }}
+        animate={{ width: "100%" }}
+        transition={{ delay: 0.2, duration: 0.5 }}
+      />
+    </h2>
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
-      {items.map((product) => (
+      {items.map((product, index) => (
         <motion.div
           key={product.name}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.5, delay: index * 0.1 }}
+          whileHover={{ y: -5 }}
         >
-          <Card className="h-full bg-white/80 backdrop-blur-sm hover:shadow-lg transition-shadow">
+          <Card className="h-full bg-white/90 backdrop-blur-sm hover:shadow-lg transition-all duration-300 border border-mai-sage/20">
             <CardHeader>
               <CardTitle className="text-mai-brown">{product.name}</CardTitle>
               <p className="text-sm text-gray-500">{product.brand}</p>
@@ -77,7 +86,7 @@ const ProductSection = ({ title, items }: { title: string; items: typeof product
             <CardContent>
               <p className="text-lg font-semibold text-mai-coral mb-2">{product.price}</p>
               <p className="text-gray-600 mb-4">{product.description}</p>
-              <span className="inline-block bg-mai-sage px-3 py-1 rounded-full text-sm text-mai-brown">
+              <span className="inline-block bg-mai-sage/30 px-4 py-1.5 rounded-full text-sm text-mai-brown font-medium transition-colors duration-300 hover:bg-mai-sage/50">
                 {product.category}
               </span>
             </CardContent>
@@ -90,7 +99,7 @@ const ProductSection = ({ title, items }: { title: string; items: typeof product
 
 const Products = () => {
   return (
-    <div className="min-h-screen bg-mai-cream">
+    <div className="min-h-screen bg-gradient-to-br from-mai-cream to-mai-rose/20">
       <Navbar />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16">
         <motion.div
@@ -99,8 +108,18 @@ const Products = () => {
           transition={{ duration: 0.5 }}
           className="text-center mb-12"
         >
-          <h1 className="text-3xl font-bold text-mai-brown mb-4">Curated Product Spotlight</h1>
-          <p className="text-gray-600">Supporting small businesses with ethical, sustainable beauty products</p>
+          <h1 className="text-4xl font-bold text-mai-brown mb-4 relative inline-block">
+            Curated Product Spotlight
+            <motion.div
+              className="absolute -bottom-2 left-0 w-full h-1 bg-mai-coral/30"
+              initial={{ width: 0 }}
+              animate={{ width: "100%" }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+            />
+          </h1>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Supporting small businesses with ethical, sustainable beauty products that align with your values
+          </p>
         </motion.div>
 
         <ProductSection title="Vegan Beauty" items={products.vegan} />
