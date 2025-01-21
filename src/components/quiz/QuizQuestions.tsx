@@ -22,6 +22,8 @@ const QuizQuestions = ({
   const skinTypes = ["Normal", "Dry", "Oily", "Combination", "Sensitive", "Scaly", "Not sure"];
   const skinConcerns = ["Acne", "Redness", "Dark spots", "Fine lines", "Uneven texture"];
   const preferences = ["Fragrance-free", "Oil-free", "Non-comedogenic", "Natural ingredients", "Cruelty-free", "None"];
+  const finishTypes = ["Matte", "Dewy", "Natural"];
+  const coverageLevels = ["Minimal", "Light", "Medium", "Maximum", "No Preference"];
 
   return (
     <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
@@ -29,6 +31,8 @@ const QuizQuestions = ({
         <TabsTrigger value="makeup" className="flex-1">Makeup Type</TabsTrigger>
         <TabsTrigger value="type" className="flex-1">Skin Type</TabsTrigger>
         <TabsTrigger value="concerns" className="flex-1">Skin Concerns</TabsTrigger>
+        <TabsTrigger value="finish" className="flex-1">Finish</TabsTrigger>
+        <TabsTrigger value="coverage" className="flex-1">Coverage</TabsTrigger>
         <TabsTrigger value="preferences" className="flex-1">Preferences</TabsTrigger>
       </TabsList>
 
@@ -52,6 +56,22 @@ const QuizQuestions = ({
         value="concerns"
         options={skinConcerns}
         category="concerns"
+        selections={selections}
+        handleSelection={handleSelection}
+      />
+
+      <QuizTabContent
+        value="finish"
+        options={finishTypes}
+        category="finish"
+        selections={selections}
+        handleSelection={handleSelection}
+      />
+
+      <QuizTabContent
+        value="coverage"
+        options={coverageLevels}
+        category="coverage"
         selections={selections}
         handleSelection={handleSelection}
       />

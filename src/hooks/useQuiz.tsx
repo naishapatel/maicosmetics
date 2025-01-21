@@ -10,9 +10,11 @@ export const useQuiz = () => {
     concerns: [],
     preferences: [],
     makeupType: [],
+    finish: [],
+    coverage: []
   });
   const [showResults, setShowResults] = useState(false);
-  const [currentTab, setCurrentTab] = useState("makeup");  // Changed from "type" to "makeup"
+  const [currentTab, setCurrentTab] = useState("makeup");
   const [recommendations, setRecommendations] = useState<ProductRecommendation[]>([]);
 
   const handleSelection = (category: keyof QuizSelections, item: string) => {
@@ -43,6 +45,24 @@ export const useQuiz = () => {
       }
     });
 
+    // Match products based on finish preference
+    if (selections.finish.length) {
+      selections.finish.forEach(finish => {
+        if (makeupProducts[finish.toLowerCase()]) {
+          newRecommendations.push(...makeupProducts[finish.toLowerCase()]);
+        }
+      });
+    }
+
+    // Match products based on coverage preference
+    if (selections.coverage.length) {
+      selections.coverage.forEach(coverage => {
+        if (makeupProducts[coverage.toLowerCase()]) {
+          newRecommendations.push(...makeupProducts[coverage.toLowerCase()]);
+        }
+      });
+    }
+
     // Match products based on skin type
     selections.skinType.forEach(type => {
       if (makeupProducts[type.toLowerCase()]) {
@@ -50,8 +70,8 @@ export const useQuiz = () => {
       }
     });
 
-    // Limit to maximum 4 recommendations
-    newRecommendations = newRecommendations.slice(0, 4);
+    // Remove duplicates and limit to maximum 4 recommendations
+    newRecommendations = Array.from(new Set(newRecommendations)).slice(0, 4);
 
     setRecommendations(newRecommendations);
     setShowResults(true);
@@ -68,6 +88,8 @@ export const useQuiz = () => {
       concerns: [],
       preferences: [],
       makeupType: [],
+      finish: [],
+      coverage: []
     });
     setRecommendations([]);
   };

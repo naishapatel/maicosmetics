@@ -10,14 +10,14 @@ export const makeupProducts: ProductDatabase = {
       name: "True Complexion Foundation",
       brand: "Range Beauty",
       price: "$27",
-      description: "Clean beauty foundation with botanical extracts suitable for all skin types",
+      description: "Clean beauty foundation with botanical extracts suitable for all skin types. Provides medium coverage with a natural finish.",
       link: ""
     },
     {
       name: "Stick Foundation",
       brand: "The Lip Bar",
       price: "$25",
-      description: "Creamy, buildable coverage foundation in diverse shades",
+      description: "Creamy, buildable coverage foundation in diverse shades. Perfect for those seeking maximum coverage with a matte finish.",
       link: ""
     }
   ],
@@ -117,83 +117,87 @@ export const makeupProducts: ProductDatabase = {
       link: ""
     }
   ],
-  dry: [
+  matte: [
     {
-      name: "Hydrating Foundation",
-      brand: "Range Beauty",
-      price: "$27",
-      description: "Clean beauty foundation with botanical extracts for dry skin types",
-      link: ""
-    },
-    {
-      name: "Cream Blush",
-      brand: "Ami Colé",
-      price: "$22",
-      description: "Moisturizing cream blush that melts into skin for a natural flush",
-      link: ""
-    }
-  ],
-  oily: [
-    {
-      name: "Oil-Control Foundation",
-      brand: "Mented Cosmetics",
-      price: "$30",
-      description: "Matte finish foundation perfect for oily skin types",
-      link: ""
-    },
-    {
-      name: "Setting Powder",
-      brand: "Beauty Bakerie",
-      price: "$24",
-      description: "Oil-absorbing setting powder for a flawless finish",
-      link: ""
-    }
-  ],
-  sensitive: [
-    {
-      name: "Gentle Coverage Foundation",
-      brand: "RÓEN",
-      price: "$42",
-      description: "Clean foundation formulated for sensitive skin",
-      link: ""
-    },
-    {
-      name: "Mineral Blush",
-      brand: "Laws of Nature Cosmetics",
-      price: "$24",
-      description: "Pure mineral blush safe for sensitive skin",
-      link: ""
-    }
-  ],
-  combination: [
-    {
-      name: "Adaptive Foundation",
-      brand: "Range Beauty",
-      price: "$32",
-      description: "Foundation that adapts to combination skin needs",
-      link: ""
-    },
-    {
-      name: "Dual-Finish Powder",
-      brand: "Danessa Myricks Beauty",
-      price: "$35",
-      description: "Versatile powder that works for combination skin",
-      link: ""
-    }
-  ],
-  normal: [
-    {
-      name: "Everyday Foundation",
+      name: "Matte Perfection Foundation",
       brand: "The Lip Bar",
       price: "$28",
-      description: "Perfect for normal skin types with balanced coverage",
+      description: "Long-wearing matte foundation perfect for oily skin types",
       link: ""
     },
     {
-      name: "Universal Blush",
+      name: "Velvet Matte Foundation",
+      brand: "Mented Cosmetics",
+      price: "$30",
+      description: "Soft-matte finish with medium to full coverage",
+      link: ""
+    }
+  ],
+  dewy: [
+    {
+      name: "Luminous Dewy Foundation",
+      brand: "Range Beauty",
+      price: "$32",
+      description: "Hydrating foundation with a radiant, dewy finish",
+      link: ""
+    },
+    {
+      name: "Glow Serum Foundation",
+      brand: "RÓEN",
+      price: "$42",
+      description: "Lightweight foundation that creates a natural, dewy glow",
+      link: ""
+    }
+  ],
+  natural: [
+    {
+      name: "Second Skin Foundation",
       brand: "Ami Colé",
-      price: "$22",
-      description: "Suits all skin types with buildable color",
+      price: "$32",
+      description: "Skin-like finish with buildable coverage",
+      link: ""
+    },
+    {
+      name: "Everyday Foundation",
+      brand: "Laws of Nature Cosmetics",
+      price: "$28",
+      description: "Natural-looking coverage that lets skin shine through",
+      link: ""
+    }
+  ],
+  minimal: [
+    {
+      name: "Tinted Moisturizer",
+      brand: "Range Beauty",
+      price: "$24",
+      description: "Sheer coverage for a barely-there look",
+      link: ""
+    }
+  ],
+  light: [
+    {
+      name: "Light Coverage Foundation",
+      brand: "Ami Colé",
+      price: "$28",
+      description: "Lightweight formula for everyday wear",
+      link: ""
+    }
+  ],
+  medium: [
+    {
+      name: "Buildable Coverage Foundation",
+      brand: "Mented Cosmetics",
+      price: "$30",
+      description: "Medium coverage that can be built up where needed",
+      link: ""
+    }
+  ],
+  maximum: [
+    {
+      name: "Full Coverage Foundation",
+      brand: "The Lip Bar",
+      price: "$32",
+      description: "Maximum coverage for complete complexion perfection",
       link: ""
     }
   ]

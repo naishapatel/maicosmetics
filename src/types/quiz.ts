@@ -3,6 +3,8 @@ export interface QuizSelections {
   concerns: string[];
   preferences: string[];
   makeupType: string[];
+  finish: string[];
+  coverage: string[];
 }
 
 export interface ProductRecommendation {
