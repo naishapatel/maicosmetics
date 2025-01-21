@@ -3,14 +3,20 @@ import { motion } from "framer-motion";
 export const HeroImages = () => {
   return (
     <>
-      <motion.img
-        src="https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=300"
-        alt="Ethical beauty products"
-        className="absolute top-32 right-[10%] w-64 h-80 object-cover rounded-2xl shadow-2xl opacity-90"
+      <motion.div
+        className="absolute top-32 right-[10%] w-[400px] glass-card p-6"
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8 }}
-      />
+      >
+        <img
+          src="/lovable-uploads/c2985e38-9019-4910-946a-6791249476e8.png"
+          alt="Organic Makeup Palette"
+          className="w-full h-auto rounded-xl"
+        />
+        <h3 className="text-2xl font-serif mt-4 text-mai-brown">Organic & Natural Makeup Brands</h3>
+        <p className="text-gray-600 mt-2">Discover clean beauty products that care for your skin and the environment</p>
+      </motion.div>
       
       <motion.img
         src="https://images.unsplash.com/photo-1630133362137-1a5c1b44f8a0?auto=format&fit=crop&w=300"
