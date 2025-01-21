@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { motion } from "framer-motion";
 import { Session } from "@supabase/supabase-js";
+import { useToast } from "@/components/ui/use-toast";
 
 export const Navbar = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [session, setSession] = useState<Session | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -26,6 +28,11 @@ export const Navbar = () => {
       if (error) {
         console.error("Error fetching session:", error.message);
         setError(error.message);
+        toast({
+          variant: "destructive",
+          title: "Authentication Error",
+          description: "There was a problem with the authentication service. Please try again later.",
+        });
       } else {
         setSession(session);
       }
@@ -35,31 +42,40 @@ export const Navbar = () => {
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       if (session) {
-        // If user just signed in, redirect to home
         navigate("/");
+        toast({
+          title: "Welcome back!",
+          description: "You have successfully signed in.",
+        });
       }
     });
 
     return () => subscription.unsubscribe();
-  }, [navigate]);
+  }, [navigate, toast]);
 
   const handleAuthClick = async () => {
     try {
       if (session) {
         await supabase.auth.signOut();
         navigate("/");
+        toast({
+          title: "Signed out",
+          description: "You have been successfully signed out.",
+        });
       } else {
         navigate("/auth");
       }
     } catch (error) {
       console.error("Auth error:", error);
-      setError(error instanceof Error ? error.message : "An error occurred");
+      const errorMessage = error instanceof Error ? error.message : "An error occurred";
+      setError(errorMessage);
+      toast({
+        variant: "destructive",
+        title: "Authentication Error",
+        description: errorMessage,
+      });
     }
   };
-
-  // Log auth-related information for debugging
-  console.log("Current session:", session);
-  console.log("Auth error:", error);
 
   return (
     <motion.nav 
