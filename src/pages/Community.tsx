@@ -58,22 +58,38 @@ const Community = () => {
   }, [navigate]);
 
   const fetchReviews = async () => {
-    const { data, error } = await supabase
-      .from("community_reviews")
-      .select(`
-        *,
-        profiles:profiles(username)
-      `)
-      .order("created_at", { ascending: false });
+    try {
+      const { data, error } = await supabase
+        .from("community_reviews")
+        .select(`
+          id,
+          product_name,
+          review_text,
+          rating,
+          created_at,
+          profiles (
+            username
+          )
+        `)
+        .order('created_at', { ascending: false });
 
-    if (error) {
+      if (error) {
+        console.error("Error fetching reviews:", error);
+        toast({
+          variant: "destructive",
+          title: "Error fetching reviews",
+          description: error.message
+        });
+      } else {
+        setReviews(data || []);
+      }
+    } catch (error) {
+      console.error("Error in fetchReviews:", error);
       toast({
         variant: "destructive",
         title: "Error fetching reviews",
-        description: error.message
+        description: "Failed to fetch reviews"
       });
-    } else {
-      setReviews(data);
     }
   };
 
@@ -141,6 +157,8 @@ const Community = () => {
       });
     }
   };
+
+  // ... keep existing code (JSX for the component UI)
 
   return (
     <div className="min-h-screen bg-white">
