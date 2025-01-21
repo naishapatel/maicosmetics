@@ -3,11 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { motion } from "framer-motion";
+import { Session } from "@supabase/supabase-js";
 
 export const Navbar = () => {
   const navigate = useNavigate();
-  const [session, setSession] = useState(null);
+  const [session, setSession] = useState<Session | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,24 +21,45 @@ export const Navbar = () => {
   }, []);
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
+    // Get initial session
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
+      if (error) {
+        console.error("Error fetching session:", error.message);
+        setError(error.message);
+      } else {
+        setSession(session);
+      }
     });
 
+    // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
+      if (session) {
+        // If user just signed in, redirect to home
+        navigate("/");
+      }
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [navigate]);
 
-  const handleAuthClick = () => {
-    if (session) {
-      supabase.auth.signOut();
-    } else {
-      navigate("/auth");
+  const handleAuthClick = async () => {
+    try {
+      if (session) {
+        await supabase.auth.signOut();
+        navigate("/");
+      } else {
+        navigate("/auth");
+      }
+    } catch (error) {
+      console.error("Auth error:", error);
+      setError(error instanceof Error ? error.message : "An error occurred");
     }
   };
+
+  // Log auth-related information for debugging
+  console.log("Current session:", session);
+  console.log("Auth error:", error);
 
   return (
     <motion.nav 
