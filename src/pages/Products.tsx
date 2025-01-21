@@ -1,59 +1,44 @@
 import { Navbar } from "@/components/Navbar";
 import { ProductsHeader } from "@/components/products/ProductsHeader";
 import { ProductsGrid } from "@/components/products/ProductsGrid";
-import { useToast } from "@/components/ui/use-toast";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { categorizedProducts } from "@/data/categorizedProducts";
 
 const Products = () => {
-  const products = [
-    {
-      id: "1",
-      title: "Natural Face Cream",
-      description: "A gentle, nourishing cream made with organic ingredients.",
-      price: "$29.99",
-      image: "/placeholder.svg",
-    },
-    {
-      id: "2",
-      title: "Organic Lip Balm",
-      description: "Moisturizing lip balm made with natural oils.",
-      price: "$9.99",
-      image: "/placeholder.svg",
-    },
-    {
-      id: "3",
-      title: "Herbal Face Mask",
-      description: "Revitalizing face mask with herbal extracts.",
-      price: "$19.99",
-      image: "/placeholder.svg",
-    },
-    {
-      id: "4",
-      title: "Sustainable Makeup Brush Set",
-      description: "Eco-friendly makeup brushes for a flawless application.",
-      price: "$39.99",
-      image: "/placeholder.svg",
-    },
-    {
-      id: "5",
-      title: "Natural Shampoo Bar",
-      description: "Plastic-free shampoo bar for healthy hair.",
-      price: "$14.99",
-      image: "/placeholder.svg",
-    },
-    {
-      id: "6",
-      title: "Vegan Nail Polish",
-      description: "Cruelty-free nail polish in vibrant colors.",
-      price: "$12.99",
-      image: "/placeholder.svg",
-    },
+  const categories = [
+    "sustainable beauty",
+    "eco-friendly beauty",
+    "vegan beauty",
+    "products for acne",
+    "products for college kids"
   ];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-mai-cream to-white">
       <Navbar />
       <ProductsHeader />
-      <ProductsGrid products={products} />
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <Tabs defaultValue={categories[0]} className="w-full">
+          <TabsList className="w-full flex flex-wrap gap-2 bg-transparent">
+            {categories.map((category) => (
+              <TabsTrigger
+                key={category}
+                value={category}
+                className="data-[state=active]:bg-mai-coral data-[state=active]:text-white"
+              >
+                {category.charAt(0).toUpperCase() + category.slice(1)}
+              </TabsTrigger>
+            ))}
+          </TabsList>
+          {categories.map((category) => (
+            <TabsContent key={category} value={category}>
+              <ProductsGrid
+                products={categorizedProducts.filter(p => p.category === category)}
+              />
+            </TabsContent>
+          ))}
+        </Tabs>
+      </div>
     </div>
   );
 };

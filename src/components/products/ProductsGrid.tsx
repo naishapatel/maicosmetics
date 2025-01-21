@@ -6,7 +6,6 @@ interface Product {
   title: string;
   description: string;
   price: string;
-  image: string;
 }
 
 interface ProductsGridProps {
@@ -19,7 +18,7 @@ export const ProductsGrid = ({ products }: ProductsGridProps) => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.5 }}
-      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6 max-w-7xl mx-auto"
+      className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6"
     >
       {products.map((product) => (
         <ProductCard
@@ -27,7 +26,6 @@ export const ProductsGrid = ({ products }: ProductsGridProps) => {
           title={product.title}
           description={product.description}
           price={product.price}
-          image={product.image}
         />
       ))}
     </motion.div>
