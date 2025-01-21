@@ -6,13 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Rating } from "@/components/ui/rating";
 import { format } from "date-fns";
 import { useSession } from "@supabase/auth-helpers-react";
@@ -33,6 +27,9 @@ const Community = () => {
     brand: "",
     category: "",
     description: "",
+    makeup_type: "none",
+    price: "0",
+    ethical_values: [],
   });
 
   useEffect(() => {
@@ -161,6 +158,9 @@ const Community = () => {
         brand: "",
         category: "",
         description: "",
+        makeup_type: "none",
+        price: "0",
+        ethical_values: [],
       });
     } catch (error) {
       console.error("Error in handleSubmitRecommendation:", error);
