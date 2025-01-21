@@ -10,14 +10,14 @@ export const HeroImages = () => {
         transition={{ duration: 0.8 }}
       >
         <img
-          src="/lovable-uploads/c2985e38-9019-4910-946a-6791249476e8.png"
+          src="https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&q=80"
           alt="Organic Makeup Palette"
           className="w-full h-auto rounded-xl shadow-md"
         />
         <h3 className="text-2xl font-serif mt-4 text-mai-brown">Organic & Natural Makeup Brands</h3>
         <p className="text-gray-600 mt-2">Discover clean beauty products that care for your skin and the environment</p>
       </motion.div>
-      
+
       <motion.img
         src="https://images.unsplash.com/photo-1630133362137-1a5c1b44f8a0?auto=format&fit=crop&w=300"
         alt="Natural skincare"
@@ -26,7 +26,7 @@ export const HeroImages = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.2 }}
       />
-      
+
       <motion.img
         src="https://images.unsplash.com/photo-1526947425960-945c6e72858f?auto=format&fit=crop&w=300"
         alt="Clean beauty"
