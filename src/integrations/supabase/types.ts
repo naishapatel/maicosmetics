@@ -44,6 +44,60 @@ export type Database = {
           },
         ]
       }
+      product_recommendations: {
+        Row: {
+          brand: string
+          category: string
+          created_at: string
+          description: string
+          ethical_values: string[]
+          id: string
+          makeup_type: string
+          price: string
+          product_name: string
+          user_id: string
+        }
+        Insert: {
+          brand: string
+          category: string
+          created_at?: string
+          description: string
+          ethical_values: string[]
+          id?: string
+          makeup_type: string
+          price: string
+          product_name: string
+          user_id: string
+        }
+        Update: {
+          brand?: string
+          category?: string
+          created_at?: string
+          description?: string
+          ethical_values?: string[]
+          id?: string
+          makeup_type?: string
+          price?: string
+          product_name?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_user"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_recommendations_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           avatar_url: string | null
