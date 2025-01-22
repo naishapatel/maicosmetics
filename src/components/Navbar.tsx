@@ -6,6 +6,21 @@ import { motion } from "framer-motion";
 import { Session } from "@supabase/supabase-js";
 import { useToast } from "@/components/ui/use-toast";
 
+interface NavLinkProps {
+  to: string;
+  children: React.ReactNode;
+  className?: string;
+}
+
+const NavLink = ({ to, children, className }: NavLinkProps) => (
+  <Link
+    to={to}
+    className={`px-4 py-2 rounded-full text-gray-600 hover:text-mai-coral hover:bg-mai-sage/20 transition-all duration-300 ${className || ''}`}
+  >
+    {children}
+  </Link>
+);
+
 export const Navbar = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -97,7 +112,7 @@ export const Navbar = () => {
             <NavLink to="/quiz">Skin Quiz</NavLink>
             <NavLink to="/products">Products</NavLink>
             <NavLink to="/businesses">Small Businesses</NavLink>
-            <NavLink to="/community" className="no-underline">Community</NavLink>
+            <NavLink to="/community">Community</NavLink>
             <NavLink to="/about">About Us</NavLink>
           </div>
           <Button
@@ -116,14 +131,5 @@ export const Navbar = () => {
     </motion.nav>
   );
 };
-
-const NavLink = ({ to, children }: { to: string; children: React.ReactNode }) => (
-  <Link
-    to={to}
-    className="px-4 py-2 rounded-full text-gray-600 hover:text-mai-coral hover:bg-mai-sage/20 transition-all duration-300"
-  >
-    {children}
-  </Link>
-);
 
 export default Navbar;

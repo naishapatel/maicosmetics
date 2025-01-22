@@ -5,7 +5,7 @@ import { ProductRecommendation, QuizSelections } from "@/types/quiz";
 import { calculateProductScore, getRecommendationsByType } from "@/utils/quizScoring";
 
 export const useQuiz = () => {
-  const [currentTab, setCurrentTab] = useState(0);
+  const [currentTab, setCurrentTab] = useState("makeup");
   const [showResults, setShowResults] = useState(false);
   const [recommendations, setRecommendations] = useState<ProductRecommendation[]>([]);
   const { toast } = useToast();
@@ -15,23 +15,24 @@ export const useQuiz = () => {
     concerns: [],
     preferences: [],
     makeupType: [],
+    finish: [],
+    coverage: []
   });
 
   const handleSelection = (
     category: keyof QuizSelections,
-    value: string,
-    isSelected: boolean
+    item: string
   ) => {
     setSelections((prev) => ({
       ...prev,
-      [category]: isSelected
-        ? [...prev[category], value]
-        : prev[category].filter((item) => item !== value),
+      [category]: prev[category].includes(item)
+        ? prev[category].filter((i) => i !== item)
+        : [...prev[category], item],
     }));
   };
 
   const resetQuiz = () => {
-    setCurrentTab(0);
+    setCurrentTab("makeup");
     setShowResults(false);
     setRecommendations([]);
     setSelections({
@@ -39,6 +40,8 @@ export const useQuiz = () => {
       concerns: [],
       preferences: [],
       makeupType: [],
+      finish: [],
+      coverage: []
     });
   };
 
@@ -53,7 +56,6 @@ export const useQuiz = () => {
     }
 
     try {
-      // Get products for each selected makeup type
       const makeupTypes = selections.makeupType.map(type => type.toLowerCase());
       const productsPromises = makeupTypes.map(type => 
         getRecommendationsByType(supabase, type)
@@ -62,13 +64,11 @@ export const useQuiz = () => {
       const productsByType = await Promise.all(productsPromises);
       const allProducts = productsByType.flat();
 
-      // Score and sort products
       const scoredProducts = allProducts.map(product => ({
         ...product,
         score: calculateProductScore(product, selections.preferences, recommendations)
       }));
 
-      // Ensure at least one product per selected makeup type
       const finalRecommendations: ProductRecommendation[] = [];
       makeupTypes.forEach(type => {
         const typeProducts = scoredProducts.filter(p => 
@@ -82,7 +82,6 @@ export const useQuiz = () => {
         }
       });
 
-      // Fill remaining slots with highest scored products
       const minRecommendations = Math.max(4, makeupTypes.length);
       const remainingSlots = minRecommendations - finalRecommendations.length;
       
