@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { ProductRecommendation, QuizSelections } from "@/types/quiz";
-import { calculateProductScore, getRecommendationsByType } from "@/utils/quizScoring";
+import { getPersonalizedRecommendations } from "@/utils/quizScoring";
 
 export const useQuiz = () => {
   const [currentTab, setCurrentTab] = useState("makeup");
@@ -56,49 +56,13 @@ export const useQuiz = () => {
     }
 
     try {
-      const makeupTypes = selections.makeupType.map(type => type.toLowerCase());
-      const productsPromises = makeupTypes.map(type => 
-        getRecommendationsByType(supabase, type)
-      );
-
-      const productsByType = await Promise.all(productsPromises);
-      const allProducts = productsByType.flat();
-
-      const scoredProducts = allProducts.map(product => ({
-        ...product,
-        score: calculateProductScore(product, selections.preferences, recommendations)
-      }));
-
-      const finalRecommendations: ProductRecommendation[] = [];
-      makeupTypes.forEach(type => {
-        const typeProducts = scoredProducts.filter(p => 
-          p.makeup_type.toLowerCase() === type
-        );
-        if (typeProducts.length > 0) {
-          const bestMatch = typeProducts.reduce((prev, current) => 
-            current.score > prev.score ? current : prev
-          );
-          finalRecommendations.push(bestMatch);
-        }
-      });
-
-      const minRecommendations = Math.max(4, makeupTypes.length);
-      const remainingSlots = minRecommendations - finalRecommendations.length;
-      
-      if (remainingSlots > 0) {
-        const remainingProducts = scoredProducts
-          .filter(p => !finalRecommendations.some(r => r.id === p.id))
-          .sort((a, b) => b.score - a.score)
-          .slice(0, remainingSlots);
-        
-        finalRecommendations.push(...remainingProducts);
-      }
-
-      setRecommendations(finalRecommendations);
+      const personalizedRecommendations = await getPersonalizedRecommendations(supabase, selections);
+      setRecommendations(personalizedRecommendations);
       setShowResults(true);
+      
       toast({
         title: "Quiz completed!",
-        description: "Here are your personalized recommendations.",
+        description: "Here are your personalized recommendations based on your preferences.",
       });
     } catch (error) {
       console.error("Error fetching recommendations:", error);
