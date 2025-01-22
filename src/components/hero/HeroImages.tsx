@@ -2,15 +2,15 @@ import { motion } from "framer-motion";
 
 export const HeroImages = () => {
   return (
-    <div className="relative w-full h-full flex justify-center items-center">
+    <div className="relative w-full h-full">
       <motion.div
-        className="w-[500px] glass-card p-6 bg-white/80 backdrop-blur-sm rounded-xl shadow-xl z-20"
+        className="absolute top-32 right-[5%] w-[400px] glass-card p-6 bg-white/80 backdrop-blur-sm rounded-xl shadow-xl z-20"
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8 }}
       >
         <img
-          src="/lovable-uploads/7d980285-cf83-4072-a86d-49b25cbdcd90.png"
+          src="/lovable-uploads/1593a1d5-8b54-4d4a-8039-22318acc6701.png"
           alt="Organic Makeup Palette with 'We believe in better' text"
           className="w-full h-auto rounded-xl shadow-md"
         />
