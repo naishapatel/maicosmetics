@@ -12,14 +12,6 @@ const Index = () => {
             transition={{ duration: 0.8 }}
             className="space-y-6"
           >
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              className="text-mai-coral font-serif italic text-xl mb-4"
-            >
-              We believe in better
-            </motion.div>
             <h1 className="text-5xl font-serif text-mai-brown leading-tight">
               Discover Clean Beauty That Cares
             </h1>
