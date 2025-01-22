@@ -2,9 +2,9 @@ import { motion } from "framer-motion";
 
 export const HeroImages = () => {
   return (
-    <div className="relative w-full h-full">
+    <div className="relative w-full h-full flex justify-center items-center">
       <motion.div
-        className="absolute top-32 right-[5%] w-[400px] glass-card p-6 bg-white/80 backdrop-blur-sm rounded-xl shadow-xl z-20"
+        className="w-[500px] glass-card p-6 bg-white/80 backdrop-blur-sm rounded-xl shadow-xl z-20"
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.8 }}
