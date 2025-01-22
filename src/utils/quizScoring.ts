@@ -1,6 +1,6 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { Database } from '@/integrations/supabase/types';
-import { QuizSelections } from '@/types/quiz';
+import { QuizSelections, ProductRecommendation } from '@/types/quiz';
 
 export const calculateProductScore = (
   product: Database['public']['Tables']['product_recommendations']['Row'],
@@ -56,24 +56,34 @@ export const getRecommendationsByType = async (
   return data || [];
 };
 
+const mapDatabaseToProductRecommendation = (
+  dbProduct: Database['public']['Tables']['product_recommendations']['Row']
+): ProductRecommendation => ({
+  id: dbProduct.id,
+  name: dbProduct.product_name, // Map product_name to name
+  brand: dbProduct.brand,
+  price: dbProduct.price,
+  description: dbProduct.description,
+  makeup_type: dbProduct.makeup_type,
+  category: dbProduct.category,
+  ethical_values: dbProduct.ethical_values
+});
+
 export const getPersonalizedRecommendations = async (
   supabase: SupabaseClient<Database>,
   selections: QuizSelections
-): Promise<Database['public']['Tables']['product_recommendations']['Row'][]> => {
+): Promise<ProductRecommendation[]> => {
   try {
-    // Get all products for selected makeup types
     const makeupTypes = selections.makeupType.map(type => type.toLowerCase());
     const productsPromises = makeupTypes.map(type => getRecommendationsByType(supabase, type));
     const productsByType = await Promise.all(productsPromises);
     const allProducts = productsByType.flat();
 
-    // Score and sort products
     const scoredProducts = allProducts.map(product => ({
       ...product,
       score: calculateProductScore(product, selections.preferences, [])
     })).sort((a, b) => b.score - a.score);
 
-    // Get top recommendations ensuring variety
     const recommendations: typeof scoredProducts = [];
     const usedBrands = new Set<string>();
     const maxRecommendations = Math.max(4, makeupTypes.length);
@@ -81,14 +91,12 @@ export const getPersonalizedRecommendations = async (
     for (const product of scoredProducts) {
       if (recommendations.length >= maxRecommendations) break;
       
-      // Ensure brand variety
       if (!usedBrands.has(product.brand)) {
         recommendations.push(product);
         usedBrands.add(product.brand);
       }
     }
 
-    // If we still need more recommendations, add remaining top-scored products
     if (recommendations.length < maxRecommendations) {
       const remainingProducts = scoredProducts
         .filter(p => !recommendations.some(r => r.id === p.id))
@@ -97,7 +105,8 @@ export const getPersonalizedRecommendations = async (
       recommendations.push(...remainingProducts);
     }
 
-    return recommendations;
+    // Map the database results to match our frontend type
+    return recommendations.map(mapDatabaseToProductRecommendation);
   } catch (error) {
     console.error('Error getting personalized recommendations:', error);
     throw error;
