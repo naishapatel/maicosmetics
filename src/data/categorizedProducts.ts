@@ -225,5 +225,151 @@ export const categorizedProducts: Product[] = [
     description: "Smudge-proof liner for long days",
     price: "$14",
     category: "products for college kids"
+  },
+
+  // Pure Skin Co Products
+  {
+    id: "psc1",
+    title: "Sensitive Skin Foundation",
+    description: "Hypoallergenic foundation for sensitive skin",
+    price: "$38",
+    category: "sustainable beauty"
+  },
+  {
+    id: "psc2",
+    title: "Calming Concealer",
+    description: "Concealer with chamomile and aloe vera",
+    price: "$26",
+    category: "sustainable beauty"
+  },
+  {
+    id: "psc3",
+    title: "Gentle Mineral Blush",
+    description: "Non-irritating mineral blush for sensitive skin",
+    price: "$28",
+    category: "sustainable beauty"
+  },
+  {
+    id: "psc4",
+    title: "Soothing BB Cream",
+    description: "BB cream with calendula extract",
+    price: "$32",
+    category: "products for acne"
+  },
+  {
+    id: "psc5",
+    title: "Pure Defense Powder",
+    description: "Non-comedogenic setting powder",
+    price: "$24",
+    category: "products for acne"
+  },
+  {
+    id: "psc6",
+    title: "Clear Skin Concealer",
+    description: "Oil-free concealer with tea tree oil",
+    price: "$22",
+    category: "products for acne"
+  },
+
+  // Natural Beauty Products
+  {
+    id: "nb1",
+    title: "Vegan Liquid Lipstick",
+    description: "Long-lasting plant-based liquid lip color",
+    price: "$24",
+    category: "vegan beauty"
+  },
+  {
+    id: "nb2",
+    title: "Organic Eye Palette",
+    description: "100% organic pressed powder eyeshadows",
+    price: "$42",
+    category: "vegan beauty"
+  },
+  {
+    id: "nb3",
+    title: "Natural Glow Highlighter",
+    description: "Vegan highlighter with coconut oil",
+    price: "$28",
+    category: "vegan beauty"
+  },
+  {
+    id: "nb4",
+    title: "Hemp Brow Pomade",
+    description: "Long-wearing brow pomade with hemp oil",
+    price: "$20",
+    category: "vegan beauty"
+  },
+  {
+    id: "nb5",
+    title: "Bamboo Bronzer",
+    description: "Matte bronzer in bamboo compact",
+    price: "$34",
+    category: "eco-friendly beauty"
+  },
+  {
+    id: "nb6",
+    title: "Zero Waste Mascara",
+    description: "Refillable mascara in glass tube",
+    price: "$26",
+    category: "eco-friendly beauty"
+  },
+
+  // Eco Glow Products
+  {
+    id: "eg1",
+    title: "Recycled Glass Foundation",
+    description: "Foundation in recycled glass bottle",
+    price: "$36",
+    category: "eco-friendly beauty"
+  },
+  {
+    id: "eg2",
+    title: "Compostable Lip Balm",
+    description: "Tinted lip balm in compostable tube",
+    price: "$16",
+    category: "eco-friendly beauty"
+  },
+  {
+    id: "eg3",
+    title: "Student Starter Kit",
+    description: "Essential makeup basics for students",
+    price: "$45",
+    category: "products for college kids"
+  },
+  {
+    id: "eg4",
+    title: "Campus Beauty Bundle",
+    description: "Multi-use products for busy students",
+    price: "$38",
+    category: "products for college kids"
+  },
+  {
+    id: "eg5",
+    title: "Study Break Palette",
+    description: "Quick-apply eyeshadow quad",
+    price: "$22",
+    category: "products for college kids"
+  },
+  {
+    id: "eg6",
+    title: "Lecture-Ready Kit",
+    description: "5-minute makeup essentials",
+    price: "$32",
+    category: "products for college kids"
+  },
+  {
+    id: "eg7",
+    title: "Dorm Room Beauty Set",
+    description: "Space-saving makeup collection",
+    price: "$48",
+    category: "products for college kids"
+  },
+  {
+    id: "eg8",
+    title: "Student Budget Brush Set",
+    description: "Affordable essential makeup brushes",
+    price: "$25",
+    category: "products for college kids"
   }
 ];
