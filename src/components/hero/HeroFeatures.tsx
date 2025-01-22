@@ -4,7 +4,7 @@ import {
   Leaf, 
   Heart, 
   Sparkles, 
-  Users, 
+  ShieldCheck, 
   Recycle,
   Target
 } from "lucide-react";
@@ -27,14 +27,14 @@ export const HeroFeatures = () => {
       description: "Free from harmful chemicals and synthetic ingredients"
     },
     {
-      icon: Target,
-      title: "Personalized Recommendations",
-      description: "Get custom product suggestions based on your unique needs"
+      icon: ShieldCheck,
+      title: "Dermatologist Tested",
+      description: "Verified and approved by certified dermatologists"
     },
     {
-      icon: Users,
-      title: "Community Driven",
-      description: "Developed with input from our beauty community"
+      icon: Target,
+      title: "Personalized Care",
+      description: "Products tailored to your unique skin needs"
     },
     {
       icon: Recycle,
