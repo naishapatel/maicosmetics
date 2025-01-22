@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { ProductRecommendation, QuizSelections } from "@/types/quiz";
-import { makeupProducts } from "@/data/makeupProducts";
+import { supabase } from "@/integrations/supabase/client";
 
 export const useQuiz = () => {
   const { toast } = useToast();
@@ -26,7 +26,7 @@ export const useQuiz = () => {
     }));
   };
 
-  const getRecommendations = () => {
+  const getRecommendations = async () => {
     if (!selections.skinType.length || !selections.makeupType.length) {
       toast({
         title: "Please complete the quiz",
@@ -36,49 +36,44 @@ export const useQuiz = () => {
       return;
     }
 
-    let newRecommendations: ProductRecommendation[] = [];
-    
-    // Match products based on makeup type
-    selections.makeupType.forEach(type => {
-      if (makeupProducts[type.toLowerCase()]) {
-        newRecommendations.push(...makeupProducts[type.toLowerCase()]);
-      }
-    });
+    try {
+      // Query products based on makeup type
+      const { data: makeupTypeProducts, error: makeupTypeError } = await supabase
+        .from('product_recommendations')
+        .select('*')
+        .in('makeup_type', selections.makeupType.map(type => type.toLowerCase()));
 
-    // Match products based on finish preference
-    if (selections.finish.length) {
-      selections.finish.forEach(finish => {
-        if (makeupProducts[finish.toLowerCase()]) {
-          newRecommendations.push(...makeupProducts[finish.toLowerCase()]);
-        }
+      if (makeupTypeError) throw makeupTypeError;
+
+      // Transform the data to match our ProductRecommendation interface
+      const transformedProducts: ProductRecommendation[] = makeupTypeProducts.map(product => ({
+        id: product.id,
+        name: product.product_name,
+        brand: product.brand,
+        price: product.price,
+        description: product.description,
+        makeup_type: product.makeup_type,
+        category: product.category,
+        ethical_values: product.ethical_values
+      }));
+
+      // Limit to maximum 4 recommendations
+      const limitedRecommendations = transformedProducts.slice(0, 4);
+
+      setRecommendations(limitedRecommendations);
+      setShowResults(true);
+      toast({
+        title: "Quiz completed!",
+        description: "Here are your personalized makeup recommendations from small businesses.",
+      });
+    } catch (error) {
+      console.error('Error fetching recommendations:', error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch recommendations. Please try again.",
+        variant: "destructive",
       });
     }
-
-    // Match products based on coverage preference
-    if (selections.coverage.length) {
-      selections.coverage.forEach(coverage => {
-        if (makeupProducts[coverage.toLowerCase()]) {
-          newRecommendations.push(...makeupProducts[coverage.toLowerCase()]);
-        }
-      });
-    }
-
-    // Match products based on skin type
-    selections.skinType.forEach(type => {
-      if (makeupProducts[type.toLowerCase()]) {
-        newRecommendations.push(...makeupProducts[type.toLowerCase()]);
-      }
-    });
-
-    // Remove duplicates and limit to maximum 4 recommendations
-    newRecommendations = Array.from(new Set(newRecommendations)).slice(0, 4);
-
-    setRecommendations(newRecommendations);
-    setShowResults(true);
-    toast({
-      title: "Quiz completed!",
-      description: "Here are your personalized makeup recommendations from small businesses.",
-    });
   };
 
   const resetQuiz = () => {

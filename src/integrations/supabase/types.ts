@@ -55,7 +55,7 @@ export type Database = {
           makeup_type: string
           price: string
           product_name: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           brand: string
@@ -67,7 +67,7 @@ export type Database = {
           makeup_type: string
           price: string
           product_name: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           brand?: string
@@ -79,7 +79,7 @@ export type Database = {
           makeup_type?: string
           price?: string
           product_name?: string
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {

@@ -18,7 +18,7 @@ const QuizResults = ({ recommendations, resetQuiz }: QuizResultsProps) => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {recommendations.map((product, index) => (
           <motion.div
-            key={product.name}
+            key={product.id}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
@@ -28,6 +28,16 @@ const QuizResults = ({ recommendations, resetQuiz }: QuizResultsProps) => {
             <p className="text-sm text-gray-500 mb-2">{product.brand}</p>
             <p className="text-mai-coral font-semibold mb-2">{product.price}</p>
             <p className="text-gray-600 text-sm mb-4">{product.description}</p>
+            <div className="flex flex-wrap gap-2">
+              {product.ethical_values.map((value, i) => (
+                <span
+                  key={i}
+                  className="text-xs bg-mai-cream text-mai-brown px-2 py-1 rounded-full"
+                >
+                  {value}
+                </span>
+              ))}
+            </div>
           </motion.div>
         ))}
       </div>

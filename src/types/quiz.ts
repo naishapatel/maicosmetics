@@ -8,9 +8,12 @@ export interface QuizSelections {
 }
 
 export interface ProductRecommendation {
+  id: string;
   name: string;
   brand: string;
   price: string;
   description: string;
-  link: string;
+  makeup_type: string;
+  category: string;
+  ethical_values: string[];
 }
