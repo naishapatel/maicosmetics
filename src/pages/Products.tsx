@@ -2,7 +2,7 @@ import { Navbar } from "@/components/Navbar";
 import { ProductsHeader } from "@/components/products/ProductsHeader";
 import { ProductsGrid } from "@/components/products/ProductsGrid";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { categorizedProducts } from "@/data/categorizedProducts";
+import { categorizedProducts } from "@/data/products";
 
 const Products = () => {
   const categories = [
