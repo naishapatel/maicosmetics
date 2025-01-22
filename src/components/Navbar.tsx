@@ -97,7 +97,7 @@ export const Navbar = () => {
             <NavLink to="/quiz">Skin Quiz</NavLink>
             <NavLink to="/products">Products</NavLink>
             <NavLink to="/businesses">Small Businesses</NavLink>
-            <NavLink to="/community">Community</NavLink>
+            <NavLink to="/community" className="no-underline">Community</NavLink>
             <NavLink to="/about">About Us</NavLink>
           </div>
           <Button
