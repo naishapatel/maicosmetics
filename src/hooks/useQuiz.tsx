@@ -37,30 +37,84 @@ export const useQuiz = () => {
     }
 
     try {
-      // Query products based on makeup type
-      const { data: makeupTypeProducts, error: makeupTypeError } = await supabase
-        .from('product_recommendations')
-        .select('*')
-        .in('makeup_type', selections.makeupType.map(type => type.toLowerCase()));
+      // Get products for each selected makeup type
+      const makeupTypes = selections.makeupType.map(type => type.toLowerCase());
+      const productsPromises = makeupTypes.map(type =>
+        supabase
+          .from('product_recommendations')
+          .select('*')
+          .eq('makeup_type', type)
+      );
 
-      if (makeupTypeError) throw makeupTypeError;
+      const results = await Promise.all(productsPromises);
+      
+      // Collect all products and organize by makeup type
+      const productsByType: { [key: string]: ProductRecommendation[] } = {};
+      results.forEach((result, index) => {
+        if (result.data) {
+          productsByType[makeupTypes[index]] = result.data.map(product => ({
+            id: product.id,
+            name: product.product_name,
+            brand: product.brand,
+            price: product.price,
+            description: product.description,
+            makeup_type: product.makeup_type,
+            category: product.category,
+            ethical_values: product.ethical_values
+          }));
+        }
+      });
 
-      // Transform the data to match our ProductRecommendation interface
-      const transformedProducts: ProductRecommendation[] = makeupTypeProducts.map(product => ({
-        id: product.id,
-        name: product.product_name,
-        brand: product.brand,
-        price: product.price,
-        description: product.description,
-        makeup_type: product.makeup_type,
-        category: product.category,
-        ethical_values: product.ethical_values
-      }));
+      // Calculate match score for each product based on preferences and concerns
+      const scoredProducts = Object.values(productsByType)
+        .flat()
+        .map(product => {
+          let score = 0;
+          
+          // Match with ethical values preferences
+          selections.preferences.forEach(pref => {
+            if (product.ethical_values.some(value => 
+              value.toLowerCase().includes(pref.toLowerCase())
+            )) {
+              score += 2;
+            }
+          });
 
-      // Limit to maximum 4 recommendations
-      const limitedRecommendations = transformedProducts.slice(0, 4);
+          // Additional score for matching brand variety
+          if (recommendations.every(rec => rec.brand !== product.brand)) {
+            score += 1;
+          }
 
-      setRecommendations(limitedRecommendations);
+          return { ...product, score };
+        });
+
+      // Ensure at least one product per selected makeup type
+      const finalRecommendations: ProductRecommendation[] = [];
+      makeupTypes.forEach(type => {
+        const typeProducts = scoredProducts.filter(p => 
+          p.makeup_type.toLowerCase() === type
+        );
+        if (typeProducts.length > 0) {
+          // Get the highest scored product for this type
+          const bestMatch = typeProducts.reduce((prev, current) => 
+            current.score > prev.score ? current : prev
+          );
+          finalRecommendations.push(bestMatch);
+        }
+      });
+
+      // Fill remaining slots with highest scored products not already included
+      const remainingSlots = Math.max(4, makeupTypes.length) - finalRecommendations.length;
+      if (remainingSlots > 0) {
+        const remainingProducts = scoredProducts
+          .filter(p => !finalRecommendations.some(r => r.id === p.id))
+          .sort((a, b) => b.score - a.score)
+          .slice(0, remainingSlots);
+        
+        finalRecommendations.push(...remainingProducts);
+      }
+
+      setRecommendations(finalRecommendations);
       setShowResults(true);
       toast({
         title: "Quiz completed!",
