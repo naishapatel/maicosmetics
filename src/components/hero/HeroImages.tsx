@@ -10,7 +10,7 @@ export const HeroImages = () => {
         transition={{ duration: 0.8 }}
       >
         <img
-          src="/lovable-uploads/1593a1d5-8b54-4d4a-8039-22318acc6701.png"
+          src="/lovable-uploads/7d980285-cf83-4072-a86d-49b25cbdcd90.png"
           alt="Organic Makeup Palette with 'We believe in better' text"
           className="w-full h-auto rounded-xl shadow-md"
         />
