@@ -3,14 +3,26 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/auth-helpers-react";
+import { Label } from "@/components/ui/label";
 
 interface RecommendationFormProps {
   user: User;
   onRecommendationSubmitted: () => void;
 }
+
+const ETHICAL_VALUES = [
+  { id: "vegan", label: "Vegan" },
+  { id: "natural", label: "Natural" },
+  { id: "sustainable", label: "Sustainable" },
+  { id: "eco-friendly", label: "Eco-Friendly" },
+  { id: "cruelty-free", label: "Cruelty-Free" },
+  { id: "organic", label: "Organic" },
+  { id: "fair-trade", label: "Fair Trade" },
+];
 
 export function RecommendationForm({ user, onRecommendationSubmitted }: RecommendationFormProps) {
   const { toast } = useToast();
@@ -23,6 +35,15 @@ export function RecommendationForm({ user, onRecommendationSubmitted }: Recommen
     price: "0",
     ethical_values: [] as string[],
   });
+
+  const handleEthicalValueChange = (value: string, checked: boolean) => {
+    setRecommendation(prev => ({
+      ...prev,
+      ethical_values: checked
+        ? [...prev.ethical_values, value]
+        : prev.ethical_values.filter(v => v !== value)
+    }));
+  };
 
   const handleSubmitRecommendation = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -159,6 +180,25 @@ export function RecommendationForm({ user, onRecommendationSubmitted }: Recommen
         }
         required
       />
+      <div className="space-y-4">
+        <Label>Ethical Values</Label>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {ETHICAL_VALUES.map((value) => (
+            <div key={value.id} className="flex items-center space-x-2">
+              <Checkbox
+                id={value.id}
+                checked={recommendation.ethical_values.includes(value.id)}
+                onCheckedChange={(checked) => 
+                  handleEthicalValueChange(value.id, checked as boolean)
+                }
+              />
+              <Label htmlFor={value.id} className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+                {value.label}
+              </Label>
+            </div>
+          ))}
+        </div>
+      </div>
       <Button type="submit">Submit Recommendation</Button>
     </form>
   );
