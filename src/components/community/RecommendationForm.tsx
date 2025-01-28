@@ -26,7 +26,22 @@ export function RecommendationForm({ user, onRecommendationSubmitted }: Recommen
 
   const handleSubmitRecommendation = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!user) {
+      toast({
+        variant: "destructive",
+        title: "Authentication required",
+        description: "Please sign in to submit a recommendation.",
+      });
+      return;
+    }
+
     try {
+      console.log("Submitting recommendation:", {
+        user_id: user.id,
+        ...recommendation,
+      });
+
       const { error } = await supabase.from("product_recommendations").insert([
         {
           user_id: user.id,
@@ -35,6 +50,7 @@ export function RecommendationForm({ user, onRecommendationSubmitted }: Recommen
       ]);
 
       if (error) {
+        console.error("Error details:", error);
         toast({
           variant: "destructive",
           title: "Error submitting recommendation",
@@ -44,8 +60,8 @@ export function RecommendationForm({ user, onRecommendationSubmitted }: Recommen
       }
 
       toast({
-        title: "Recommendation submitted successfully",
-        description: "Thank you for your recommendation!",
+        title: "Success!",
+        description: "Your recommendation has been submitted successfully.",
       });
 
       setRecommendation({
@@ -64,7 +80,7 @@ export function RecommendationForm({ user, onRecommendationSubmitted }: Recommen
       toast({
         variant: "destructive",
         title: "Error submitting recommendation",
-        description: "Failed to submit recommendation",
+        description: "Failed to submit recommendation. Please try again.",
       });
     }
   };
@@ -92,6 +108,7 @@ export function RecommendationForm({ user, onRecommendationSubmitted }: Recommen
         onValueChange={(value) =>
           setRecommendation({ ...recommendation, category: value })
         }
+        required
       >
         <SelectTrigger>
           <SelectValue placeholder="Select Category" />
@@ -104,6 +121,36 @@ export function RecommendationForm({ user, onRecommendationSubmitted }: Recommen
           <SelectItem value="fragrance">Fragrance</SelectItem>
         </SelectContent>
       </Select>
+      <Select
+        value={recommendation.makeup_type}
+        onValueChange={(value) =>
+          setRecommendation({ ...recommendation, makeup_type: value })
+        }
+        required
+      >
+        <SelectTrigger>
+          <SelectValue placeholder="Select Makeup Type" />
+        </SelectTrigger>
+        <SelectContent>
+          <SelectItem value="foundation">Foundation</SelectItem>
+          <SelectItem value="concealer">Concealer</SelectItem>
+          <SelectItem value="blush">Blush</SelectItem>
+          <SelectItem value="bronzer">Bronzer</SelectItem>
+          <SelectItem value="eyeshadow">Eyeshadow</SelectItem>
+          <SelectItem value="mascara">Mascara</SelectItem>
+          <SelectItem value="lipstick">Lipstick</SelectItem>
+          <SelectItem value="none">None</SelectItem>
+        </SelectContent>
+      </Select>
+      <Input
+        placeholder="Price"
+        type="text"
+        value={recommendation.price}
+        onChange={(e) =>
+          setRecommendation({ ...recommendation, price: e.target.value })
+        }
+        required
+      />
       <Textarea
         placeholder="Why do you recommend this product?"
         value={recommendation.description}
