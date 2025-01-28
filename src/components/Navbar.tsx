@@ -3,7 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { motion } from "framer-motion";
-import { Session } from "@supabase/supabase-js";
+import { useSession } from "@supabase/auth-helpers-react";
 import { useToast } from "@/components/ui/use-toast";
 
 interface NavLinkProps {
@@ -24,9 +24,8 @@ const NavLink = ({ to, children, className }: NavLinkProps) => (
 export const Navbar = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [session, setSession] = useState<Session | null>(null);
+  const session = useSession();
   const [isScrolled, setIsScrolled] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -37,42 +36,10 @@ export const Navbar = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    // Get initial session
-    supabase.auth.getSession().then(({ data: { session }, error }) => {
-      if (error) {
-        console.error("Error fetching session:", error.message);
-        setError(error.message);
-        toast({
-          variant: "destructive",
-          title: "Authentication Error",
-          description: "There was a problem with the authentication service. Please try again later.",
-        });
-      } else {
-        setSession(session);
-      }
-    });
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      if (session) {
-        navigate("/");
-        toast({
-          title: "Welcome back!",
-          description: "You have successfully signed in.",
-        });
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [navigate, toast]);
-
   const handleAuthClick = async () => {
     try {
       if (session) {
         await supabase.auth.signOut();
-        navigate("/");
         toast({
           title: "Signed out",
           description: "You have been successfully signed out.",
@@ -83,7 +50,6 @@ export const Navbar = () => {
     } catch (error) {
       console.error("Auth error:", error);
       const errorMessage = error instanceof Error ? error.message : "An error occurred";
-      setError(errorMessage);
       toast({
         variant: "destructive",
         title: "Authentication Error",

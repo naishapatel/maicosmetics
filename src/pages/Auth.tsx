@@ -6,19 +6,17 @@ import { supabase } from "@/integrations/supabase/client";
 import { Navbar } from "@/components/Navbar";
 import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
+import { useSession } from "@supabase/auth-helpers-react";
 
 const Auth = () => {
   const navigate = useNavigate();
+  const session = useSession();
 
   useEffect(() => {
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-      if (session) {
-        navigate("/");
-      }
-    });
-
-    return () => subscription.unsubscribe();
-  }, [navigate]);
+    if (session) {
+      navigate("/", { replace: true });
+    }
+  }, [session, navigate]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-mai-cream via-mai-rose to-mai-sage">
@@ -105,7 +103,6 @@ const Auth = () => {
         </motion.div>
       </div>
       
-      {/* Decorative elements */}
       <div className="fixed inset-0 -z-10">
         <div className="absolute top-20 left-1/4 w-64 h-64 bg-mai-rose/20 rounded-full blur-3xl" />
         <div className="absolute bottom-20 right-1/4 w-64 h-64 bg-mai-sage/20 rounded-full blur-3xl" />

@@ -29,10 +29,13 @@ const AppRoutes = () => {
         <Route path="/businesses" element={<Businesses />} />
         <Route 
           path="/community" 
-          element={session ? <Community /> : <Navigate to="/auth" />} 
+          element={session ? <Community /> : <Navigate to="/auth" replace />} 
         />
         <Route path="/about" element={<About />} />
-        <Route path="/auth" element={<Auth />} />
+        <Route 
+          path="/auth" 
+          element={!session ? <Auth /> : <Navigate to="/" replace />} 
+        />
       </Routes>
     </>
   );
@@ -42,9 +45,9 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <SessionContextProvider supabaseClient={supabase}>
       <TooltipProvider>
-        <Toaster />
-        <Sonner />
         <BrowserRouter>
+          <Toaster />
+          <Sonner />
           <AppRoutes />
         </BrowserRouter>
       </TooltipProvider>
