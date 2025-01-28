@@ -1,5 +1,11 @@
 import { format } from "date-fns";
 import { Star } from "lucide-react";
+import { useState } from "react";
+import { useSession } from "@supabase/auth-helpers-react";
+import { CommentForm } from "./CommentForm";
+import { CommentList } from "./CommentList";
+import { Button } from "@/components/ui/button";
+import { supabase } from "@/integrations/supabase/client";
 
 interface Review {
   id: string;
@@ -17,6 +23,34 @@ interface ReviewListProps {
 }
 
 export function ReviewList({ reviews }: ReviewListProps) {
+  const session = useSession();
+  const [expandedReview, setExpandedReview] = useState<string | null>(null);
+  const [comments, setComments] = useState<Record<string, any[]>>({});
+
+  const fetchComments = async (reviewId: string) => {
+    const { data } = await supabase
+      .from("review_comments")
+      .select("*, profiles(username)")
+      .eq("review_id", reviewId)
+      .order("created_at", { ascending: true });
+    
+    if (data) {
+      setComments(prev => ({
+        ...prev,
+        [reviewId]: data
+      }));
+    }
+  };
+
+  const handleExpandReview = async (reviewId: string) => {
+    if (expandedReview === reviewId) {
+      setExpandedReview(null);
+    } else {
+      setExpandedReview(reviewId);
+      await fetchComments(reviewId);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {reviews.map((review) => (
@@ -44,6 +78,36 @@ export function ReviewList({ reviews }: ReviewListProps) {
             </div>
           </div>
           <p className="text-gray-700">{review.review_text}</p>
+          
+          <div className="pt-4 border-t">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => handleExpandReview(review.id)}
+            >
+              {expandedReview === review.id ? "Hide Comments" : "Show Comments"}
+            </Button>
+            
+            {expandedReview === review.id && (
+              <div className="mt-4 space-y-4">
+                {comments[review.id] && comments[review.id].length > 0 && (
+                  <CommentList comments={comments[review.id]} />
+                )}
+                
+                {session ? (
+                  <CommentForm
+                    user={session.user}
+                    reviewId={review.id}
+                    onCommentSubmitted={() => fetchComments(review.id)}
+                  />
+                ) : (
+                  <p className="text-sm text-gray-500">
+                    Please sign in to leave a comment
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
         </div>
       ))}
     </div>
