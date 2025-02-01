@@ -73,6 +73,7 @@ export type Database = {
           makeup_type: string
           price: string
           product_name: string
+          skin_benefits: string[]
           user_id: string | null
         }
         Insert: {
@@ -85,6 +86,7 @@ export type Database = {
           makeup_type: string
           price: string
           product_name: string
+          skin_benefits?: string[]
           user_id?: string | null
         }
         Update: {
@@ -97,6 +99,7 @@ export type Database = {
           makeup_type?: string
           price?: string
           product_name?: string
+          skin_benefits?: string[]
           user_id?: string | null
         }
         Relationships: [
