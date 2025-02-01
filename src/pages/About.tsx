@@ -45,8 +45,8 @@ const About = () => {
               Our Story
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 max-w-2xl">
-              At mai., we're revolutionizing how people discover and connect with beauty products 
-              that align with their values and enhance their natural beauty.
+              We created mai. to bridge the gap between conscious consumers and ethical beauty brands. 
+              Our platform makes it simple to discover products that align with both your beauty needs and values.
             </p>
           </div>
         </motion.section>
@@ -63,15 +63,14 @@ const About = () => {
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div className="space-y-6">
                 <p className="text-lg text-gray-600 leading-relaxed">
-                  We're on a mission to transform the beauty industry by connecting conscious consumers 
-                  with ethical, small-business beauty brands. Through our innovative quiz system and 
-                  community-driven platform, we make it easier than ever to find products that work for 
-                  you while supporting businesses that share your values.
+                  We believe finding the right beauty products shouldn't be complicated. Through our 
+                  personalized quiz system and community insights, we help you discover products that 
+                  work for you while supporting small, ethical businesses.
                 </p>
                 <p className="text-lg text-gray-600 leading-relaxed">
-                  Our platform goes beyond simple product recommendations – we're building a community 
-                  where beauty enthusiasts can share experiences, discover new brands, and make informed 
-                  decisions about their beauty purchases.
+                  Our platform combines expert knowledge with real user experiences, creating a trusted 
+                  space where you can make informed decisions about your beauty purchases and connect 
+                  with brands that share your values.
                 </p>
               </div>
               <div className="grid gap-4">
