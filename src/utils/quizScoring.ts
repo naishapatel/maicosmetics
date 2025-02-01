@@ -40,13 +40,20 @@ export const calculateProductScore = (
 
 export const getRecommendationsByType = async (
   supabase: SupabaseClient<Database>,
-  makeupType: string
+  makeupType: string,
+  isNoPreference: boolean
 ) => {
-  const { data, error } = await supabase
+  let query = supabase
     .from('product_recommendations')
     .select('*')
-    .eq('makeup_type', makeupType.toLowerCase())
     .order('created_at', { ascending: false });
+
+  // If not "No preference", filter by makeup type
+  if (!isNoPreference) {
+    query = query.eq('makeup_type', makeupType.toLowerCase());
+  }
+
+  const { data, error } = await query;
 
   if (error) {
     console.error('Error fetching recommendations:', error);
@@ -56,11 +63,21 @@ export const getRecommendationsByType = async (
   return data || [];
 };
 
+const expandNoPreferenceSelections = (
+  category: string[],
+  allOptions: string[]
+): string[] => {
+  if (category.includes('No preference')) {
+    return allOptions.filter(option => option !== 'No preference');
+  }
+  return category;
+};
+
 const mapDatabaseToProductRecommendation = (
   dbProduct: Database['public']['Tables']['product_recommendations']['Row']
 ): ProductRecommendation => ({
   id: dbProduct.id,
-  name: dbProduct.product_name, // Map product_name to name
+  name: dbProduct.product_name,
   brand: dbProduct.brand,
   price: dbProduct.price,
   description: dbProduct.description,
@@ -74,19 +91,43 @@ export const getPersonalizedRecommendations = async (
   selections: QuizSelections
 ): Promise<ProductRecommendation[]> => {
   try {
-    const makeupTypes = selections.makeupType.map(type => type.toLowerCase());
-    const productsPromises = makeupTypes.map(type => getRecommendationsByType(supabase, type));
+    // Define all possible options for each category
+    const allMakeupTypes = ["Foundation", "Concealer", "Blush", "Bronzer", "Eyeshadow", "Mascara", "Lipstick"];
+    const allSkinTypes = ["Normal", "Dry", "Oily", "Combination", "Sensitive", "Scaly", "Not sure"];
+    const allFinishTypes = ["Matte", "Dewy", "Natural"];
+    const allCoverageLevels = ["Minimal", "Light", "Medium", "Maximum"];
+    const allPreferences = ["Fragrance-free", "Oil-free", "Non-comedogenic", "Natural ingredients", "Cruelty-free"];
+
+    // Expand selections if "No preference" is selected
+    const expandedSelections = {
+      makeupType: expandNoPreferenceSelections(selections.makeupType, allMakeupTypes),
+      skinType: expandNoPreferenceSelections(selections.skinType, allSkinTypes),
+      concerns: selections.concerns.includes('No concerns') ? [] : selections.concerns,
+      preferences: expandNoPreferenceSelections(selections.preferences, allPreferences),
+      finish: expandNoPreferenceSelections(selections.finish, allFinishTypes),
+      coverage: expandNoPreferenceSelections(selections.coverage, allCoverageLevels)
+    };
+
+    console.log('Expanded selections:', expandedSelections);
+
+    const hasNoPreferenceMakeup = selections.makeupType.includes('No preference');
+    const productsPromises = expandedSelections.makeupType.map(type => 
+      getRecommendationsByType(supabase, type, hasNoPreferenceMakeup)
+    );
+    
     const productsByType = await Promise.all(productsPromises);
     const allProducts = productsByType.flat();
 
+    console.log('Found products:', allProducts.length);
+
     const scoredProducts = allProducts.map(product => ({
       ...product,
-      score: calculateProductScore(product, selections.preferences, [])
+      score: calculateProductScore(product, expandedSelections.preferences, [])
     })).sort((a, b) => b.score - a.score);
 
     const recommendations: typeof scoredProducts = [];
     const usedBrands = new Set<string>();
-    const maxRecommendations = Math.max(4, makeupTypes.length);
+    const maxRecommendations = Math.max(4, expandedSelections.makeupType.length);
 
     for (const product of scoredProducts) {
       if (recommendations.length >= maxRecommendations) break;
@@ -105,7 +146,8 @@ export const getPersonalizedRecommendations = async (
       recommendations.push(...remainingProducts);
     }
 
-    // Map the database results to match our frontend type
+    console.log('Final recommendations:', recommendations.length);
+
     return recommendations.map(mapDatabaseToProductRecommendation);
   } catch (error) {
     console.error('Error getting personalized recommendations:', error);
