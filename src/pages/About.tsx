@@ -42,7 +42,7 @@ const About = () => {
         >
           <div className="max-w-6xl mx-auto px-4 py-16">
             <h1 className="text-5xl md:text-6xl font-bold text-mai-brown mb-6 leading-tight">
-              Our Story
+              Redefining Beauty Discovery
             </h1>
             <p className="text-xl md:text-2xl text-gray-600 max-w-2xl">
               We created mai. to bridge the gap between conscious consumers and ethical beauty brands. 
