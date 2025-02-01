@@ -13,6 +13,7 @@ import About from "./pages/About";
 import Auth from "./pages/Auth";
 import { supabase } from "./integrations/supabase/client";
 import { Navbar } from "./components/Navbar";
+import { Footer } from "./components/Footer";
 
 const queryClient = new QueryClient();
 
@@ -20,24 +21,27 @@ const AppRoutes = () => {
   const session = useSession();
 
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <Navbar />
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/quiz" element={<Quiz />} />
-        <Route path="/products" element={<Products />} />
-        <Route path="/businesses" element={<Businesses />} />
-        <Route 
-          path="/community" 
-          element={session ? <Community /> : <Navigate to="/auth" replace />} 
-        />
-        <Route path="/about" element={<About />} />
-        <Route 
-          path="/auth" 
-          element={!session ? <Auth /> : <Navigate to="/" replace />} 
-        />
-      </Routes>
-    </>
+      <div className="flex-grow">
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/quiz" element={<Quiz />} />
+          <Route path="/products" element={<Products />} />
+          <Route path="/businesses" element={<Businesses />} />
+          <Route 
+            path="/community" 
+            element={session ? <Community /> : <Navigate to="/auth" replace />} 
+          />
+          <Route path="/about" element={<About />} />
+          <Route 
+            path="/auth" 
+            element={!session ? <Auth /> : <Navigate to="/" replace />} 
+          />
+        </Routes>
+      </div>
+      <Footer />
+    </div>
   );
 };
 
