@@ -5,6 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/auth-helpers-react";
 import { ProductDetailsFields } from "./ProductDetailsFields";
 import { EthicalValuesSelect } from "./EthicalValuesSelect";
+import { SkinBenefitsSelect } from "./SkinBenefitsSelect";
 
 interface RecommendationFormProps {
   user: User;
@@ -21,6 +22,7 @@ export function RecommendationForm({ user, onRecommendationSubmitted }: Recommen
     makeup_type: "none",
     price: "0",
     ethical_values: [] as string[],
+    skin_benefits: [] as string[],
   });
 
   const handleFieldChange = (field: string, value: string) => {
@@ -36,6 +38,15 @@ export function RecommendationForm({ user, onRecommendationSubmitted }: Recommen
       ethical_values: checked
         ? [...prev.ethical_values, value]
         : prev.ethical_values.filter(v => v !== value)
+    }));
+  };
+
+  const handleSkinBenefitChange = (value: string, checked: boolean) => {
+    setRecommendation(prev => ({
+      ...prev,
+      skin_benefits: checked
+        ? [...prev.skin_benefits, value]
+        : prev.skin_benefits.filter(v => v !== value)
     }));
   };
 
@@ -82,6 +93,7 @@ export function RecommendationForm({ user, onRecommendationSubmitted }: Recommen
         makeup_type: "none",
         price: "0",
         ethical_values: [],
+        skin_benefits: [],
       });
       
       onRecommendationSubmitted();
@@ -104,6 +116,10 @@ export function RecommendationForm({ user, onRecommendationSubmitted }: Recommen
       <EthicalValuesSelect
         selectedValues={recommendation.ethical_values}
         onValueChange={handleEthicalValueChange}
+      />
+      <SkinBenefitsSelect
+        selectedValues={recommendation.skin_benefits}
+        onValueChange={handleSkinBenefitChange}
       />
       <Button type="submit">Submit Recommendation</Button>
     </form>
