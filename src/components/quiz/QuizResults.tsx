@@ -29,6 +29,9 @@ const QuizResults = ({ recommendations, resetQuiz }: QuizResultsProps) => {
     return 0; // Default to original order for "match"
   });
 
+  // Use a placeholder image from Unsplash when no image is available
+  const placeholderImage = "https://images.unsplash.com/photo-1581091226825-a6a2a5aee158";
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -64,17 +67,15 @@ const QuizResults = ({ recommendations, resetQuiz }: QuizResultsProps) => {
           >
             <Card className="overflow-hidden h-full hover:shadow-lg transition-all duration-300">
               <div className="p-4">
-                {product.imageUrl && (
-                  <div className="mb-4 overflow-hidden rounded-lg">
-                    <AspectRatio ratio={4/3} className="bg-mai-cream">
-                      <img
-                        src={product.imageUrl}
-                        alt={product.name}
-                        className="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
-                      />
-                    </AspectRatio>
-                  </div>
-                )}
+                <div className="mb-4 overflow-hidden rounded-lg">
+                  <AspectRatio ratio={4/3} className="bg-mai-cream">
+                    <img
+                      src={product.imageUrl || placeholderImage}
+                      alt={product.name}
+                      className="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
+                    />
+                  </AspectRatio>
+                </div>
                 <h4 className="text-lg font-semibold text-mai-brown">{product.name}</h4>
                 <p className="text-sm text-gray-500 mb-2">{product.brand}</p>
                 <p className="text-mai-coral font-semibold mb-2">{product.price}</p>
