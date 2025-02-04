@@ -1,6 +1,7 @@
 import { SupabaseClient } from '@supabase/supabase-js';
 import { Database } from '@/integrations/supabase/types';
 import { QuizSelections, ProductRecommendation } from '@/types/quiz';
+import { supabase } from '@/integrations/supabase/client';
 
 export const calculateProductScore = (
   product: Database['public']['Tables']['product_recommendations']['Row'],
