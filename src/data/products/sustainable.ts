@@ -14,7 +14,7 @@ export const sustainableProducts: Product[] = [
     description: "Zero waste mascara in glass packaging",
     price: "$24",
     category: "sustainable beauty",
-    link: "https://cleanfacedcosmetics.com/collections/eye-makeup/products/zero-waste-mascara"
+    link: "https://cleanfacedcosmetics.com"
   },
   {
     id: "s2",
@@ -22,7 +22,7 @@ export const sustainableProducts: Product[] = [
     description: "Waterless, plastic-free serum bar",
     price: "$48",
     category: "sustainable beauty",
-    link: "https://dewmighty.com/products/bloom-jelly-serum-bar"
+    link: "https://dewmighty.com"
   },
   {
     id: "s3",

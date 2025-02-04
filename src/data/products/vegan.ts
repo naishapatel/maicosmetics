@@ -14,7 +14,7 @@ export const veganProducts: Product[] = [
     description: "All-natural lip and cheek tint",
     price: "$20",
     category: "vegan beauty",
-    link: "https://www.fatandthemoon.com/products/lip-cheek-stain"
+    link: "https://www.fatandthemoon.com"
   },
   {
     id: "v2",
@@ -25,7 +25,7 @@ export const veganProducts: Product[] = [
     link: "https://habitcosmetics.com"
   },
   {
-    id: "nb1",
+    id: "v3",
     title: "River Organics Bronzer",
     description: "Zero-waste bronzing balm",
     price: "$32",

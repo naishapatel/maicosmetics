@@ -14,7 +14,7 @@ export const ecoFriendlyProducts: Product[] = [
     description: "Zero-waste crystal-inspired palette",
     price: "$58",
     category: "eco-friendly beauty",
-    link: "https://aetherbeautyco.com/collections/palettes"
+    link: "https://aetherbeautyco.com"
   },
   {
     id: "e2",
@@ -22,10 +22,10 @@ export const ecoFriendlyProducts: Product[] = [
     description: "Zero-waste multi-use color crayon",
     price: "$14",
     category: "eco-friendly beauty",
-    link: "https://axiologybeauty.com/products/balmies"
+    link: "https://axiologybeauty.com"
   },
   {
-    id: "nb6",
+    id: "e3",
     title: "Meow Meow Tweet Powder",
     description: "Plastic-free setting powder",
     price: "$25",

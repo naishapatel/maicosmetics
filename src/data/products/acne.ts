@@ -14,7 +14,7 @@ export const acneProducts: Product[] = [
     description: "Hypochlorous acid spray for acne-prone skin",
     price: "$28",
     category: "products for acne",
-    link: "https://tower28beauty.com/products/sos-daily-rescue-facial-spray"
+    link: "https://tower28beauty.com"
   },
   {
     id: "a2",

@@ -14,7 +14,7 @@ export const collegeProducts: Product[] = [
     description: "Multi-use color sticks for quick application",
     price: "$32",
     category: "products for college kids",
-    link: "https://axiologybeauty.com/collections/sets"
+    link: "https://axiologybeauty.com"
   },
   {
     id: "c2",
@@ -22,7 +22,7 @@ export const collegeProducts: Product[] = [
     description: "Easy-to-use cream blush",
     price: "$22",
     category: "products for college kids",
-    link: "https://tower28beauty.com/products/beachplease-lip-cheek"
+    link: "https://tower28beauty.com"
   },
   {
     id: "c3",
@@ -30,6 +30,6 @@ export const collegeProducts: Product[] = [
     description: "Natural cream eyeshadow",
     price: "$20",
     category: "products for college kids",
-    link: "https://www.fatandthemoon.com/products/eye-coal"
+    link: "https://www.fatandthemoon.com"
   }
 ];
