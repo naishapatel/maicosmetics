@@ -16,4 +16,5 @@ export interface ProductRecommendation {
   makeup_type: string;
   category: string;
   ethical_values: string[];
+  imageUrl?: string;
 }

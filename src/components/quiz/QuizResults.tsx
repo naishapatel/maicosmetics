@@ -1,6 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { ProductRecommendation } from "@/types/quiz";
 import { motion } from "framer-motion";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { Card } from "@/components/ui/card";
 
 interface QuizResultsProps {
   recommendations: ProductRecommendation[];
@@ -22,22 +24,36 @@ const QuizResults = ({ recommendations, resetQuiz }: QuizResultsProps) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: index * 0.1 }}
-            className="bg-white p-6 rounded-lg shadow-sm"
           >
-            <h4 className="text-lg font-semibold text-mai-brown">{product.name}</h4>
-            <p className="text-sm text-gray-500 mb-2">{product.brand}</p>
-            <p className="text-mai-coral font-semibold mb-2">{product.price}</p>
-            <p className="text-gray-600 text-sm mb-4">{product.description}</p>
-            <div className="flex flex-wrap gap-2">
-              {product.ethical_values.map((value, i) => (
-                <span
-                  key={i}
-                  className="text-xs bg-mai-cream text-mai-brown px-2 py-1 rounded-full"
-                >
-                  {value}
-                </span>
-              ))}
-            </div>
+            <Card className="overflow-hidden h-full hover:shadow-lg transition-all duration-300">
+              <div className="p-4">
+                {product.imageUrl && (
+                  <div className="mb-4 overflow-hidden rounded-lg">
+                    <AspectRatio ratio={4/3} className="bg-mai-cream">
+                      <img
+                        src={product.imageUrl}
+                        alt={product.name}
+                        className="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
+                      />
+                    </AspectRatio>
+                  </div>
+                )}
+                <h4 className="text-lg font-semibold text-mai-brown">{product.name}</h4>
+                <p className="text-sm text-gray-500 mb-2">{product.brand}</p>
+                <p className="text-mai-coral font-semibold mb-2">{product.price}</p>
+                <p className="text-gray-600 text-sm mb-4">{product.description}</p>
+                <div className="flex flex-wrap gap-2">
+                  {product.ethical_values.map((value, i) => (
+                    <span
+                      key={i}
+                      className="text-xs bg-mai-cream text-mai-brown px-2 py-1 rounded-full"
+                    >
+                      {value}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </Card>
           </motion.div>
         ))}
       </div>

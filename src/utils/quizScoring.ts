@@ -75,16 +75,23 @@ const expandNoPreferenceSelections = (
 
 const mapDatabaseToProductRecommendation = (
   dbProduct: Database['public']['Tables']['product_recommendations']['Row']
-): ProductRecommendation => ({
-  id: dbProduct.id,
-  name: dbProduct.product_name,
-  brand: dbProduct.brand,
-  price: dbProduct.price,
-  description: dbProduct.description,
-  makeup_type: dbProduct.makeup_type,
-  category: dbProduct.category,
-  ethical_values: dbProduct.ethical_values
-});
+): ProductRecommendation => {
+  const { data: imageUrl } = supabase.storage
+    .from('product-images')
+    .getPublicUrl(`${dbProduct.id}.jpg`);
+
+  return {
+    id: dbProduct.id,
+    name: dbProduct.product_name,
+    brand: dbProduct.brand,
+    price: dbProduct.price,
+    description: dbProduct.description,
+    makeup_type: dbProduct.makeup_type,
+    category: dbProduct.category,
+    ethical_values: dbProduct.ethical_values,
+    imageUrl: imageUrl.publicUrl
+  };
+};
 
 export const getPersonalizedRecommendations = async (
   supabase: SupabaseClient<Database>,
