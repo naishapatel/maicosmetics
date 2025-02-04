@@ -17,4 +17,5 @@ export interface ProductRecommendation {
   category: string;
   ethical_values: string[];
   imageUrl?: string;
+  business_tags?: string[];
 }

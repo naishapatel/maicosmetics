@@ -65,6 +65,7 @@ export type Database = {
       product_recommendations: {
         Row: {
           brand: string
+          business_tags: string[] | null
           category: string
           created_at: string
           description: string
@@ -78,6 +79,7 @@ export type Database = {
         }
         Insert: {
           brand: string
+          business_tags?: string[] | null
           category: string
           created_at?: string
           description: string
@@ -91,6 +93,7 @@ export type Database = {
         }
         Update: {
           brand?: string
+          business_tags?: string[] | null
           category?: string
           created_at?: string
           description?: string
