@@ -11,25 +11,25 @@ export const acneProducts: Product[] = [
   {
     id: "a1",
     title: "Tower 28 SOS Spray",
-    description: "Acne-safe setting spray with hypochlorous acid",
+    description: "Hypochlorous acid spray for acne-prone skin",
     price: "$28",
     category: "products for acne",
     link: "https://tower28beauty.com/products/sos-daily-rescue-facial-spray"
   },
   {
-    id: "psc4",
-    title: "Dr. Jart+ BB Cream",
-    description: "BB cream with centella asiatica",
-    price: "$32",
+    id: "a2",
+    title: "Clean Faced Minerals",
+    description: "Non-comedogenic mineral foundation",
+    price: "$28",
     category: "products for acne",
-    link: "https://www.drjart.com/product/29719/92640/bb-cream/premium-beauty-balm-spf-45"
+    link: "https://cleanfacedcosmetics.com"
   },
   {
-    id: "psc5",
-    title: "Innisfree No Sebum Powder",
-    description: "Non-comedogenic mineral powder",
-    price: "$24",
+    id: "a3",
+    title: "Common Heir Vitamin C",
+    description: "Plastic-free vitamin C serum",
+    price: "$38",
     category: "products for acne",
-    link: "https://us.innisfree.com/products/no-sebum-mineral-powder"
+    link: "https://commonheir.com"
   }
 ];

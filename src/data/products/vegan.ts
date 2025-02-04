@@ -10,26 +10,26 @@ interface Product {
 export const veganProducts: Product[] = [
   {
     id: "v1",
-    title: "Cover FX Mascara",
-    description: "100% vegan volumizing mascara",
-    price: "$24",
+    title: "Fat and the Moon Stain",
+    description: "All-natural lip and cheek tint",
+    price: "$20",
     category: "vegan beauty",
-    link: "https://www.coverfx.com/products/power-flex-mascara"
+    link: "https://www.fatandthemoon.com/products/lip-cheek-stain"
   },
   {
     id: "v2",
-    title: "Milk Makeup Lip Stain",
-    description: "Vegan lip and cheek stain",
-    price: "$26",
+    title: "HABIT Cream Blush",
+    description: "Clean, vegan cream blush",
+    price: "$24",
     category: "vegan beauty",
-    link: "https://www.milkmakeup.com/products/bionic-liquid-blush"
+    link: "https://habitcosmetics.com"
   },
   {
     id: "nb1",
-    title: "KVD Beauty Liquid Lipstick",
-    description: "Long-lasting vegan liquid lip color",
-    price: "$24",
+    title: "River Organics Bronzer",
+    description: "Zero-waste bronzing balm",
+    price: "$32",
     category: "vegan beauty",
-    link: "https://kvdveganbeauty.com/products/everlasting-liquid-lipstick"
+    link: "https://riverorganics.com"
   }
 ];

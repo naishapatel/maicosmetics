@@ -10,26 +10,26 @@ interface Product {
 export const ecoFriendlyProducts: Product[] = [
   {
     id: "e1",
-    title: "RMS Beauty Lip2Cheek",
-    description: "Multi-use color in glass packaging",
-    price: "$36",
-    category: "eco-friendly beauty",
-    link: "https://www.rmsbeauty.com/products/lip2cheek"
-  },
-  {
-    id: "e2",
     title: "Aether Beauty Eyeshadow",
-    description: "Zero-waste eyeshadow palette",
-    price: "$42",
+    description: "Zero-waste crystal-inspired palette",
+    price: "$58",
     category: "eco-friendly beauty",
     link: "https://aetherbeautyco.com/collections/palettes"
   },
   {
-    id: "nb6",
-    title: "Clean Faced Cosmetics Mascara",
-    description: "Zero waste mascara in glass tube",
-    price: "$26",
+    id: "e2",
+    title: "Axiology Balmies",
+    description: "Zero-waste multi-use color crayon",
+    price: "$14",
     category: "eco-friendly beauty",
-    link: "https://cleanfacedcosmetics.com/collections/eye-makeup/products/zero-waste-mascara"
+    link: "https://axiologybeauty.com/products/balmies"
+  },
+  {
+    id: "nb6",
+    title: "Meow Meow Tweet Powder",
+    description: "Plastic-free setting powder",
+    price: "$25",
+    category: "eco-friendly beauty",
+    link: "https://meowmeowtweet.com"
   }
 ];

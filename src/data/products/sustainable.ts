@@ -10,26 +10,26 @@ interface Product {
 export const sustainableProducts: Product[] = [
   {
     id: "s1",
-    title: "Kjaer Weis Foundation",
-    description: "Certified organic cream foundation in refillable case",
-    price: "$32",
+    title: "Clean Faced Cosmetics Mascara",
+    description: "Zero waste mascara in glass packaging",
+    price: "$24",
     category: "sustainable beauty",
-    link: "https://kjaerweis.com/products/cream-foundation"
+    link: "https://cleanfacedcosmetics.com/collections/eye-makeup/products/zero-waste-mascara"
   },
   {
     id: "s2",
-    title: "Elate Mascara",
-    description: "Bamboo packaged natural mascara",
-    price: "$24",
+    title: "Dew Mighty Bloom Jelly",
+    description: "Waterless, plastic-free serum bar",
+    price: "$48",
     category: "sustainable beauty",
-    link: "https://elatebeauty.com/collections/eyes/products/essential-mascara"
+    link: "https://dewmighty.com/products/bloom-jelly-serum-bar"
   },
   {
     id: "s3",
-    title: "La Bouche Rouge Lipstick",
-    description: "Luxury refillable leather case lipstick",
-    price: "$28",
+    title: "River Organics Lip Butter",
+    description: "Plastic-free vegan lip color",
+    price: "$18",
     category: "sustainable beauty",
-    link: "https://www.laboucherougeparis.com/en-us/products/le-rouge-refill"
+    link: "https://riverorganics.com"
   }
 ];
