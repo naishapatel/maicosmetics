@@ -30,21 +30,44 @@ export const HeroFeatures = () => {
       {features.map((feature, index) => (
         <motion.div
           key={index}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: index * 0.2 }}
           whileHover={{ y: -5 }}
-          className="relative group"
+          className="relative group cursor-pointer"
         >
-          <div className="glass-card p-8 hover:shadow-2xl transition-all duration-300 border border-white/20 backdrop-blur-md relative z-10">
-            <div className="w-12 h-12 bg-gradient-to-br from-mai-rose/30 to-mai-coral/20 rounded-xl flex items-center justify-center mb-6 mx-auto group-hover:scale-110 transition-transform duration-300">
-              {feature.icon}
-            </div>
-            <h3 className="text-lg font-semibold text-mai-brown mb-3">
+          <motion.div
+            className="glass-card p-8 transition-all duration-300 border border-white/20 backdrop-blur-md relative z-10"
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+          >
+            <motion.div
+              className="w-12 h-12 bg-gradient-to-br from-mai-rose/30 to-mai-coral/20 rounded-xl flex items-center justify-center mb-6 mx-auto transition-transform duration-300"
+              whileHover={{ rotate: 5, scale: 1.1 }}
+            >
+              <motion.div
+                initial={{ rotate: 0 }}
+                whileHover={{ rotate: [0, -5, 5, 0] }}
+                transition={{ duration: 0.3 }}
+              >
+                {feature.icon}
+              </motion.div>
+            </motion.div>
+            <motion.h3
+              className="text-lg font-semibold text-mai-brown mb-3"
+              whileHover={{ scale: 1.05 }}
+            >
               {feature.title}
-            </h3>
+            </motion.h3>
             <p className="text-gray-600">
               {feature.description}
             </p>
-          </div>
-          <div className="absolute inset-0 bg-gradient-to-br from-mai-sage/20 to-mai-rose/20 blur-xl opacity-0 group-hover:opacity-70 transition-opacity duration-300" />
+          </motion.div>
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-br from-mai-sage/20 to-mai-rose/20 blur-xl opacity-0 group-hover:opacity-70 transition-opacity duration-300"
+            initial={{ scale: 0.8 }}
+            whileHover={{ scale: 1 }}
+          />
         </motion.div>
       ))}
     </motion.div>

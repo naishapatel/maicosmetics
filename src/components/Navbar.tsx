@@ -13,12 +13,23 @@ interface NavLinkProps {
 }
 
 const NavLink = ({ to, children, className }: NavLinkProps) => (
-  <Link
-    to={to}
-    className={`px-4 py-2 rounded-full text-gray-600 hover:text-mai-coral hover:bg-mai-sage/20 transition-all duration-300 ${className || ''}`}
+  <motion.div
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
   >
-    {children}
-  </Link>
+    <Link
+      to={to}
+      className={`px-4 py-2 rounded-full text-gray-600 relative overflow-hidden group ${className || ''}`}
+    >
+      <span className="relative z-10">{children}</span>
+      <motion.div
+        className="absolute inset-0 bg-gradient-to-r from-mai-sage/20 to-mai-rose/20 rounded-full -z-0"
+        initial={{ scale: 0, opacity: 0 }}
+        whileHover={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.2 }}
+      />
+    </Link>
+  </motion.div>
 );
 
 export const Navbar = () => {
