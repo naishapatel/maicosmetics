@@ -54,12 +54,12 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         mai: {
-          cream: "#F7EBE8",
-          rose: "#E2B4BD",
-          sage: "#B4C5AF",
-          sand: "#D3C0B2",
-          coral: "#CF8B7E",
-          brown: "#5C4741",
+          cream: "#FFEBD6",
+          rose: "#C53579",
+          sage: "#8F0137",
+          sand: "#FF9985",
+          coral: "#A80006",
+          brown: "#8F0137",
         },
       },
       borderRadius: {
