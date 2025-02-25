@@ -1,4 +1,3 @@
-
 import type { Config } from "tailwindcss";
 
 export default {
@@ -54,12 +53,12 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         mai: {
-          cream: "#FFEBD6",
-          rose: "#C53579",
-          sage: "#8F0137",
-          sand: "#FF9985",
-          coral: "#A80006",
-          brown: "#8F0137",
+          cream: "#FFF5EA",
+          rose: "#FFE4E6",
+          sage: "#E7F3EF",
+          sand: "#F6F5F1",
+          coral: "#FF9494",
+          brown: "#4A3F35",
         },
       },
       borderRadius: {
