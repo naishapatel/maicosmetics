@@ -11,6 +11,7 @@ export type Database = {
     Tables: {
       community_reviews: {
         Row: {
+          categories: string[] | null
           created_at: string
           id: string
           product_name: string
@@ -19,6 +20,7 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          categories?: string[] | null
           created_at?: string
           id?: string
           product_name: string
@@ -27,6 +29,7 @@ export type Database = {
           user_id: string
         }
         Update: {
+          categories?: string[] | null
           created_at?: string
           id?: string
           product_name?: string
@@ -125,22 +128,31 @@ export type Database = {
       profiles: {
         Row: {
           avatar_url: string | null
+          bio: string | null
           created_at: string
           id: string
+          recommendation_count: number | null
+          review_count: number | null
           updated_at: string
           username: string | null
         }
         Insert: {
           avatar_url?: string | null
+          bio?: string | null
           created_at?: string
           id: string
+          recommendation_count?: number | null
+          review_count?: number | null
           updated_at?: string
           username?: string | null
         }
         Update: {
           avatar_url?: string | null
+          bio?: string | null
           created_at?: string
           id?: string
+          recommendation_count?: number | null
+          review_count?: number | null
           updated_at?: string
           username?: string | null
         }

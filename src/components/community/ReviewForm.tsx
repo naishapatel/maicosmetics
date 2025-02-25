@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,6 +7,16 @@ import { Rating } from "@/components/ui/rating";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/auth-helpers-react";
+
+const CATEGORIES = [
+  "Skincare",
+  "Makeup",
+  "Haircare",
+  "Body Care",
+  "Fragrance",
+  "Tools",
+  "Other"
+];
 
 interface ReviewFormProps {
   user: User;
@@ -18,7 +29,17 @@ export function ReviewForm({ user, onReviewSubmitted }: ReviewFormProps) {
     product_name: "",
     review_text: "",
     rating: 0,
+    categories: [] as string[],
   });
+
+  const handleCategoryChange = (category: string) => {
+    setNewReview(prev => ({
+      ...prev,
+      categories: prev.categories.includes(category)
+        ? prev.categories.filter(c => c !== category)
+        : [...prev.categories, category]
+    }));
+  };
 
   const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,6 +69,7 @@ export function ReviewForm({ user, onReviewSubmitted }: ReviewFormProps) {
         product_name: "",
         review_text: "",
         rating: 0,
+        categories: [],
       });
       
       onReviewSubmitted();
@@ -85,6 +107,22 @@ export function ReviewForm({ user, onReviewSubmitted }: ReviewFormProps) {
           value={newReview.rating}
           onChange={(value) => setNewReview({ ...newReview, rating: value })}
         />
+      </div>
+      <div className="space-y-2">
+        <label className="text-sm text-gray-600">Categories:</label>
+        <div className="flex flex-wrap gap-2">
+          {CATEGORIES.map((category) => (
+            <Button
+              key={category}
+              type="button"
+              variant={newReview.categories.includes(category) ? "default" : "outline"}
+              size="sm"
+              onClick={() => handleCategoryChange(category)}
+            >
+              {category}
+            </Button>
+          ))}
+        </div>
       </div>
       <Button type="submit">Submit Review</Button>
     </form>
