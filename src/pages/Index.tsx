@@ -24,14 +24,14 @@ const features = [
 
 const Index = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-background">
       <Navbar />
       <Hero />
       <motion.section
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8, delay: 0.8 }}
-        className="py-32 bg-gradient-to-b from-gray-50 to-white"
+        className="py-32 bg-gradient-to-b from-background to-background/90"
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
@@ -39,7 +39,7 @@ const Index = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8 }}
-              className="text-4xl font-bold text-gray-900 mb-6"
+              className="text-4xl font-bold text-foreground mb-6"
             >
               Why Choose <span className="text-mai-coral">mai.</span>
             </motion.h2>
@@ -47,7 +47,7 @@ const Index = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-gray-600 max-w-2xl mx-auto text-lg leading-relaxed"
+              className="text-muted-foreground max-w-2xl mx-auto text-lg leading-relaxed"
             >
               We understand that every skin is unique. Our recommendations are carefully curated to match your specific needs and preferences.
             </motion.p>
@@ -59,13 +59,13 @@ const Index = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8, delay: 0.8 + index * 0.2 }}
-                className="bg-white p-8 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100"
+                className="bg-card p-8 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-border"
               >
-                <div className="text-mai-coral mb-6 bg-gray-50 p-4 rounded-2xl inline-block">
+                <div className="text-mai-coral mb-6 bg-background/50 p-4 rounded-2xl inline-block">
                   {feature.icon}
                 </div>
-                <h3 className="text-2xl font-semibold text-gray-900 mb-4">{feature.title}</h3>
-                <p className="text-gray-600 leading-relaxed">{feature.description}</p>
+                <h3 className="text-2xl font-semibold text-card-foreground mb-4">{feature.title}</h3>
+                <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
               </motion.div>
             ))}
           </div>
