@@ -1,3 +1,4 @@
+
 import { format } from "date-fns";
 import { Star } from "lucide-react";
 import { useState } from "react";
@@ -65,7 +66,7 @@ export function ReviewList({ reviews }: ReviewListProps) {
               </h3>
               <p className="text-sm text-gray-500">
                 by {review.profiles?.username || "Anonymous"} •{" "}
-                {format(new Date(review.created_at), "MMM d, yyyy")}
+                {format(new Date(review.created_at), "MMMM d, yyyy")}
               </p>
             </div>
             <div className="flex items-center">
