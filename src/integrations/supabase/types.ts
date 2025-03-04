@@ -65,6 +65,35 @@ export type Database = {
         }
         Relationships: []
       }
+      page_views: {
+        Row: {
+          id: string
+          path: string
+          session_id: string
+          view_time: string
+        }
+        Insert: {
+          id?: string
+          path: string
+          session_id: string
+          view_time?: string
+        }
+        Update: {
+          id?: string
+          path?: string
+          session_id?: string
+          view_time?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "page_views_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "user_analytics"
+            referencedColumns: ["session_id"]
+          },
+        ]
+      }
       product_recommendations: {
         Row: {
           brand: string
@@ -196,6 +225,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_analytics: {
+        Row: {
+          first_seen: string
+          id: string
+          last_seen: string
+          path: string | null
+          referrer: string | null
+          session_id: string
+          user_agent: string | null
+        }
+        Insert: {
+          first_seen?: string
+          id?: string
+          last_seen?: string
+          path?: string | null
+          referrer?: string | null
+          session_id: string
+          user_agent?: string | null
+        }
+        Update: {
+          first_seen?: string
+          id?: string
+          last_seen?: string
+          path?: string | null
+          referrer?: string | null
+          session_id?: string
+          user_agent?: string | null
+        }
+        Relationships: []
       }
     }
     Views: {

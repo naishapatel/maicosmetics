@@ -25,11 +25,16 @@ const AppRoutes = () => {
 
   // Initialize analytics and set up activity tracking
   useEffect(() => {
-    initAnalytics();
+    // Initialize analytics once when the app loads
+    initAnalytics().catch(error => {
+      console.error("Failed to initialize analytics:", error);
+    });
     
     // Update user activity every 5 minutes while the app is open
     const activityInterval = setInterval(() => {
-      updateUserActivity();
+      updateUserActivity().catch(error => {
+        console.error("Failed to update user activity:", error);
+      });
     }, 5 * 60 * 1000);
     
     // Cleanup on unmount

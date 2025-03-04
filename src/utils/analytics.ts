@@ -33,18 +33,14 @@ export const initAnalytics = async () => {
  */
 const trackUserSession = async (sessionId: string) => {
   try {
-    const { error } = await supabase
-      .from('user_analytics')
-      .upsert(
-        { 
-          session_id: sessionId,
-          last_seen: new Date().toISOString(),
-          user_agent: navigator.userAgent,
-          referrer: document.referrer || null,
-          path: window.location.pathname
-        },
-        { onConflict: 'session_id' }
-      );
+    // Use the Raw API to insert/update data to user_analytics
+    const { error } = await supabase.rpc('upsert_user_analytics', {
+      p_session_id: sessionId,
+      p_last_seen: new Date().toISOString(),
+      p_user_agent: navigator.userAgent,
+      p_referrer: document.referrer || null,
+      p_path: window.location.pathname
+    });
     
     if (error) throw error;
     
@@ -87,13 +83,11 @@ const trackPageView = (sessionId: string) => {
  */
 const recordPageView = async (sessionId: string, path: string) => {
   try {
-    const { error } = await supabase
-      .from('page_views')
-      .insert({
-        session_id: sessionId,
-        path,
-        view_time: new Date().toISOString()
-      });
+    // Use the Raw API to insert data to page_views
+    const { error } = await supabase.rpc('insert_page_view', {
+      p_session_id: sessionId,
+      p_path: path
+    });
     
     if (error) throw error;
   } catch (error) {
@@ -110,10 +104,11 @@ export const updateUserActivity = async () => {
   if (!sessionId) return;
   
   try {
-    await supabase
-      .from('user_analytics')
-      .update({ last_seen: new Date().toISOString() })
-      .eq('session_id', sessionId);
+    // Use the Raw API to update the last_seen timestamp
+    await supabase.rpc('update_user_activity', {
+      p_session_id: sessionId,
+      p_last_seen: new Date().toISOString()
+    });
   } catch (error) {
     console.error('Error updating user activity:', error);
   }
