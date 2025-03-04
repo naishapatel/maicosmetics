@@ -33,7 +33,7 @@ export const initAnalytics = async () => {
  */
 const trackUserSession = async (sessionId: string) => {
   try {
-    // Use the Raw API to insert/update data to user_analytics
+    // Use the RPC function to insert/update data to user_analytics
     const { error } = await supabase.rpc('upsert_user_analytics', {
       p_session_id: sessionId,
       p_last_seen: new Date().toISOString(),
@@ -83,7 +83,7 @@ const trackPageView = (sessionId: string) => {
  */
 const recordPageView = async (sessionId: string, path: string) => {
   try {
-    // Use the Raw API to insert data to page_views
+    // Use the RPC function to insert data to page_views
     const { error } = await supabase.rpc('insert_page_view', {
       p_session_id: sessionId,
       p_path: path
@@ -104,7 +104,7 @@ export const updateUserActivity = async () => {
   if (!sessionId) return;
   
   try {
-    // Use the Raw API to update the last_seen timestamp
+    // Use the RPC function to update the last_seen timestamp
     await supabase.rpc('update_user_activity', {
       p_session_id: sessionId,
       p_last_seen: new Date().toISOString()

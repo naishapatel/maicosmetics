@@ -261,7 +261,30 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      insert_page_view: {
+        Args: {
+          p_session_id: string
+          p_path: string
+        }
+        Returns: undefined
+      }
+      update_user_activity: {
+        Args: {
+          p_session_id: string
+          p_last_seen: string
+        }
+        Returns: undefined
+      }
+      upsert_user_analytics: {
+        Args: {
+          p_session_id: string
+          p_last_seen: string
+          p_user_agent: string
+          p_referrer: string
+          p_path: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never
