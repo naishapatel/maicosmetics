@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -11,7 +10,6 @@ import { ReviewForm } from "@/components/community/ReviewForm";
 import { RecommendationForm } from "@/components/community/RecommendationForm";
 import { ReviewList } from "@/components/community/ReviewList";
 import { ProfileCard } from "@/components/community/ProfileCard";
-import { ProfileList } from "@/components/community/ProfileList";
 
 const Community = () => {
   const { toast } = useToast();
@@ -102,9 +100,8 @@ const Community = () => {
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
         <Tabs defaultValue="reviews" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="reviews">Community Reviews</TabsTrigger>
-            <TabsTrigger value="members">Community Members</TabsTrigger>
             <TabsTrigger value="recommendations">Recommend a Product</TabsTrigger>
           </TabsList>
 
@@ -165,10 +162,6 @@ const Community = () => {
               )}
             </div>
             <ReviewList reviews={reviews} />
-          </TabsContent>
-
-          <TabsContent value="members">
-            <ProfileList />
           </TabsContent>
 
           <TabsContent value="recommendations">
