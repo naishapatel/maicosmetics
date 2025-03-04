@@ -6,7 +6,7 @@ import { CommentForm } from "./CommentForm";
 import { CommentList } from "./CommentList";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { User } from "@supabase/auth-helpers-react";
+import { Session } from "@supabase/auth-helpers-react";
 import { memo } from "react";
 
 interface ReviewItemProps {
@@ -20,7 +20,7 @@ interface ReviewItemProps {
       username: string | null;
     } | null;
   };
-  session: User | null;
+  session: Session | null;
 }
 
 export const ReviewItem = memo(({ review, session }: ReviewItemProps) => {
@@ -82,9 +82,9 @@ export const ReviewItem = memo(({ review, session }: ReviewItemProps) => {
           <div className="mt-4 space-y-4">
             {comments.length > 0 && <CommentList comments={comments} />}
             
-            {session ? (
+            {session?.user ? (
               <CommentForm
-                user={session}
+                user={session.user}
                 reviewId={review.id}
                 onCommentSubmitted={fetchComments}
               />
