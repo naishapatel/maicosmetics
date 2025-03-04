@@ -1,9 +1,11 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { SessionContextProvider, useSession } from '@supabase/auth-helpers-react';
+import { useEffect } from "react";
 import Index from "./pages/Index";
 import Quiz from "./pages/Quiz";
 import Products from "./pages/Products";
@@ -14,11 +16,25 @@ import Auth from "./pages/Auth";
 import { supabase } from "./integrations/supabase/client";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
+import { initAnalytics, updateUserActivity } from "./utils/analytics";
 
 const queryClient = new QueryClient();
 
 const AppRoutes = () => {
   const session = useSession();
+
+  // Initialize analytics and set up activity tracking
+  useEffect(() => {
+    initAnalytics();
+    
+    // Update user activity every 5 minutes while the app is open
+    const activityInterval = setInterval(() => {
+      updateUserActivity();
+    }, 5 * 60 * 1000);
+    
+    // Cleanup on unmount
+    return () => clearInterval(activityInterval);
+  }, []);
 
   return (
     <div className="min-h-screen flex flex-col">
