@@ -42,7 +42,7 @@ export const HeroContent = () => {
         <h1 className="text-6xl sm:text-7xl font-bold text-mai-brown mb-4 tracking-tight leading-tight">
           Beauty that
           <span className="relative inline-block mx-3">
-            <span className="relative z-10 text-mai-maroon">cares</span>
+            <span className="relative z-10 text-mai-coral">cares</span>
             <motion.span className="absolute inset-0 bg-mai-sage/20 -skew-y-3 rounded-lg" initial={{
             scaleX: 0
           }} animate={{
