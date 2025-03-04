@@ -1,3 +1,4 @@
+
 import { motion } from "framer-motion";
 
 export const HeroBackground = () => {
@@ -32,8 +33,7 @@ export const HeroBackground = () => {
         className="absolute bottom-20 left-[10%] w-[35rem] h-[35rem] rounded-full bg-gradient-to-tr from-mai-rose/20 to-mai-sage/10 blur-3xl"
       />
       
-      {/* Decorative patterns */}
-      <div className="absolute inset-0 opacity-[0.15] bg-[radial-gradient(circle_at_1px_1px,#4A3F35_1px,transparent_0)] [background-size:40px_40px]" />
+      {/* Removed the decorative patterns div that contained the grid points */}
     </>
   );
 };
