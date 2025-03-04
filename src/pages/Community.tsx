@@ -11,6 +11,7 @@ import { ReviewForm } from "@/components/community/ReviewForm";
 import { RecommendationForm } from "@/components/community/RecommendationForm";
 import { ReviewList } from "@/components/community/ReviewList";
 import { ProfileCard } from "@/components/community/ProfileCard";
+import { ProfileList } from "@/components/community/ProfileList";
 
 const Community = () => {
   const { toast } = useToast();
@@ -100,32 +101,25 @@ const Community = () => {
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
-        {session && userProfile && (
-          <div className="mb-8">
-            <ProfileCard
-              username={userProfile.username}
-              avatarUrl={userProfile.avatar_url}
-              bio={userProfile.bio}
-              reviewCount={userProfile.review_count}
-              recommendationCount={userProfile.recommendation_count}
-            />
-          </div>
-        )}
-
-        <div className="mb-8">
-          <Input
-            placeholder="Search reviews..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="max-w-md"
-          />
-        </div>
-
         <Tabs defaultValue="reviews" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="reviews">Community Reviews</TabsTrigger>
+            <TabsTrigger value="members">Community Members</TabsTrigger>
             <TabsTrigger value="recommendations">Recommend a Product</TabsTrigger>
           </TabsList>
+
+          {session && userProfile && (
+            <div className="my-8">
+              <h2 className="text-2xl font-semibold text-mai-brown mb-4">Your Profile</h2>
+              <ProfileCard
+                username={userProfile.username}
+                avatarUrl={userProfile.avatar_url}
+                bio={userProfile.bio}
+                reviewCount={userProfile.review_count}
+                recommendationCount={userProfile.recommendation_count}
+              />
+            </div>
+          )}
 
           <TabsContent value="reviews" className="space-y-8">
             <div className="bg-mai-sage/20 rounded-lg p-6 mt-6">
@@ -142,6 +136,14 @@ const Community = () => {
                   <Button onClick={handleAuthRedirect}>Sign In</Button>
                 </div>
               )}
+            </div>
+            <div className="mb-8">
+              <Input
+                placeholder="Search reviews..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="max-w-md"
+              />
             </div>
             <div className="flex flex-wrap gap-2 mb-4">
               <Button
@@ -163,6 +165,10 @@ const Community = () => {
               )}
             </div>
             <ReviewList reviews={reviews} />
+          </TabsContent>
+
+          <TabsContent value="members">
+            <ProfileList />
           </TabsContent>
 
           <TabsContent value="recommendations">
