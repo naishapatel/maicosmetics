@@ -36,27 +36,37 @@ const AboutFounders = () => {
 
   return (
     <motion.section 
-      className="max-w-6xl mx-auto px-4 mb-16"
+      className="max-w-6xl mx-auto px-4 mb-24"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
       variants={containerVariants}
     >
       <motion.div 
-        className="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-mai-sage/20"
+        className="bg-white/80 backdrop-blur-sm rounded-3xl p-10 md:p-16 shadow-md border border-mai-sage/20"
         initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.8 }}
+        whileHover={{ 
+          boxShadow: "0 20px 50px -12px rgba(0, 0, 0, 0.1)",
+          transition: { duration: 0.4 }
+        }}
       >
         <motion.h2 
-          className="text-3xl md:text-4xl font-bold text-mai-brown mb-8"
+          className="text-3xl md:text-4xl font-bold text-mai-brown mb-12 relative inline-block"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
           Our Founders
+          <motion.div 
+            className="absolute -bottom-2 left-0 h-1 bg-mai-coral rounded-full w-0"
+            whileInView={{ width: "100%" }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.5 }}
+          />
         </motion.h2>
         
         {founders.map((founder, index) => (
