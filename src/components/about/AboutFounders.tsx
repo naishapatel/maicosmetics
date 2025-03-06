@@ -22,15 +22,42 @@ const AboutFounders = () => {
     }
   ];
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: { 
+        staggerChildren: 0.4,
+        delayChildren: 0.2,
+        duration: 0.8
+      }
+    }
+  };
+
   return (
     <motion.section 
       className="max-w-6xl mx-auto px-4 mb-16"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: 0.1 }}
+      initial="hidden"
+      whileInView="visible"
+      viewport={{ once: true, amount: 0.2 }}
+      variants={containerVariants}
     >
-      <div className="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-mai-sage/20">
-        <h2 className="text-3xl md:text-4xl font-bold text-mai-brown mb-8">Our Founders</h2>
+      <motion.div 
+        className="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-mai-sage/20"
+        initial={{ opacity: 0, y: 30 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, amount: 0.2 }}
+        transition={{ duration: 0.8 }}
+      >
+        <motion.h2 
+          className="text-3xl md:text-4xl font-bold text-mai-brown mb-8"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
+          Our Founders
+        </motion.h2>
         
         {founders.map((founder, index) => (
           <FounderCard 
@@ -39,7 +66,7 @@ const AboutFounders = () => {
             {...founder}
           />
         ))}
-      </div>
+      </motion.div>
     </motion.section>
   );
 };

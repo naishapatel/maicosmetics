@@ -5,28 +5,65 @@ const JoinCommunity = () => {
   return (
     <motion.section 
       className="max-w-6xl mx-auto px-4"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, delay: 0.6 }}
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.2 }}
+      transition={{ duration: 0.8 }}
     >
-      <div className="bg-mai-cream rounded-3xl p-12 text-center border border-mai-sage/20">
-        <h2 className="text-3xl md:text-4xl font-bold text-mai-brown mb-6">Join Our Community</h2>
-        <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+      <motion.div 
+        className="bg-mai-cream rounded-3xl p-12 text-center border border-mai-sage/20"
+        initial={{ scale: 0.95, opacity: 0 }}
+        whileInView={{ scale: 1, opacity: 1 }}
+        viewport={{ once: true }}
+        transition={{ 
+          duration: 0.6,
+          type: "spring",
+          stiffness: 100,
+          damping: 15
+        }}
+        whileHover={{ 
+          boxShadow: "0 10px 30px -5px rgba(0, 0, 0, 0.1)",
+          transition: { duration: 0.3 }
+        }}
+      >
+        <motion.h2 
+          className="text-3xl md:text-4xl font-bold text-mai-brown mb-6"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+        >
+          Join Our Community
+        </motion.h2>
+        <motion.p 
+          className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto"
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.4 }}
+        >
           Be part of a movement that's reshaping the beauty industry. Share your experiences, 
           discover new products, and connect with like-minded beauty enthusiasts.
-        </p>
+        </motion.p>
         <motion.div
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.6 }}
         >
-          <a 
+          <motion.a 
             href="/auth" 
             className="inline-block bg-mai-coral text-white px-8 py-4 rounded-full font-medium hover:shadow-md transition-all duration-300"
+            whileHover={{ 
+              scale: 1.05,
+              boxShadow: "0 10px 25px -5px rgba(255, 148, 148, 0.4)"
+            }}
+            whileTap={{ scale: 0.95 }}
           >
             Join mai. Today
-          </a>
+          </motion.a>
         </motion.div>
-      </div>
+      </motion.div>
     </motion.section>
   );
 };
