@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { Heart, Users, Building2, Handshake } from "lucide-react";
+import { Heart, Users, Building2, Handshake, Code } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
@@ -53,7 +53,7 @@ const About = () => {
           </div>
         </motion.section>
 
-        {/* Founder Section */}
+        {/* Founders Section */}
         <motion.section 
           className="max-w-6xl mx-auto px-4 mb-16"
           initial={{ opacity: 0, y: 20 }}
@@ -61,8 +61,10 @@ const About = () => {
           transition={{ duration: 0.6, delay: 0.1 }}
         >
           <div className="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-mai-sage/20">
-            <h2 className="text-3xl md:text-4xl font-bold text-mai-brown mb-8">Our Founder</h2>
-            <div className="flex flex-col md:flex-row items-center gap-8">
+            <h2 className="text-3xl md:text-4xl font-bold text-mai-brown mb-8">Our Founders</h2>
+            
+            {/* First Founder */}
+            <div className="flex flex-col md:flex-row items-center gap-8 mb-16">
               <div className="w-full md:w-1/3 flex justify-center">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
@@ -86,6 +88,35 @@ const About = () => {
                   Combining her passion for ethical beauty with her technical expertise, she created 
                   a platform that puts both consumers and small businesses first, emphasizing authenticity 
                   and sustainability throughout the beauty journey.
+                </p>
+              </div>
+            </div>
+            
+            {/* Second Founder */}
+            <div className="flex flex-col md:flex-row items-center gap-8">
+              <div className="w-full md:w-1/3 flex justify-center">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5 }}
+                  className="relative w-64 h-64 rounded-full overflow-hidden border-4 border-mai-sage/20"
+                >
+                  <img 
+                    src="/lovable-uploads/3d0b2768-19f0-4844-86ca-73f4e313195a.png" 
+                    alt="Connie Chen" 
+                    className="w-full h-full object-cover"
+                  />
+                </motion.div>
+              </div>
+              <div className="w-full md:w-2/3 space-y-4 text-center md:text-left">
+                <h3 className="text-2xl font-bold text-mai-brown">Connie Chen</h3>
+                <p className="text-xl text-mai-coral font-medium">Co-Founder, CTO</p>
+                <p className="text-lg text-gray-600">Stanford University</p>
+                <p className="text-lg text-gray-600 leading-relaxed">
+                  As Co-Founder and CTO, Connie brings her extensive technical expertise to mai. 
+                  She leads our engineering team in developing innovative solutions that power our 
+                  personalization algorithms and seamless user experience. Her passion for technology 
+                  that makes a positive impact drives the technical vision behind our platform.
                 </p>
               </div>
             </div>
