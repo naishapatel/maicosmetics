@@ -1,6 +1,8 @@
+
 import { motion } from "framer-motion";
 import { Heart, Users, Building2, Handshake } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 
 const About = () => {
   const fadeIn = {
@@ -48,6 +50,45 @@ const About = () => {
               We created mai. to bridge the gap between conscious consumers and ethical beauty brands. 
               Our platform makes it simple to discover products that align with both your beauty needs and values.
             </p>
+          </div>
+        </motion.section>
+
+        {/* Founder Section */}
+        <motion.section 
+          className="max-w-6xl mx-auto px-4 mb-16"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+        >
+          <div className="bg-white rounded-3xl p-8 md:p-12 shadow-sm border border-mai-sage/20">
+            <h2 className="text-3xl md:text-4xl font-bold text-mai-brown mb-8">Our Founder</h2>
+            <div className="flex flex-col md:flex-row items-center gap-8">
+              <div className="w-full md:w-1/3 flex justify-center">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5 }}
+                  className="relative w-64 h-64 rounded-full overflow-hidden border-4 border-mai-coral/20"
+                >
+                  <img 
+                    src="/lovable-uploads/7396519f-835d-4b8e-917c-a151b9ce67ac.png" 
+                    alt="Naisha Patel" 
+                    className="w-full h-full object-cover"
+                  />
+                </motion.div>
+              </div>
+              <div className="w-full md:w-2/3 space-y-4 text-center md:text-left">
+                <h3 className="text-2xl font-bold text-mai-brown">Naisha Patel</h3>
+                <p className="text-xl text-mai-coral font-medium">Founder, CEO</p>
+                <p className="text-lg text-gray-600">Purdue University</p>
+                <p className="text-lg text-gray-600 leading-relaxed">
+                  Naisha founded mai. with a vision to transform how people discover beauty products. 
+                  Combining her passion for ethical beauty with her technical expertise, she created 
+                  a platform that puts both consumers and small businesses first, emphasizing authenticity 
+                  and sustainability throughout the beauty journey.
+                </p>
+              </div>
+            </div>
           </div>
         </motion.section>
 
