@@ -111,7 +111,7 @@ const About = () => {
               <div className="w-full md:w-2/3 space-y-4 text-center md:text-left">
                 <h3 className="text-2xl font-bold text-mai-brown">Connie Chen</h3>
                 <p className="text-xl text-mai-coral font-medium">Co-Founder, CTO</p>
-                <p className="text-lg text-gray-600">Stanford University</p>
+                <p className="text-lg text-gray-600">Purdue University</p>
                 <p className="text-lg text-gray-600 leading-relaxed">
                   As Co-Founder and CTO, Connie brings her extensive technical expertise to mai. 
                   She leads our engineering team in developing innovative solutions that power our 
