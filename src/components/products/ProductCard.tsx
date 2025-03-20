@@ -7,9 +7,10 @@ interface ProductCardProps {
   description: string;
   price: string;
   images?: string[];
+  link?: string;
 }
 
-export const ProductCard = ({ title, description, price, images }: ProductCardProps) => {
+export const ProductCard = ({ title, description, price, images, link }: ProductCardProps) => {
   // Default placeholder image if no images are provided
   const placeholderImage = "/placeholder.svg";
   
@@ -29,6 +30,7 @@ export const ProductCard = ({ title, description, price, images }: ProductCardPr
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
                 target.src = placeholderImage;
+                console.log(`Image failed to load for ${title}, using placeholder`);
               }}
             />
           </div>

@@ -7,6 +7,8 @@ interface Product {
   title: string;
   description: string;
   price: string;
+  category: string;
+  link?: string;
   images?: string[];
 }
 
@@ -29,6 +31,7 @@ export const ProductsGrid = ({ products }: ProductsGridProps) => {
           description={product.description}
           price={product.price}
           images={product.images}
+          link={product.link}
         />
       ))}
     </motion.div>
