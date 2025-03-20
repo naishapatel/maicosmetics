@@ -103,6 +103,7 @@ export type Database = {
           description: string
           ethical_values: string[]
           id: string
+          images: string[] | null
           makeup_type: string
           price: string
           product_name: string
@@ -117,6 +118,7 @@ export type Database = {
           description: string
           ethical_values: string[]
           id?: string
+          images?: string[] | null
           makeup_type: string
           price: string
           product_name: string
@@ -131,6 +133,7 @@ export type Database = {
           description?: string
           ethical_values?: string[]
           id?: string
+          images?: string[] | null
           makeup_type?: string
           price?: string
           product_name?: string
@@ -153,6 +156,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      products: {
+        Row: {
+          category: string
+          description: string
+          id: string
+          images: string[] | null
+          link: string | null
+          price: string
+          title: string
+        }
+        Insert: {
+          category: string
+          description: string
+          id?: string
+          images?: string[] | null
+          link?: string | null
+          price: string
+          title: string
+        }
+        Update: {
+          category?: string
+          description?: string
+          id?: string
+          images?: string[] | null
+          link?: string | null
+          price?: string
+          title?: string
+        }
+        Relationships: []
       }
       profiles: {
         Row: {

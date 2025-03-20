@@ -1,3 +1,4 @@
+
 interface Product {
   id: string;
   title: string;
@@ -5,6 +6,7 @@ interface Product {
   price: string;
   category: string;
   link?: string;
+  images?: string[];
 }
 
 export const sustainableProducts: Product[] = [
@@ -14,7 +16,8 @@ export const sustainableProducts: Product[] = [
     description: "Zero waste mascara in glass packaging",
     price: "$24",
     category: "sustainable beauty",
-    link: "https://cleanfacedcosmetics.com"
+    link: "https://cleanfacedcosmetics.com",
+    images: ["/placeholder.svg"]
   },
   {
     id: "s2",
@@ -22,7 +25,8 @@ export const sustainableProducts: Product[] = [
     description: "Waterless, plastic-free serum bar",
     price: "$48",
     category: "sustainable beauty",
-    link: "https://dewmighty.com"
+    link: "https://dewmighty.com",
+    images: ["/placeholder.svg"]
   },
   {
     id: "s3",
@@ -30,6 +34,7 @@ export const sustainableProducts: Product[] = [
     description: "Plastic-free vegan lip color",
     price: "$18",
     category: "sustainable beauty",
-    link: "https://riverorganics.com"
+    link: "https://riverorganics.com",
+    images: ["/placeholder.svg"]
   }
 ];

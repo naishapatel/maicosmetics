@@ -1,3 +1,4 @@
+
 import { ProductCard } from "./ProductCard";
 import { motion } from "framer-motion";
 
@@ -6,6 +7,7 @@ interface Product {
   title: string;
   description: string;
   price: string;
+  images?: string[];
 }
 
 interface ProductsGridProps {
@@ -26,6 +28,7 @@ export const ProductsGrid = ({ products }: ProductsGridProps) => {
           title={product.title}
           description={product.description}
           price={product.price}
+          images={product.images}
         />
       ))}
     </motion.div>

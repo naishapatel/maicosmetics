@@ -1,3 +1,4 @@
+
 import { sustainableProducts } from './sustainable';
 import { ecoFriendlyProducts } from './eco-friendly';
 import { veganProducts } from './vegan';
@@ -19,4 +20,5 @@ export type Product = {
   price: string;
   category: string;
   link?: string;
+  images?: string[];
 };
