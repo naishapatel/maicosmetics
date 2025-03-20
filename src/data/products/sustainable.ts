@@ -17,7 +17,7 @@ export const sustainableProducts: Product[] = [
     price: "$24",
     category: "sustainable beauty",
     link: "https://cleanfacedcosmetics.com",
-    images: ["/placeholder.svg"]
+    images: ["https://images.unsplash.com/photo-1512496015851-a90fb38ba796?q=80&w=500&auto=format&fit=crop"]
   },
   {
     id: "s2",
@@ -26,7 +26,7 @@ export const sustainableProducts: Product[] = [
     price: "$48",
     category: "sustainable beauty",
     link: "https://dewmighty.com",
-    images: ["/placeholder.svg"]
+    images: ["https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=500&auto=format&fit=crop"]
   },
   {
     id: "s3",
@@ -35,6 +35,6 @@ export const sustainableProducts: Product[] = [
     price: "$18",
     category: "sustainable beauty",
     link: "https://riverorganics.com",
-    images: ["/placeholder.svg"]
+    images: ["https://images.unsplash.com/photo-1599307767391-6166ae7ad6e5?q=80&w=500&auto=format&fit=crop"]
   }
 ];
