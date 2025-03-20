@@ -17,16 +17,16 @@ export const collegeProducts: Product[] = [
     price: "$32",
     category: "products for college kids",
     link: "https://axiologybeauty.com",
-    images: ["https://images.unsplash.com/photo-1631217868264-e5b90bb7e133?q=80&w=500&auto=format&fit=crop"]
+    images: ["https://cdn.shopify.com/s/files/1/0075/3195/0959/products/NUDE_grande.jpg"]
   },
   {
     id: "c2",
-    title: "Tower 28 BeachPlease",
+    title: "Tower 28 BeachPlease Blush",
     description: "Easy-to-use cream blush",
     price: "$22",
     category: "products for college kids",
     link: "https://tower28beauty.com",
-    images: ["https://images.unsplash.com/photo-1596704017254-9a02606a858d?q=80&w=500&auto=format&fit=crop"]
+    images: ["https://cdn.shopify.com/s/files/1/0034/9483/0049/products/tower-28-beachplease-lip-cheek-cream-blush-magic-hour-A_800x.jpg"]
   },
   {
     id: "c3",
@@ -35,6 +35,6 @@ export const collegeProducts: Product[] = [
     price: "$20",
     category: "products for college kids",
     link: "https://www.fatandthemoon.com",
-    images: ["https://images.unsplash.com/photo-1512207519167-96672a42ce85?q=80&w=500&auto=format&fit=crop"]
+    images: ["https://images.squarespace-cdn.com/content/v1/55af7414e4b0936e656dd473/1634235772509-YGQZ6Z5O2HFWZVGPWA9P/Eye+Coal.jpg"]
   }
 ];

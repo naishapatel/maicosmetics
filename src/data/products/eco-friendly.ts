@@ -12,12 +12,12 @@ interface Product {
 export const ecoFriendlyProducts: Product[] = [
   {
     id: "e1",
-    title: "Aether Beauty Eyeshadow",
+    title: "Aether Beauty Eyeshadow Palette",
     description: "Zero-waste crystal-inspired palette",
     price: "$58",
     category: "eco-friendly beauty",
     link: "https://aetherbeautyco.com",
-    images: ["https://images.unsplash.com/photo-1616683693504-d5a44561f1dc?q=80&w=500&auto=format&fit=crop"]
+    images: ["https://cdn.shopify.com/s/files/1/0346/1304/8976/products/AETHER_AmethystCrystalGemmPalette_Closed_1024x1024.jpg"]
   },
   {
     id: "e2",
@@ -26,7 +26,7 @@ export const ecoFriendlyProducts: Product[] = [
     price: "$14",
     category: "eco-friendly beauty",
     link: "https://axiologybeauty.com",
-    images: ["https://images.unsplash.com/photo-1599733594230-6b823268757a?q=80&w=500&auto=format&fit=crop"]
+    images: ["https://cdn.shopify.com/s/files/1/0075/3195/0959/products/Balmies-Image-HeroHPSlider-Desktop-3000x2250-02_1024x1024.jpg"]
   },
   {
     id: "e3",
@@ -35,6 +35,6 @@ export const ecoFriendlyProducts: Product[] = [
     price: "$25",
     category: "eco-friendly beauty",
     link: "https://meowmeowtweet.com",
-    images: ["https://images.unsplash.com/photo-1631215583473-4711e4b4b012?q=80&w=500&auto=format&fit=crop"]
+    images: ["https://cdn.shopify.com/s/files/1/0214/5422/4550/products/SettingPowder_Lifestyle-1_3000x.jpg"]
   }
 ];
