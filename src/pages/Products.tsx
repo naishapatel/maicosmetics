@@ -6,6 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { categorizedProducts } from "@/data/products";
 import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const Products = () => {
   const categories = [
@@ -31,10 +32,11 @@ const Products = () => {
           
           // Insert all categorized products
           for (const product of categorizedProducts) {
-            await supabase
+            // Generate proper UUID for database compatibility
+            const { data, error } = await supabase
               .from('products')
-              .upsert({
-                id: product.id,
+              .insert({
+                // Don't use the string ID from the product data
                 title: product.title,
                 description: product.description,
                 price: product.price,
@@ -43,11 +45,17 @@ const Products = () => {
                 url: product.url,
                 images: product.images
               });
+              
+            if (error) {
+              console.error('Error inserting product:', error);
+            }
           }
           console.log('Product sync complete!');
+          toast.success('Products synchronized with database');
         }
       } catch (error) {
         console.error('Error syncing products:', error);
+        toast.error('Failed to sync products with database');
       }
     };
 

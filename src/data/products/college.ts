@@ -19,7 +19,7 @@ export const collegeProducts: Product[] = [
     category: "products for college kids",
     link: "https://axiologybeauty.com",
     url: "https://axiologybeauty.com/collections/sets/products/desert-sunset-set",
-    images: ["https://cdn.shopify.com/s/files/1/0075/3195/0959/products/NUDE_grande.jpg"]
+    images: ["https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=800"]
   },
   {
     id: "c2",
@@ -29,7 +29,7 @@ export const collegeProducts: Product[] = [
     category: "products for college kids",
     link: "https://tower28beauty.com",
     url: "https://tower28beauty.com/products/beachplease-tinted-lip-cheek-balm",
-    images: ["https://cdn.shopify.com/s/files/1/0034/9483/0049/products/tower-28-beachplease-lip-cheek-cream-blush-magic-hour-A_800x.jpg"]
+    images: ["https://images.unsplash.com/photo-1503236823255-94609f598e71?auto=format&fit=crop&w=800"]
   },
   {
     id: "c3",
@@ -39,6 +39,6 @@ export const collegeProducts: Product[] = [
     category: "products for college kids",
     link: "https://www.fatandthemoon.com",
     url: "https://www.fatandthemoon.com/products/eye-coal",
-    images: ["https://images.squarespace-cdn.com/content/v1/55af7414e4b0936e656dd473/1634235772509-YGQZ6Z5O2HFWZVGPWA9P/Eye+Coal.jpg"]
+    images: ["https://images.unsplash.com/photo-1631730359585-950f8c3f933d?auto=format&fit=crop&w=800"]
   }
 ];

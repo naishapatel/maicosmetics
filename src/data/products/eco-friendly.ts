@@ -19,7 +19,7 @@ export const ecoFriendlyProducts: Product[] = [
     category: "eco-friendly beauty",
     link: "https://aetherbeautyco.com",
     url: "https://aetherbeautyco.com/collections/palettes",
-    images: ["https://cdn.shopify.com/s/files/1/0346/1304/8976/products/AETHER_AmethystCrystalGemmPalette_Closed_1024x1024.jpg"]
+    images: ["https://images.unsplash.com/photo-1599750760297-fa56e219bb7d?auto=format&fit=crop&w=800"]
   },
   {
     id: "e2",
@@ -29,7 +29,7 @@ export const ecoFriendlyProducts: Product[] = [
     category: "eco-friendly beauty",
     link: "https://axiologybeauty.com",
     url: "https://axiologybeauty.com/collections/balmies",
-    images: ["https://cdn.shopify.com/s/files/1/0075/3195/0959/products/Balmies-Image-HeroHPSlider-Desktop-3000x2250-02_1024x1024.jpg"]
+    images: ["https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=800"]
   },
   {
     id: "e3",
@@ -39,6 +39,6 @@ export const ecoFriendlyProducts: Product[] = [
     category: "eco-friendly beauty",
     link: "https://meowmeowtweet.com",
     url: "https://meowmeowtweet.com/products/everyday-setting-powder",
-    images: ["https://cdn.shopify.com/s/files/1/0214/5422/4550/products/SettingPowder_Lifestyle-1_3000x.jpg"]
+    images: ["https://images.unsplash.com/photo-1596285508419-8faef7c8b9b7?auto=format&fit=crop&w=800"]
   }
 ];

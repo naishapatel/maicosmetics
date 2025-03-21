@@ -2,6 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
+import { useState } from "react";
 
 interface ProductCardProps {
   title: string;
@@ -13,8 +14,23 @@ interface ProductCardProps {
 }
 
 export const ProductCard = ({ title, description, price, images, link, url }: ProductCardProps) => {
-  // Default placeholder image if no images are provided
-  const placeholderImage = "/placeholder.svg";
+  const [imageError, setImageError] = useState(false);
+  
+  // Default placeholder images with reliable sources
+  const placeholderImages = [
+    "https://images.unsplash.com/photo-1649972904349-6e44c42644a7?auto=format&fit=crop&w=800",
+    "https://images.unsplash.com/photo-1488590528505-98d2b5aba04b?auto=format&fit=crop&w=800",
+    "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=800"
+  ];
+  
+  // Generate a consistent placeholder based on product title
+  const getPlaceholderIndex = (str: string) => {
+    let hash = 0;
+    for (let i = 0; i < str.length; i++) {
+      hash = str.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return Math.abs(hash) % placeholderImages.length;
+  };
   
   // Use URL if available, otherwise fallback to link
   const productUrl = url || link;
@@ -24,6 +40,16 @@ export const ProductCard = ({ title, description, price, images, link, url }: Pr
       window.open(productUrl, '_blank', 'noopener,noreferrer');
     }
   };
+  
+  const handleImageError = () => {
+    console.log(`Image failed to load for ${title}, using placeholder`);
+    setImageError(true);
+  };
+  
+  // Select image source: original product image or fallback to placeholder
+  const imageSource = !imageError && images && images.length > 0 
+    ? images[0] 
+    : placeholderImages[getPlaceholderIndex(title)];
   
   return (
     <motion.div
@@ -35,38 +61,19 @@ export const ProductCard = ({ title, description, price, images, link, url }: Pr
         className={`h-full hover:shadow-lg transition-all duration-300 ${productUrl ? 'cursor-pointer' : ''}`}
         onClick={handleCardClick}
       >
-        {images && images.length > 0 ? (
-          <div className="w-full h-48 overflow-hidden relative">
-            <img 
-              src={images[0]} 
-              alt={title} 
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement;
-                target.src = placeholderImage;
-                console.log(`Image failed to load for ${title}, using placeholder`);
-              }}
-            />
-            {productUrl && (
-              <div className="absolute top-2 right-2 bg-mai-coral p-1 rounded-full">
-                <ExternalLink className="w-4 h-4 text-white" />
-              </div>
-            )}
-          </div>
-        ) : (
-          <div className="w-full h-48 bg-gray-100 flex items-center justify-center relative">
-            <img 
-              src={placeholderImage} 
-              alt="Product placeholder" 
-              className="w-20 h-20 opacity-30"
-            />
-            {productUrl && (
-              <div className="absolute top-2 right-2 bg-mai-coral p-1 rounded-full">
-                <ExternalLink className="w-4 h-4 text-white" />
-              </div>
-            )}
-          </div>
-        )}
+        <div className="w-full h-48 overflow-hidden relative">
+          <img 
+            src={imageSource} 
+            alt={title} 
+            className="w-full h-full object-cover"
+            onError={handleImageError}
+          />
+          {productUrl && (
+            <div className="absolute top-2 right-2 bg-mai-coral p-1 rounded-full">
+              <ExternalLink className="w-4 h-4 text-white" />
+            </div>
+          )}
+        </div>
         <CardHeader>
           <CardTitle className="text-xl font-semibold text-mai-brown">{title}</CardTitle>
           <p className="text-lg font-medium text-mai-coral">{price}</p>

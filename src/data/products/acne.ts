@@ -19,7 +19,7 @@ export const acneProducts: Product[] = [
     category: "products for acne",
     link: "https://tower28beauty.com",
     url: "https://tower28beauty.com/products/sos-daily-rescue-facial-spray",
-    images: ["https://cdn.shopify.com/s/files/1/0034/9483/0049/products/tower-28-sos-daily-rescue-facial-spray-1oz-B_800x.jpg"]
+    images: ["https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=800"]
   },
   {
     id: "a3",
@@ -29,6 +29,6 @@ export const acneProducts: Product[] = [
     category: "products for acne",
     link: "https://commonheir.com",
     url: "https://commonheir.com/products/vitamin-c-serum",
-    images: ["https://cdn.shopify.com/s/files/1/0366/0633/8377/products/IMG_9367_1024x1024@2x.jpg"]
+    images: ["https://images.unsplash.com/photo-1611080626919-7cf5a9dbab12?auto=format&fit=crop&w=800"]
   }
 ];
