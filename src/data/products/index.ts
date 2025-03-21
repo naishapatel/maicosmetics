@@ -20,5 +20,6 @@ export type Product = {
   price: string;
   category: string;
   link?: string;
+  url?: string;
   images?: string[];
 };

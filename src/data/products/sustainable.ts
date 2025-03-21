@@ -6,6 +6,7 @@ interface Product {
   price: string;
   category: string;
   link?: string;
+  url?: string;
   images?: string[];
 }
 
@@ -17,6 +18,7 @@ export const sustainableProducts: Product[] = [
     price: "$48",
     category: "sustainable beauty",
     link: "https://dewmighty.com",
+    url: "https://dewmighty.com/products/bloom-jelly-serum-bar",
     images: ["https://cdn.shopify.com/s/files/1/0554/7265/4785/products/blue-packaging_0b9cf1d4-cb79-4f78-b17d-3d11f1c1bb96_1024x1024.jpg"]
   },
   {
@@ -26,6 +28,7 @@ export const sustainableProducts: Product[] = [
     price: "$18",
     category: "sustainable beauty",
     link: "https://riverorganics.com",
+    url: "https://riverorganics.com/collections/lip-butter",
     images: ["https://cdn.shopify.com/s/files/1/0274/1751/2657/products/LipButtersNew-AllShades_5000x.jpg"]
   }
 ];

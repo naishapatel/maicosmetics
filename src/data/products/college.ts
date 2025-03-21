@@ -6,6 +6,7 @@ interface Product {
   price: string;
   category: string;
   link?: string;
+  url?: string;
   images?: string[];
 }
 
@@ -17,6 +18,7 @@ export const collegeProducts: Product[] = [
     price: "$32",
     category: "products for college kids",
     link: "https://axiologybeauty.com",
+    url: "https://axiologybeauty.com/collections/sets/products/desert-sunset-set",
     images: ["https://cdn.shopify.com/s/files/1/0075/3195/0959/products/NUDE_grande.jpg"]
   },
   {
@@ -26,6 +28,7 @@ export const collegeProducts: Product[] = [
     price: "$22",
     category: "products for college kids",
     link: "https://tower28beauty.com",
+    url: "https://tower28beauty.com/products/beachplease-tinted-lip-cheek-balm",
     images: ["https://cdn.shopify.com/s/files/1/0034/9483/0049/products/tower-28-beachplease-lip-cheek-cream-blush-magic-hour-A_800x.jpg"]
   },
   {
@@ -35,6 +38,7 @@ export const collegeProducts: Product[] = [
     price: "$20",
     category: "products for college kids",
     link: "https://www.fatandthemoon.com",
+    url: "https://www.fatandthemoon.com/products/eye-coal",
     images: ["https://images.squarespace-cdn.com/content/v1/55af7414e4b0936e656dd473/1634235772509-YGQZ6Z5O2HFWZVGPWA9P/Eye+Coal.jpg"]
   }
 ];

@@ -1,8 +1,11 @@
+
 import { Navbar } from "@/components/Navbar";
 import { ProductsHeader } from "@/components/products/ProductsHeader";
 import { ProductsGrid } from "@/components/products/ProductsGrid";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { categorizedProducts } from "@/data/products";
+import { useEffect } from "react";
+import { supabase } from "@/integrations/supabase/client";
 
 const Products = () => {
   const categories = [
@@ -12,6 +15,44 @@ const Products = () => {
     "products for acne",
     "products for college kids"
   ];
+
+  // Sync local products with Supabase when component loads
+  useEffect(() => {
+    const syncProductsWithSupabase = async () => {
+      try {
+        // First check if products already exist in Supabase
+        const { data: existingProducts } = await supabase
+          .from('products')
+          .select('id');
+        
+        // Only sync if no products exist
+        if (!existingProducts || existingProducts.length === 0) {
+          console.log('Syncing products with Supabase...');
+          
+          // Insert all categorized products
+          for (const product of categorizedProducts) {
+            await supabase
+              .from('products')
+              .upsert({
+                id: product.id,
+                title: product.title,
+                description: product.description,
+                price: product.price,
+                category: product.category,
+                link: product.link,
+                url: product.url,
+                images: product.images
+              });
+          }
+          console.log('Product sync complete!');
+        }
+      } catch (error) {
+        console.error('Error syncing products:', error);
+      }
+    };
+
+    syncProductsWithSupabase();
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-mai-cream to-white">
