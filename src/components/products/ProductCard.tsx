@@ -17,7 +17,7 @@ export const ProductCard = ({ title, description, price, images, link, url }: Pr
   const [imageSource, setImageSource] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   
-  // Use URL if available, otherwise fallback to link
+  // Prioritize URL if available, otherwise fallback to link
   const productUrl = url || link;
   
   useEffect(() => {
@@ -118,7 +118,15 @@ export const ProductCard = ({ title, description, price, images, link, url }: Pr
   
   const handleCardClick = () => {
     if (productUrl) {
-      window.open(productUrl, '_blank', 'noopener,noreferrer');
+      // Validate URL before opening
+      try {
+        // Test if URL is valid by creating a URL object
+        new URL(productUrl);
+        window.open(productUrl, '_blank', 'noopener,noreferrer');
+      } catch (e) {
+        console.error(`Invalid URL for ${title}: ${productUrl}`);
+        // If URL is invalid, don't open anything to prevent 404s
+      }
     }
   };
   
