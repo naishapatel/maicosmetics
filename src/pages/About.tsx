@@ -3,6 +3,7 @@ import AboutHero from "@/components/about/AboutHero";
 import AboutFounders from "@/components/about/AboutFounders";
 import AboutMission from "@/components/about/AboutMission";
 import AboutValues from "@/components/about/AboutValues";
+import SustainabilitySection from "@/components/about/SustainabilitySection";
 import JoinCommunity from "@/components/about/JoinCommunity";
 
 const About = () => {
@@ -13,6 +14,7 @@ const About = () => {
         <AboutFounders />
         <AboutMission />
         <AboutValues />
+        <SustainabilitySection />
         <JoinCommunity />
       </main>
     </div>
