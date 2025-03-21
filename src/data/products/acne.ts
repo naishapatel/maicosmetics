@@ -1,3 +1,4 @@
+
 interface Product {
   id: string;
   title: string;
@@ -19,5 +20,16 @@ export const acneProducts: Product[] = [
     link: "https://tower28beauty.com",
     url: "https://tower28beauty.com/products/sos-daily-rescue-facial-spray",
     images: ["https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=800"]
+  },
+  // Restoring this product after verifying it exists
+  {
+    id: "a2",
+    title: "Cocokind Turmeric Spot Treatment",
+    description: "Natural spot treatment for blemishes",
+    price: "$9",
+    category: "products for acne",
+    link: "https://www.cocokind.com",
+    url: "https://www.cocokind.com/products/turmeric-spot-treatment",
+    images: ["https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=800"]
   }
 ];

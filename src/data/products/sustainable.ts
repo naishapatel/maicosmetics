@@ -11,7 +11,7 @@ interface Product {
 }
 
 export const sustainableProducts: Product[] = [
-  // Dew Mighty Bloom Jelly Bar removed - verified URL and product no longer exists
+  // Dew Mighty Bloom Jelly Bar remains removed - I verified the URL and product no longer exists
   {
     id: "s3",
     title: "River Organics Lip Butter",

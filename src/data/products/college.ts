@@ -1,3 +1,4 @@
+
 interface Product {
   id: string;
   title: string;
@@ -29,5 +30,16 @@ export const collegeProducts: Product[] = [
     link: "https://tower28beauty.com",
     url: "https://tower28beauty.com/products/beachplease-tinted-lip-cheek-balm",
     images: ["https://images.unsplash.com/photo-1503236823255-94609f598e71?auto=format&fit=crop&w=800"]
+  },
+  // Restoring this product after verifying it exists
+  {
+    id: "c3",
+    title: "Kinship Supermelt Oil Cleanser",
+    description: "Gentle makeup-removing cleanser",
+    price: "$26",
+    category: "products for college kids",
+    link: "https://www.lovekinship.com",
+    url: "https://www.lovekinship.com/products/supermelt-vegan-jelly-oil-cleanser",
+    images: ["https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=800"]
   }
 ];
