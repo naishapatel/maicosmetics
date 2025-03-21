@@ -1,7 +1,8 @@
+
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 export const HeroContent = () => {
   return <motion.div initial={{
     opacity: 0,
@@ -42,7 +43,7 @@ export const HeroContent = () => {
         <h1 className="text-6xl sm:text-7xl font-bold text-mai-brown mb-4 tracking-tight leading-tight">
           Beauty that
           <span className="relative inline-block mx-3">
-            <span className="relative z-10 text-mai-coral">cares</span>
+            <span className="relative z-10 text-mai-coral">Cares</span>
             <motion.span className="absolute inset-0 bg-mai-sage/20 -skew-y-3 rounded-lg" initial={{
             scaleX: 0
           }} animate={{
@@ -52,8 +53,6 @@ export const HeroContent = () => {
             duration: 0.8
           }} />
           </span>
-          <br />
-          for your skin
         </h1>
       </motion.div>
 
@@ -90,14 +89,6 @@ export const HeroContent = () => {
             <Button className="group bg-mai-coral hover:bg-mai-brown text-white px-8 py-6 rounded-full transition-all duration-300 transform shadow-lg hover:shadow-xl w-full sm:w-auto relative overflow-hidden">
               <span className="relative z-10 flex items-center">
                 Take the Skin Quiz
-                <motion.div animate={{
-                x: [0, 5, 0]
-              }} transition={{
-                duration: 1,
-                repeat: Infinity
-              }}>
-                  <ArrowRight className="ml-2 w-5 h-5" />
-                </motion.div>
               </span>
               <motion.div className="absolute inset-0 bg-gradient-to-r from-mai-coral to-mai-brown" initial={{
               x: "100%"

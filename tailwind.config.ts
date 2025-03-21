@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -59,6 +60,9 @@ export default {
           sand: "#F6F5F1",
           coral: "#FF9494",
           brown: "#4A3F35",
+          mauve: "#D8BFD8",
+          mauveDark: "#9B87F5",
+          mauveLight: "#E5DEFF",
         },
       },
       borderRadius: {

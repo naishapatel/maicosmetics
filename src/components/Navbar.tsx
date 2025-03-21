@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -23,7 +24,7 @@ const NavLink = ({ to, children, className }: NavLinkProps) => (
     >
       <span className="relative z-10">{children}</span>
       <motion.div
-        className="absolute inset-0 bg-gradient-to-r from-mai-sage/20 to-mai-rose/20 rounded-full -z-0"
+        className="absolute inset-0 bg-gradient-to-r from-mai-mauve/20 to-mai-mauveLight/20 rounded-full -z-0"
         initial={{ scale: 0, opacity: 0 }}
         whileHover={{ scale: 1, opacity: 1 }}
         transition={{ duration: 0.2 }}
@@ -83,7 +84,7 @@ export const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
-          <Link to="/" className="text-2xl font-bold text-mai-brown hover:text-mai-coral transition-colors">
+          <Link to="/" className="text-2xl font-bold text-mai-brown hover:text-mai-mauveDark transition-colors">
             mai.
           </Link>
           <div className="hidden sm:flex space-x-1">
@@ -97,8 +98,8 @@ export const Navbar = () => {
             variant="ghost"
             className={`rounded-full px-6 transition-all duration-300 ${
               session 
-                ? "text-mai-brown hover:text-mai-coral" 
-                : "bg-mai-coral text-white hover:bg-mai-brown"
+                ? "text-mai-brown hover:text-mai-mauveDark" 
+                : "bg-mai-mauveDark text-white hover:bg-mai-mauveDark/80"
             }`}
             onClick={handleAuthClick}
           >

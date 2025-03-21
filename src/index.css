@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -12,11 +13,11 @@
     --popover-foreground: 222.2 84% 4.9%;
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
-    --secondary: 210 40% 96.1%;
+    --secondary: 280 25% 80%;
     --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
+    --muted: 280 15% 90%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
+    --accent: 280 25% 85%;
     --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
@@ -79,5 +80,13 @@
   
   .hover-scale {
     @apply transition-transform duration-300 hover:scale-[1.02];
+  }
+  
+  .mauve-gradient {
+    @apply bg-gradient-to-br from-mai-mauve to-mai-mauveLight;
+  }
+  
+  .mauve-text {
+    @apply text-mai-mauveDark;
   }
 }
