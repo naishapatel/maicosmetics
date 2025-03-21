@@ -60,9 +60,9 @@ export default {
           sand: "#F6F5F1",
           coral: "#FF9494",
           brown: "#4A3F35",
-          mauve: "#D8BFD8",
-          mauveDark: "#9B87F5",
-          mauveLight: "#E5DEFF",
+          mauve: "#9D7A8C",     // Updated to the new mauve color
+          mauveDark: "#9D7A8C", // Updated to match the new mauve
+          mauveLight: "#C7B2BC", // Lighter version of the new mauve
         },
       },
       borderRadius: {

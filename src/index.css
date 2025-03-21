@@ -13,11 +13,11 @@
     --popover-foreground: 222.2 84% 4.9%;
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
-    --secondary: 280 25% 80%;
+    --secondary: 330 15% 60%; /* Updated to more mauve-like tone */
     --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 280 15% 90%;
+    --muted: 330 10% 70%; /* Updated to more mauve-like tone */
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 280 25% 85%;
+    --accent: 330 15% 75%; /* Updated to more mauve-like tone */
     --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
@@ -87,6 +87,6 @@
   }
   
   .mauve-text {
-    @apply text-mai-mauveDark;
+    @apply text-mai-mauve;
   }
 }
