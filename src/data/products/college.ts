@@ -19,7 +19,7 @@ export const collegeProducts: Product[] = [
     price: "$32",
     category: "products for college kids",
     link: "https://axiologybeauty.com",
-    url: "https://axiologybeauty.com/collections/sets/products/desert-sunset-set",
+    url: "https://axiologybeauty.com/products/desert-sunset-set",
     images: ["https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=800"]
   },
   // Verified: Tower 28 BeachPlease Blush - URL is valid

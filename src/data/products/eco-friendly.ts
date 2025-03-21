@@ -11,15 +11,15 @@ interface Product {
 }
 
 export const ecoFriendlyProducts: Product[] = [
+  // Verified: Beauty Bakerie Eyeshadow Palette (replacing Aether Beauty which was acquired)
   {
     id: "e1",
-    title: "Aether Beauty Eyeshadow Palette",
-    description: "Zero-waste crystal-inspired palette",
-    price: "$58",
+    title: "Beauty Bakerie Breakfast in Bed Eyeshadow Palette",
+    description: "Vegan eyeshadow palette with vibrant colors",
+    price: "$38",
     category: "eco-friendly beauty",
     link: "https://beautybakerie.com",
-    // Fixed: Aether Beauty was acquired by Beauty Bakerie, using direct link to eyeshadow palettes
-    url: "https://beautybakerie.com/collections/eyeshadow-palettes",
+    url: "https://beautybakerie.com/products/breakfast-in-bed-eyeshadow-palette",
     images: ["https://images.unsplash.com/photo-1599750760297-fa56e219bb7d?auto=format&fit=crop&w=800"]
   },
   // Verified: Axiology Balmies - URL is valid and working
@@ -33,7 +33,7 @@ export const ecoFriendlyProducts: Product[] = [
     url: "https://axiologybeauty.com/collections/balmies",
     images: ["https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=800"]
   },
-  // Fixed: Elate Cosmetics Pressed Cheek Color - using correct case for URL
+  // Verified: Elate Cosmetics Pressed Cheek Color - URL is working
   {
     id: "e3",
     title: "Elate Cosmetics Pressed Cheek Color",

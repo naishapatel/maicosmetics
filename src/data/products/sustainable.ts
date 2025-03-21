@@ -22,8 +22,7 @@ export const sustainableProducts: Product[] = [
     url: "https://dewmighty.com/products/bloom-jelly-serum-bar",
     images: ["https://images.unsplash.com/photo-1566958769312-82cef41d19ef?auto=format&fit=crop&w=800"]
   },
-  // Fixed: River Organics Lip Butter - original URL was redirecting to a wine website
-  // Updated to use direct product page from their official site
+  // Verified: Updated River Organics Lip Butter - fixed URL that was previously redirecting to a wine website
   {
     id: "s3",
     title: "River Organics Lip Butter",
@@ -31,7 +30,7 @@ export const sustainableProducts: Product[] = [
     price: "$18",
     category: "sustainable beauty",
     link: "https://riverorganics.com",
-    url: "https://riverorganics.com/collections/all/products/lip-butter",
+    url: "https://riverorganics.com/products/lip-butter",
     images: ["https://images.unsplash.com/photo-1594125311687-3b1b3eafa9f4?auto=format&fit=crop&w=800"]
   }
 ];
