@@ -17,7 +17,7 @@ export const HeroBackground = () => {
           repeat: Infinity,
           ease: "linear" 
         }}
-        className="absolute top-20 right-[20%] w-[40rem] h-[40rem] rounded-full bg-gradient-to-br from-mai-coral/10 to-mai-sage/20 blur-3xl"
+        className="absolute top-20 right-[20%] w-[40rem] h-[40rem] rounded-full bg-gradient-to-br from-mai-mauve/10 to-mai-sage/20 blur-3xl"
       />
       
       <motion.div
@@ -30,10 +30,8 @@ export const HeroBackground = () => {
           repeat: Infinity,
           ease: "linear" 
         }}
-        className="absolute bottom-20 left-[10%] w-[35rem] h-[35rem] rounded-full bg-gradient-to-tr from-mai-rose/20 to-mai-sage/10 blur-3xl"
+        className="absolute bottom-20 left-[10%] w-[35rem] h-[35rem] rounded-full bg-gradient-to-tr from-mai-mauve/20 to-mai-sage/10 blur-3xl"
       />
-      
-      {/* Removed the decorative patterns div that contained the grid points */}
     </>
   );
 };

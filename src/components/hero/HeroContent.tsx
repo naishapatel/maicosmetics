@@ -24,7 +24,7 @@ export const HeroContent = () => {
     }} transition={{
       duration: 0.2
     }} className="inline-flex items-center gap-2 px-6 py-2 mb-8 glass-card border-mai-sage/30 cursor-pointer">
-        <Sparkles className="w-4 h-4 text-mai-coral" />
+        <Sparkles className="w-4 h-4 text-mai-mauve" />
         <span className="text-sm font-medium text-mai-brown">
           Discover your perfect makeup match
         </span>
@@ -43,7 +43,7 @@ export const HeroContent = () => {
         <h1 className="text-6xl sm:text-7xl font-bold text-mai-brown mb-4 tracking-tight leading-tight">
           Beauty that
           <span className="relative inline-block mx-3">
-            <span className="relative z-10 text-mai-coral">Cares</span>
+            <span className="relative z-10 text-mai-mauve">Cares</span>
             <motion.span className="absolute inset-0 bg-mai-sage/20 -skew-y-3 rounded-lg" initial={{
             scaleX: 0
           }} animate={{
@@ -86,11 +86,11 @@ export const HeroContent = () => {
         }} whileTap={{
           scale: 0.95
         }}>
-            <Button className="group bg-mai-coral hover:bg-mai-brown text-white px-8 py-6 rounded-full transition-all duration-300 transform shadow-lg hover:shadow-xl w-full sm:w-auto relative overflow-hidden">
+            <Button className="group bg-mai-mauve hover:bg-mai-brown text-white px-8 py-6 rounded-full transition-all duration-300 transform shadow-lg hover:shadow-xl w-full sm:w-auto relative overflow-hidden">
               <span className="relative z-10 flex items-center">
                 Take the Skin Quiz
               </span>
-              <motion.div className="absolute inset-0 bg-gradient-to-r from-mai-coral to-mai-brown" initial={{
+              <motion.div className="absolute inset-0 bg-gradient-to-r from-mai-mauve to-mai-brown" initial={{
               x: "100%"
             }} whileHover={{
               x: 0
@@ -106,9 +106,9 @@ export const HeroContent = () => {
         }} whileTap={{
           scale: 0.95
         }}>
-            <Button variant="outline" className="border-2 border-mai-coral text-mai-coral hover:bg-mai-coral hover:text-white px-8 py-6 rounded-full transition-all duration-300 w-full sm:w-auto backdrop-blur-sm relative overflow-hidden group">
+            <Button variant="outline" className="border-2 border-mai-mauve text-mai-mauve hover:bg-mai-mauve hover:text-white px-8 py-6 rounded-full transition-all duration-300 w-full sm:w-auto backdrop-blur-sm relative overflow-hidden group">
               <span className="relative z-10">Browse Products</span>
-              <motion.div className="absolute inset-0 bg-mai-coral/10" initial={{
+              <motion.div className="absolute inset-0 bg-mai-mauve/10" initial={{
               scale: 0,
               opacity: 0
             }} whileHover={{

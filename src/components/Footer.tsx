@@ -1,3 +1,4 @@
+
 import { Link } from "react-router-dom";
 import { Copyright, Github, Instagram, Linkedin } from "lucide-react";
 import { useState } from "react";
@@ -57,17 +58,17 @@ export const Footer = () => {
             <h4 className="font-semibold text-mai-cream">Quick Links</h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/quiz" className="text-mai-cream/80 hover:text-mai-coral transition-colors text-sm">
+                <Link to="/quiz" className="text-mai-cream/80 hover:text-mai-mauve transition-colors text-sm">
                   Skin Quiz
                 </Link>
               </li>
               <li>
-                <Link to="/products" className="text-mai-cream/80 hover:text-mai-coral transition-colors text-sm">
+                <Link to="/products" className="text-mai-cream/80 hover:text-mai-mauve transition-colors text-sm">
                   Products
                 </Link>
               </li>
               <li>
-                <Link to="/businesses" className="text-mai-cream/80 hover:text-mai-coral transition-colors text-sm">
+                <Link to="/businesses" className="text-mai-cream/80 hover:text-mai-mauve transition-colors text-sm">
                   Small Businesses
                 </Link>
               </li>
@@ -79,12 +80,12 @@ export const Footer = () => {
             <h4 className="font-semibold text-mai-cream">Community</h4>
             <ul className="space-y-2">
               <li>
-                <Link to="/community" className="text-mai-cream/80 hover:text-mai-coral transition-colors text-sm">
+                <Link to="/community" className="text-mai-cream/80 hover:text-mai-mauve transition-colors text-sm">
                   Reviews
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="text-mai-cream/80 hover:text-mai-coral transition-colors text-sm">
+                <Link to="/about" className="text-mai-cream/80 hover:text-mai-mauve transition-colors text-sm">
                   About Us
                 </Link>
               </li>
@@ -109,7 +110,7 @@ export const Footer = () => {
               <Button 
                 type="submit" 
                 disabled={isLoading}
-                className="w-full bg-mai-coral hover:bg-mai-coral/90 text-white"
+                className="w-full bg-mai-mauve hover:bg-mai-mauve/90 text-white"
               >
                 {isLoading ? "Subscribing..." : "Subscribe"}
               </Button>
@@ -124,7 +125,7 @@ export const Footer = () => {
               href="https://github.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-mai-cream/80 hover:text-mai-coral transition-colors"
+              className="text-mai-cream/80 hover:text-mai-mauve transition-colors"
             >
               <Github className="w-5 h-5" />
             </a>
@@ -132,7 +133,7 @@ export const Footer = () => {
               href="https://instagram.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-mai-cream/80 hover:text-mai-coral transition-colors"
+              className="text-mai-cream/80 hover:text-mai-mauve transition-colors"
             >
               <Instagram className="w-5 h-5" />
             </a>
@@ -140,7 +141,7 @@ export const Footer = () => {
               href="https://linkedin.com"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-mai-cream/80 hover:text-mai-coral transition-colors"
+              className="text-mai-cream/80 hover:text-mai-mauve transition-colors"
             >
               <Linkedin className="w-5 h-5" />
             </a>

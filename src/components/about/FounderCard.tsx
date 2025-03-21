@@ -87,7 +87,7 @@ const FounderCard = ({ name, role, university, bio, image, borderColor, index }:
         variants={textVariants}
       >
         <h3 className="text-2xl font-bold text-mai-brown">{name}</h3>
-        <p className="text-xl text-mai-coral font-medium">{role}</p>
+        <p className="text-xl text-mai-mauve font-medium">{role}</p>
         <p className="text-lg text-gray-600 italic">{university}</p>
         <p className="text-lg text-gray-600 leading-relaxed">
           {bio}

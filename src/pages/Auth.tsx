@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Auth as SupabaseAuth } from "@supabase/auth-ui-react";
@@ -37,7 +38,7 @@ const Auth = () => {
               transition={{ delay: 0.2, duration: 0.5 }}
               className="inline-block mb-4"
             >
-              <Sparkles className="w-12 h-12 text-mai-coral" />
+              <Sparkles className="w-12 h-12 text-mai-mauve" />
             </motion.div>
             <h1 className="text-4xl font-serif font-light text-mai-brown mb-3">
               Welcome to mai
@@ -61,12 +62,12 @@ const Auth = () => {
                   default: {
                     colors: {
                       brand: '#4A3F35',
-                      brandAccent: '#FF9494',
+                      brandAccent: '#9D7A8C',
                       defaultButtonBackground: '#4A3F35',
-                      defaultButtonBackgroundHover: '#FF9494',
+                      defaultButtonBackgroundHover: '#9D7A8C',
                       inputBackground: 'white',
                       inputBorder: '#E7F3EF',
-                      inputBorderHover: '#FF9494',
+                      inputBorderHover: '#9D7A8C',
                       inputBorderFocus: '#4A3F35',
                     },
                     borderWidths: {
@@ -94,7 +95,7 @@ const Auth = () => {
                   button: 'w-full transition-all duration-200 hover:transform hover:translate-y-[-2px] active:translate-y-[1px]',
                   input: 'w-full transition-colors duration-200',
                   label: 'text-mai-brown font-serif',
-                  loader: 'text-mai-coral',
+                  loader: 'text-mai-mauve',
                 }
               }}
               providers={[]}

@@ -1,19 +1,20 @@
+
 import { motion } from "framer-motion";
 import { Heart, Shield, Sparkles } from "lucide-react";
 
 const features = [
   {
-    icon: <Heart className="w-6 h-6 text-mai-coral" />,
+    icon: <Heart className="w-6 h-6 text-mai-mauve" />,
     title: "Personalized Care",
     description: "Tailored recommendations for your unique skin"
   },
   {
-    icon: <Shield className="w-6 h-6 text-mai-coral" />,
+    icon: <Shield className="w-6 h-6 text-mai-mauve" />,
     title: "Ethical Choices",
     description: "Cruelty-free and sustainable products"
   },
   {
-    icon: <Sparkles className="w-6 h-6 text-mai-coral" />,
+    icon: <Sparkles className="w-6 h-6 text-mai-mauve" />,
     title: "Small Business",
     description: "Support independent ethical brands"
   }
@@ -42,7 +43,7 @@ export const HeroFeatures = () => {
             whileTap={{ scale: 0.98 }}
           >
             <motion.div
-              className="w-12 h-12 bg-gradient-to-br from-mai-rose/30 to-mai-coral/20 rounded-xl flex items-center justify-center mb-6 mx-auto transition-transform duration-300"
+              className="w-12 h-12 bg-gradient-to-br from-mai-rose/30 to-mai-mauve/20 rounded-xl flex items-center justify-center mb-6 mx-auto transition-transform duration-300"
               whileHover={{ rotate: 5, scale: 1.1 }}
             >
               <motion.div
@@ -64,7 +65,7 @@ export const HeroFeatures = () => {
             </p>
           </motion.div>
           <motion.div
-            className="absolute inset-0 bg-gradient-to-br from-mai-sage/20 to-mai-rose/20 blur-xl opacity-0 group-hover:opacity-70 transition-opacity duration-300"
+            className="absolute inset-0 bg-gradient-to-br from-mai-sage/20 to-mai-mauve/20 blur-xl opacity-0 group-hover:opacity-70 transition-opacity duration-300"
             initial={{ scale: 0.8 }}
             whileHover={{ scale: 1 }}
           />

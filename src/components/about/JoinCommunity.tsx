@@ -53,10 +53,10 @@ const JoinCommunity = () => {
         >
           <motion.a 
             href="/auth" 
-            className="inline-block bg-mai-coral text-white px-8 py-4 rounded-full font-medium hover:shadow-md transition-all duration-300"
+            className="inline-block bg-mai-mauve text-white px-8 py-4 rounded-full font-medium hover:shadow-md transition-all duration-300"
             whileHover={{ 
               scale: 1.05,
-              boxShadow: "0 10px 25px -5px rgba(255, 148, 148, 0.4)"
+              boxShadow: "0 10px 25px -5px rgba(157, 122, 140, 0.4)"
             }}
             whileTap={{ scale: 0.95 }}
           >
