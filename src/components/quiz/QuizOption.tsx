@@ -13,8 +13,8 @@ const QuizOption = ({ item, isSelected, onClick }: QuizOptionProps) => {
       variant={isSelected ? "default" : "outline"}
       className={`h-auto p-4 text-left justify-start ${
         isSelected
-          ? "bg-[#9D7A8C] text-white hover:bg-[#9D7A8C]/90"
-          : "hover:bg-[#9D7A8C]/20"
+          ? "bg-mai-mauve text-white hover:bg-mai-darkRed"
+          : "hover:bg-mai-blushPink/40"
       }`}
       onClick={onClick}
     >

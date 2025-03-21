@@ -11,7 +11,7 @@ const JoinCommunity = () => {
       transition={{ duration: 0.8 }}
     >
       <motion.div 
-        className="bg-mai-cream rounded-3xl p-12 text-center border border-mai-sage/20"
+        className="bg-mai-blushPink rounded-3xl p-12 text-center border border-mai-mauve/20"
         initial={{ scale: 0.95, opacity: 0 }}
         whileInView={{ scale: 1, opacity: 1 }}
         viewport={{ once: true }}
@@ -27,7 +27,7 @@ const JoinCommunity = () => {
         }}
       >
         <motion.h2 
-          className="text-3xl md:text-4xl font-bold text-mai-brown mb-6"
+          className="text-3xl md:text-4xl font-bold text-mai-darkRed mb-6"
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -53,10 +53,10 @@ const JoinCommunity = () => {
         >
           <motion.a 
             href="/auth" 
-            className="inline-block bg-mai-mauve text-white px-8 py-4 rounded-full font-medium hover:shadow-md transition-all duration-300"
+            className="inline-block bg-mai-mauve text-white px-8 py-4 rounded-full font-medium hover:bg-mai-darkRed transition-all duration-300"
             whileHover={{ 
               scale: 1.05,
-              boxShadow: "0 10px 25px -5px rgba(157, 122, 140, 0.4)"
+              boxShadow: "0 10px 25px -5px rgba(86, 12, 12, 0.4)"
             }}
             whileTap={{ scale: 0.95 }}
           >

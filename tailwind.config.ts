@@ -55,14 +55,16 @@ export default {
         },
         mai: {
           cream: "#FFF5EA",
-          rose: "#FFE4E6",
+          rose: "#FAEBEB",     // Updated to blush pink
           sage: "#E7F3EF",
           sand: "#F6F5F1",
-          coral: "#FF9494",
+          coral: "#560C0C",    // Updated to dark red
           brown: "#4A3F35",
-          mauve: "#9D7A8C",     // Updated to the new mauve color
-          mauveDark: "#9D7A8C", // Updated to match the new mauve
-          mauveLight: "#C7B2BC", // Lighter version of the new mauve
+          mauve: "#B48B9C",    // Updated to dusty mauve
+          mauveDark: "#9D7A8C",
+          mauveLight: "#D3B9C7", // Lighter version of dusty mauve
+          blushPink: "#FAEBEB", // Added blush pink
+          darkRed: "#560C0C",  // Added dark red
         },
       },
       borderRadius: {

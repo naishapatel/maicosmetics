@@ -23,9 +23,9 @@ export const HeroContent = () => {
       scale: 1.05
     }} transition={{
       duration: 0.2
-    }} className="inline-flex items-center gap-2 px-6 py-2 mb-8 glass-card border-mai-sage/30 cursor-pointer">
-        <Sparkles className="w-4 h-4 text-mai-mauve" />
-        <span className="text-sm font-medium text-mai-brown">
+    }} className="inline-flex items-center gap-2 px-6 py-2 mb-8 glass-card border-mai-blushPink/30 cursor-pointer">
+        <Sparkles className="w-4 h-4 text-mai-darkRed" />
+        <span className="text-sm font-medium text-mai-darkRed">
           Discover your perfect makeup match
         </span>
       </motion.div>
@@ -40,11 +40,11 @@ export const HeroContent = () => {
       duration: 0.8,
       delay: 0.2
     }} className="relative">
-        <h1 className="text-6xl sm:text-7xl font-bold text-mai-brown mb-4 tracking-tight leading-tight">
+        <h1 className="text-6xl sm:text-7xl font-bold text-mai-darkRed mb-4 tracking-tight leading-tight">
           Beauty that
           <span className="relative inline-block mx-3">
             <span className="relative z-10 text-mai-mauve">Cares</span>
-            <motion.span className="absolute inset-0 bg-mai-sage/20 -skew-y-3 rounded-lg" initial={{
+            <motion.span className="absolute inset-0 bg-mai-blushPink/40 -skew-y-3 rounded-lg" initial={{
             scaleX: 0
           }} animate={{
             scaleX: 1
@@ -86,11 +86,11 @@ export const HeroContent = () => {
         }} whileTap={{
           scale: 0.95
         }}>
-            <Button className="group bg-mai-mauve hover:bg-mai-brown text-white px-8 py-6 rounded-full transition-all duration-300 transform shadow-lg hover:shadow-xl w-full sm:w-auto relative overflow-hidden">
+            <Button className="group bg-mai-mauve hover:bg-mai-darkRed text-white px-8 py-6 rounded-full transition-all duration-300 transform shadow-lg hover:shadow-xl w-full sm:w-auto relative overflow-hidden">
               <span className="relative z-10 flex items-center">
                 Take the Skin Quiz
               </span>
-              <motion.div className="absolute inset-0 bg-gradient-to-r from-mai-mauve to-mai-brown" initial={{
+              <motion.div className="absolute inset-0 bg-gradient-to-r from-mai-mauve to-mai-darkRed" initial={{
               x: "100%"
             }} whileHover={{
               x: 0

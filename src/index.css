@@ -13,11 +13,11 @@
     --popover-foreground: 222.2 84% 4.9%;
     --primary: 222.2 47.4% 11.2%;
     --primary-foreground: 210 40% 98%;
-    --secondary: 330 15% 55%; /* Slightly darker mauve for better contrast */
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 330 10% 80%; /* Lighter mauve for muted areas */
+    --secondary: 330 30% 65%; /* Updated to dusty mauve */
+    --secondary-foreground: 360 92% 20%; /* Dark red for better contrast */
+    --muted: 330 20% 90%; /* Lighter mauve/pink for muted areas */
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 330 15% 65%; /* Medium mauve for accents */
+    --accent: 330 30% 75%; /* Medium mauve for accents */
     --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
@@ -86,7 +86,15 @@
     @apply bg-gradient-to-br from-mai-mauve to-mai-mauveLight;
   }
   
+  .pink-gradient {
+    @apply bg-gradient-to-br from-mai-blushPink to-white;
+  }
+  
   .mauve-text {
     @apply text-mai-mauve;
+  }
+  
+  .dark-red-text {
+    @apply text-mai-darkRed;
   }
 }
