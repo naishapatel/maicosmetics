@@ -11,7 +11,7 @@ interface Product {
 }
 
 export const acneProducts: Product[] = [
-  // Verified Tower 28 SOS Daily Rescue Spray - URL is valid
+  // Verified: Tower 28 SOS Daily Rescue Spray - URL is valid
   {
     id: "a1",
     title: "Tower 28 SOS Daily Rescue Spray",
@@ -22,7 +22,7 @@ export const acneProducts: Product[] = [
     url: "https://tower28beauty.com/products/sos-daily-rescue-facial-spray",
     images: ["https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=800"]
   },
-  // Verified Cocokind Turmeric Spot Treatment - URL is valid
+  // Verified: Cocokind Turmeric Spot Treatment - URL is valid
   {
     id: "a2",
     title: "Cocokind Turmeric Spot Treatment",

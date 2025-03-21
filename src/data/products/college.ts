@@ -11,7 +11,7 @@ interface Product {
 }
 
 export const collegeProducts: Product[] = [
-  // Verified Axiology Balmies Set - URL is valid
+  // Verified: Axiology Balmies Set - URL is valid
   {
     id: "c1",
     title: "Axiology Balmies Set",
@@ -22,7 +22,7 @@ export const collegeProducts: Product[] = [
     url: "https://axiologybeauty.com/collections/sets/products/desert-sunset-set",
     images: ["https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=800"]
   },
-  // Verified Tower 28 BeachPlease Blush - URL is valid
+  // Verified: Tower 28 BeachPlease Blush - URL is valid
   {
     id: "c2",
     title: "Tower 28 BeachPlease Blush",
@@ -33,7 +33,7 @@ export const collegeProducts: Product[] = [
     url: "https://tower28beauty.com/products/beachplease-tinted-lip-cheek-balm",
     images: ["https://images.unsplash.com/photo-1503236823255-94609f598e71?auto=format&fit=crop&w=800"]
   },
-  // Verified Kinship Supermelt Oil Cleanser - URL is valid
+  // Verified: Kinship Supermelt Oil Cleanser - URL is valid
   {
     id: "c3",
     title: "Kinship Supermelt Oil Cleanser",
