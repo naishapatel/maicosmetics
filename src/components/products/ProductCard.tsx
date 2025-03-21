@@ -31,24 +31,36 @@ export const ProductCard = ({ title, description, price, images, link, url }: Pr
         return;
       }
       
-      // If no images provided, generate a brand-focused placeholder
+      // If no product URL, generate a placeholder
       if (!productUrl) {
         generatePlaceholder();
         return;
       }
       
-      // Extract brand name from URL for better placeholder if needed
-      const brandName = extractBrandName(productUrl);
-      const productType = title.toLowerCase().includes("serum") ? "serum" : 
-                         title.toLowerCase().includes("balm") ? "balm" :
-                         title.toLowerCase().includes("powder") ? "powder" :
-                         title.toLowerCase().includes("spray") ? "spray" :
-                         "beauty product";
-      
-      // Generate Unsplash-based placeholder with brand and product type
-      const placeholderUrl = `https://source.unsplash.com/random/800x600/?${brandName},${productType}`;
-      setImageSource(placeholderUrl);
-      setIsLoading(false);
+      try {
+        // Only attempt to scrape product website if there's a URL
+        if (productUrl) {
+          console.log(`Fetching image for product: ${title} from URL: ${productUrl}`);
+          
+          // Since direct web scraping isn't possible in client-side JavaScript due to CORS,
+          // we would need a proxy server or API. As a fallback, we'll use a targeted 
+          // placeholder based on the product URL's domain and product info
+          
+          // Extract brand name and details for better placeholder
+          const brandName = extractBrandName(productUrl);
+          const productType = extractProductType(title);
+          
+          // Create a more targeted placeholder based on brand and product type
+          const placeholderUrl = `https://source.unsplash.com/featured/?${encodeURIComponent(brandName)},${encodeURIComponent(productType)},cosmetics`;
+          console.log(`Using targeted placeholder: ${placeholderUrl}`);
+          setImageSource(placeholderUrl);
+        }
+      } catch (error) {
+        console.error(`Error fetching image for ${title}:`, error);
+        generatePlaceholder();
+      } finally {
+        setIsLoading(false);
+      }
     };
     
     fetchProductImage();
@@ -68,17 +80,33 @@ export const ProductCard = ({ title, description, price, images, link, url }: Pr
     }
   };
   
+  const extractProductType = (productTitle: string): string => {
+    const lowercaseTitle = productTitle.toLowerCase();
+    
+    if (lowercaseTitle.includes("serum")) return "serum";
+    if (lowercaseTitle.includes("balm") || lowercaseTitle.includes("butter")) return "balm";
+    if (lowercaseTitle.includes("powder")) return "powder";
+    if (lowercaseTitle.includes("spray")) return "spray";
+    if (lowercaseTitle.includes("oil")) return "oil";
+    if (lowercaseTitle.includes("cream")) return "cream";
+    if (lowercaseTitle.includes("palette")) return "palette";
+    if (lowercaseTitle.includes("stain")) return "stain";
+    if (lowercaseTitle.includes("tint")) return "tint";
+    if (lowercaseTitle.includes("eyeshadow")) return "eyeshadow";
+    if (lowercaseTitle.includes("lipstick") || lowercaseTitle.includes("lip")) return "lipstick";
+    if (lowercaseTitle.includes("blush")) return "blush";
+    
+    // Default to a more generic term
+    return "beauty product";
+  };
+  
   const generatePlaceholder = () => {
     // Extract potential brand name from title
     const words = title.split(' ');
     const brand = words[0].toLowerCase();
-    const productType = title.toLowerCase().includes("serum") ? "serum" : 
-                       title.toLowerCase().includes("balm") ? "balm" :
-                       title.toLowerCase().includes("powder") ? "powder" :
-                       title.toLowerCase().includes("spray") ? "spray" :
-                       "beauty product";
+    const productType = extractProductType(title);
     
-    const placeholderUrl = `https://source.unsplash.com/random/800x600/?${brand},${productType}`;
+    const placeholderUrl = `https://source.unsplash.com/featured/?${encodeURIComponent(brand)},${encodeURIComponent(productType)},cosmetics`;
     setImageSource(placeholderUrl);
     setIsLoading(false);
   };
