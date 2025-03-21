@@ -43,15 +43,8 @@ const Products = () => {
         if (!existingProducts || existingProducts.length === 0) {
           console.log('Syncing products with Supabase...');
           
-          // Set up RLS policy first if needed (this may require admin rights)
-          try {
-            const { error: policyError } = await supabase.rpc('ensure_products_rls_policy');
-            if (policyError) {
-              console.warn('Could not set up RLS policy:', policyError);
-            }
-          } catch (err) {
-            console.warn('RPC for RLS policy not available:', err);
-          }
+          // Remove the RPC call for RLS policy as it's not available
+          // Instead, we'll rely on the default RLS policies set up in Supabase
           
           let successCount = 0;
           let errorCount = 0;
