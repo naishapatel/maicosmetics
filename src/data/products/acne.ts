@@ -21,7 +21,6 @@ export const acneProducts: Product[] = [
     url: "https://tower28beauty.com/products/sos-daily-rescue-facial-spray",
     images: ["https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=800"]
   },
-  // Restoring this product after verifying it exists
   {
     id: "a2",
     title: "Cocokind Turmeric Spot Treatment",

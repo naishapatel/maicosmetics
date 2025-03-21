@@ -21,7 +21,6 @@ export const veganProducts: Product[] = [
     url: "https://www.fatandthemoon.com/products/lip-cheek-stain",
     images: ["https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=format&fit=crop&w=800"]
   },
-  // Restoring product after verifying it exists
   {
     id: "v2",
     title: "Fat and the Moon Eye Coal",

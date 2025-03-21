@@ -31,7 +31,6 @@ export const ecoFriendlyProducts: Product[] = [
     url: "https://axiologybeauty.com/collections/balmies",
     images: ["https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=800"]
   },
-  // Restoring this product after verifying it exists
   {
     id: "e3",
     title: "Elate Cosmetics Pressed Cheek Color",
