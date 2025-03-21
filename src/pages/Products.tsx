@@ -4,11 +4,14 @@ import { ProductsHeader } from "@/components/products/ProductsHeader";
 import { ProductsGrid } from "@/components/products/ProductsGrid";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { categorizedProducts } from "@/data/products";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 const Products = () => {
+  const [isSyncing, setIsSyncing] = useState(false);
+  const [syncError, setSyncError] = useState<string | null>(null);
+  
   const categories = [
     "sustainable beauty",
     "eco-friendly beauty",
@@ -21,41 +24,79 @@ const Products = () => {
   useEffect(() => {
     const syncProductsWithSupabase = async () => {
       try {
+        setIsSyncing(true);
+        setSyncError(null);
+        
         // First check if products already exist in Supabase
-        const { data: existingProducts } = await supabase
+        const { data: existingProducts, error: fetchError } = await supabase
           .from('products')
           .select('id');
+        
+        if (fetchError) {
+          console.error('Error fetching products:', fetchError);
+          setSyncError('Failed to check existing products');
+          toast.error('Database connection error');
+          return;
+        }
         
         // Only sync if no products exist
         if (!existingProducts || existingProducts.length === 0) {
           console.log('Syncing products with Supabase...');
           
+          // Set up RLS policy first if needed (this may require admin rights)
+          try {
+            const { error: policyError } = await supabase.rpc('ensure_products_rls_policy');
+            if (policyError) {
+              console.warn('Could not set up RLS policy:', policyError);
+            }
+          } catch (err) {
+            console.warn('RPC for RLS policy not available:', err);
+          }
+          
+          let successCount = 0;
+          let errorCount = 0;
+          
           // Insert all categorized products
           for (const product of categorizedProducts) {
-            // Generate proper UUID for database compatibility
-            const { data, error } = await supabase
-              .from('products')
-              .insert({
-                // Don't use the string ID from the product data
-                title: product.title,
-                description: product.description,
-                price: product.price,
-                category: product.category,
-                link: product.link,
-                url: product.url,
-                images: product.images
-              });
-              
-            if (error) {
-              console.error('Error inserting product:', error);
+            try {
+              const { error } = await supabase
+                .from('products')
+                .insert({
+                  title: product.title,
+                  description: product.description,
+                  price: product.price,
+                  category: product.category,
+                  link: product.link,
+                  url: product.url,
+                  images: product.images
+                });
+                
+              if (error) {
+                console.error('Error inserting product:', error);
+                errorCount++;
+              } else {
+                successCount++;
+              }
+            } catch (err) {
+              console.error('Exception inserting product:', err);
+              errorCount++;
             }
           }
-          console.log('Product sync complete!');
-          toast.success('Products synchronized with database');
+          
+          console.log(`Product sync complete! Success: ${successCount}, Errors: ${errorCount}`);
+          if (successCount > 0) {
+            toast.success(`${successCount} products synced with database`);
+          } else if (errorCount > 0) {
+            toast.error(`Failed to sync products (${errorCount} errors). You may need to log in first.`);
+            setSyncError('Database permissions error');
+          }
         }
       } catch (error) {
-        console.error('Error syncing products:', error);
+        console.error('Error in sync process:', error);
         toast.error('Failed to sync products with database');
+        setSyncError('Unexpected error during database sync');
+      } finally {
+        setIsSyncing(false);
       }
     };
 
@@ -67,6 +108,20 @@ const Products = () => {
       <Navbar />
       <ProductsHeader />
       <div className="max-w-7xl mx-auto px-4 py-8">
+        {syncError && (
+          <div className="bg-red-50 text-red-700 p-3 rounded-md mb-6">
+            {syncError === 'Database permissions error' ? 
+              'Unable to sync products with database. You may need to log in first.' : 
+              syncError}
+          </div>
+        )}
+        
+        {isSyncing && (
+          <div className="bg-blue-50 text-blue-700 p-3 rounded-md mb-6 animate-pulse">
+            Syncing products with database...
+          </div>
+        )}
+        
         <Tabs defaultValue={categories[0]} className="w-full">
           <TabsList className="w-full flex flex-wrap gap-2 bg-transparent">
             {categories.map((category) => (
