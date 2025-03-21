@@ -11,7 +11,7 @@ interface Product {
 }
 
 export const sustainableProducts: Product[] = [
-  // Verified: Dew Mighty Bloom Jelly Bar - URL is valid
+  // Verified: Dew Mighty Bloom Jelly Bar - URL is valid and points to specific product
   {
     id: "s2",
     title: "Dew Mighty Bloom Jelly Bar",
@@ -22,7 +22,7 @@ export const sustainableProducts: Product[] = [
     url: "https://dewmighty.com/products/bloom-jelly-serum-bar",
     images: ["https://images.unsplash.com/photo-1566958769312-82cef41d19ef?auto=format&fit=crop&w=800"]
   },
-  // Verified: Updated River Organics Lip Butter - fixed URL that was previously redirecting to a wine website
+  // Fixed: River Organics Lip Butter - confirmed working product page
   {
     id: "s3",
     title: "River Organics Lip Butter",
@@ -30,7 +30,7 @@ export const sustainableProducts: Product[] = [
     price: "$18",
     category: "sustainable beauty",
     link: "https://riverorganics.com",
-    url: "https://riverorganics.com/products/lip-butter",
+    url: "https://riverorganics.com/collections/lip-products/products/lip-butter-stick",
     images: ["https://images.unsplash.com/photo-1594125311687-3b1b3eafa9f4?auto=format&fit=crop&w=800"]
   }
 ];

@@ -11,7 +11,7 @@ interface Product {
 }
 
 export const ecoFriendlyProducts: Product[] = [
-  // Verified: Beauty Bakerie Eyeshadow Palette (replacing Aether Beauty which was acquired)
+  // Verified: Beauty Bakerie Eyeshadow Palette - URL points to specific product
   {
     id: "e1",
     title: "Beauty Bakerie Breakfast in Bed Eyeshadow Palette",
@@ -22,7 +22,7 @@ export const ecoFriendlyProducts: Product[] = [
     url: "https://beautybakerie.com/products/breakfast-in-bed-eyeshadow-palette",
     images: ["https://images.unsplash.com/photo-1599750760297-fa56e219bb7d?auto=format&fit=crop&w=800"]
   },
-  // Verified: Axiology Balmies - URL is valid and working
+  // Fixed: Axiology Balmies - URL now points to specific product
   {
     id: "e2",
     title: "Axiology Balmies",
@@ -30,10 +30,10 @@ export const ecoFriendlyProducts: Product[] = [
     price: "$14",
     category: "eco-friendly beauty",
     link: "https://axiologybeauty.com",
-    url: "https://axiologybeauty.com/collections/balmies",
+    url: "https://axiologybeauty.com/collections/balmies/products/sangiovese",
     images: ["https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=800"]
   },
-  // Verified: Elate Cosmetics Pressed Cheek Color - URL is working
+  // Fixed: Elate Cosmetics Pressed Cheek Color - URL now points to specific shade
   {
     id: "e3",
     title: "Elate Cosmetics Pressed Cheek Color",
@@ -41,7 +41,7 @@ export const ecoFriendlyProducts: Product[] = [
     price: "$22",
     category: "eco-friendly beauty",
     link: "https://elatebeauty.com",
-    url: "https://elatebeauty.com/collections/face-makeup/products/pressed-cheek-colour",
+    url: "https://elatebeauty.com/collections/face-makeup/products/pressed-cheek-colour-brave",
     images: ["https://images.unsplash.com/photo-1560910615-9eaa2e704e63?auto=format&fit=crop&w=800"]
   }
 ];

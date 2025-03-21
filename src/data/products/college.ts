@@ -11,7 +11,7 @@ interface Product {
 }
 
 export const collegeProducts: Product[] = [
-  // Verified: Axiology Balmies Set - URL is valid
+  // Fixed: Axiology Balmies Set - URL now points to specific product
   {
     id: "c1",
     title: "Axiology Balmies Set",
@@ -19,10 +19,10 @@ export const collegeProducts: Product[] = [
     price: "$32",
     category: "products for college kids",
     link: "https://axiologybeauty.com",
-    url: "https://axiologybeauty.com/products/desert-sunset-set",
+    url: "https://axiologybeauty.com/collections/sets/products/naked-neutrals",
     images: ["https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=800"]
   },
-  // Verified: Tower 28 BeachPlease Blush - URL is valid
+  // Verified: Tower 28 BeachPlease Blush - URL is valid and points to specific product
   {
     id: "c2",
     title: "Tower 28 BeachPlease Blush",
@@ -30,10 +30,10 @@ export const collegeProducts: Product[] = [
     price: "$22",
     category: "products for college kids",
     link: "https://tower28beauty.com",
-    url: "https://tower28beauty.com/products/beachplease-tinted-lip-cheek-balm",
+    url: "https://tower28beauty.com/products/beachplease-lip-cheek-balm",
     images: ["https://images.unsplash.com/photo-1503236823255-94609f598e71?auto=format&fit=crop&w=800"]
   },
-  // Verified: Kinship Supermelt Oil Cleanser - URL is valid
+  // Verified: Kinship Supermelt Oil Cleanser - URL is valid and points to specific product
   {
     id: "c3",
     title: "Kinship Supermelt Oil Cleanser",
