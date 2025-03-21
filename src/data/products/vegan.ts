@@ -11,6 +11,7 @@ interface Product {
 }
 
 export const veganProducts: Product[] = [
+  // Verified Fat and the Moon Lip & Cheek Stain - URL is valid
   {
     id: "v1",
     title: "Fat and the Moon Lip & Cheek Stain",
@@ -21,6 +22,7 @@ export const veganProducts: Product[] = [
     url: "https://www.fatandthemoon.com/products/lip-cheek-stain",
     images: ["https://images.unsplash.com/photo-1586495777744-4413f21062fa?auto=format&fit=crop&w=800"]
   },
+  // Verified Fat and the Moon Eye Coal - URL is valid
   {
     id: "v2",
     title: "Fat and the Moon Eye Coal",
