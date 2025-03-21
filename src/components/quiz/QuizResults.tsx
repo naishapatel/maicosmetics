@@ -1,3 +1,4 @@
+
 import { Button } from "@/components/ui/button";
 import { ProductRecommendation } from "@/types/quiz";
 import { motion } from "framer-motion";
@@ -65,13 +66,13 @@ const QuizResults = ({ recommendations, resetQuiz }: QuizResultsProps) => {
               <div className="p-4">
                 <h4 className="text-lg font-semibold text-mai-brown">{product.name}</h4>
                 <p className="text-sm text-gray-500 mb-2">{product.brand}</p>
-                <p className="text-mai-coral font-semibold mb-2">{product.price}</p>
+                <p className="text-mai-mauve font-semibold mb-2">{product.price}</p>
                 <p className="text-gray-600 text-sm mb-4">{product.description}</p>
                 <div className="flex flex-wrap gap-2 mb-3">
                   {product.ethical_values.map((value, i) => (
                     <span
                       key={i}
-                      className="text-xs bg-mai-cream text-mai-brown px-2 py-1 rounded-full"
+                      className="text-xs bg-mai-mauveLight/40 text-mai-mauveDark px-2 py-1 rounded-full"
                     >
                       {value}
                     </span>
@@ -82,7 +83,7 @@ const QuizResults = ({ recommendations, resetQuiz }: QuizResultsProps) => {
                     {product.business_tags.map((tag, i) => (
                       <span
                         key={i}
-                        className="text-xs bg-mai-coral/10 text-mai-coral px-2 py-1 rounded-full"
+                        className="text-xs bg-mai-mauve/10 text-mai-mauve px-2 py-1 rounded-full"
                       >
                         {tag}
                       </span>
@@ -96,7 +97,7 @@ const QuizResults = ({ recommendations, resetQuiz }: QuizResultsProps) => {
       </div>
       <Button
         onClick={resetQuiz}
-        className="mt-6 bg-mai-coral hover:bg-mai-brown text-white transition-colors"
+        className="mt-6 bg-mai-mauve hover:bg-mai-mauveDark text-white transition-colors"
       >
         Retake Quiz
       </Button>

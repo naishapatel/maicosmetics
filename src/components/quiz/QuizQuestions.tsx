@@ -119,7 +119,7 @@ const QuizQuestions = ({
       <div className="mt-8 flex justify-end">
         <Button
           onClick={handleGetRecommendations}
-          className="bg-mai-coral hover:bg-mai-brown text-white transition-colors"
+          className="bg-mai-mauve hover:bg-mai-mauveDark text-white transition-colors"
         >
           Get Recommendations
         </Button>

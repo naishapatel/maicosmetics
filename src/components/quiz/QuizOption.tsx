@@ -14,7 +14,7 @@ const QuizOption = ({ item, isSelected, onClick }: QuizOptionProps) => {
       className={`h-auto p-4 text-left justify-start ${
         isSelected
           ? "bg-[#9D7A8C] text-white hover:bg-[#9D7A8C]/90"
-          : "hover:bg-[#9D7A8C]/10"
+          : "hover:bg-[#9D7A8C]/20"
       }`}
       onClick={onClick}
     >
