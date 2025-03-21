@@ -1,4 +1,3 @@
-
 interface Product {
   id: string;
   title: string;
@@ -30,15 +29,5 @@ export const collegeProducts: Product[] = [
     link: "https://tower28beauty.com",
     url: "https://tower28beauty.com/products/beachplease-tinted-lip-cheek-balm",
     images: ["https://images.unsplash.com/photo-1503236823255-94609f598e71?auto=format&fit=crop&w=800"]
-  },
-  {
-    id: "c3",
-    title: "Fat and the Moon Eye Coal",
-    description: "Natural cream eyeshadow",
-    price: "$20",
-    category: "products for college kids",
-    link: "https://www.fatandthemoon.com",
-    url: "https://www.fatandthemoon.com/products/eye-coal",
-    images: ["https://images.unsplash.com/photo-1631730359585-950f8c3f933d?auto=format&fit=crop&w=800"]
   }
 ];

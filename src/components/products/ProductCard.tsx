@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
@@ -16,6 +15,7 @@ interface ProductCardProps {
 export const ProductCard = ({ title, description, price, images, link, url }: ProductCardProps) => {
   const [imageSource, setImageSource] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isValidUrl, setIsValidUrl] = useState(true);
   
   // Prioritize URL if available, otherwise fallback to link
   const productUrl = url || link;
@@ -38,13 +38,18 @@ export const ProductCard = ({ title, description, price, images, link, url }: Pr
       }
       
       try {
-        // Only attempt to scrape product website if there's a URL
-        if (productUrl) {
+        // Validate the URL by creating a URL object
+        try {
+          new URL(productUrl);
+          setIsValidUrl(true);
+        } catch (e) {
+          console.error(`Invalid URL format for ${title}: ${productUrl}`);
+          setIsValidUrl(false);
+        }
+        
+        // Only attempt to use targeted placeholder if URL is valid
+        if (isValidUrl && productUrl) {
           console.log(`Fetching image for product: ${title} from URL: ${productUrl}`);
-          
-          // Since direct web scraping isn't possible in client-side JavaScript due to CORS,
-          // we would need a proxy server or API. As a fallback, we'll use a targeted 
-          // placeholder based on the product URL's domain and product info
           
           // Extract brand name and details for better placeholder
           const brandName = extractBrandName(productUrl);
@@ -54,6 +59,8 @@ export const ProductCard = ({ title, description, price, images, link, url }: Pr
           const placeholderUrl = `https://source.unsplash.com/featured/?${encodeURIComponent(brandName)},${encodeURIComponent(productType)},cosmetics`;
           console.log(`Using targeted placeholder: ${placeholderUrl}`);
           setImageSource(placeholderUrl);
+        } else {
+          generatePlaceholder();
         }
       } catch (error) {
         console.error(`Error fetching image for ${title}:`, error);
@@ -64,7 +71,7 @@ export const ProductCard = ({ title, description, price, images, link, url }: Pr
     };
     
     fetchProductImage();
-  }, [images, productUrl, title]);
+  }, [images, productUrl, title, isValidUrl]);
   
   const extractBrandName = (url: string): string => {
     try {
@@ -117,16 +124,10 @@ export const ProductCard = ({ title, description, price, images, link, url }: Pr
   };
   
   const handleCardClick = () => {
-    if (productUrl) {
-      // Validate URL before opening
-      try {
-        // Test if URL is valid by creating a URL object
-        new URL(productUrl);
-        window.open(productUrl, '_blank', 'noopener,noreferrer');
-      } catch (e) {
-        console.error(`Invalid URL for ${title}: ${productUrl}`);
-        // If URL is invalid, don't open anything to prevent 404s
-      }
+    if (productUrl && isValidUrl) {
+      window.open(productUrl, '_blank', 'noopener,noreferrer');
+    } else if (productUrl) {
+      console.error(`Cannot open invalid URL for ${title}: ${productUrl}`);
     }
   };
   
@@ -137,7 +138,7 @@ export const ProductCard = ({ title, description, price, images, link, url }: Pr
       className="h-full"
     >
       <Card 
-        className={`h-full hover:shadow-lg transition-all duration-300 ${productUrl ? 'cursor-pointer' : ''}`}
+        className={`h-full hover:shadow-lg transition-all duration-300 ${productUrl && isValidUrl ? 'cursor-pointer' : ''}`}
         onClick={handleCardClick}
       >
         <div className="w-full h-48 overflow-hidden relative">
@@ -153,7 +154,7 @@ export const ProductCard = ({ title, description, price, images, link, url }: Pr
               onError={handleImageError}
             />
           )}
-          {productUrl && (
+          {productUrl && isValidUrl && (
             <div className="absolute top-2 right-2 bg-mai-coral p-1 rounded-full">
               <ExternalLink className="w-4 h-4 text-white" />
             </div>
@@ -165,6 +166,9 @@ export const ProductCard = ({ title, description, price, images, link, url }: Pr
         </CardHeader>
         <CardContent>
           <p className="text-gray-700">{description}</p>
+          {productUrl && !isValidUrl && (
+            <p className="text-red-500 text-sm mt-2">Product link unavailable</p>
+          )}
         </CardContent>
       </Card>
     </motion.div>

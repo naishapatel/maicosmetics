@@ -1,4 +1,3 @@
-
 interface Product {
   id: string;
   title: string;
@@ -30,15 +29,5 @@ export const ecoFriendlyProducts: Product[] = [
     link: "https://axiologybeauty.com",
     url: "https://axiologybeauty.com/collections/balmies",
     images: ["https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=800"]
-  },
-  {
-    id: "e3",
-    title: "Meow Meow Tweet Powder",
-    description: "Plastic-free setting powder",
-    price: "$25",
-    category: "eco-friendly beauty",
-    link: "https://meowmeowtweet.com",
-    url: "https://meowmeowtweet.com/products/everyday-setting-powder",
-    images: ["https://images.unsplash.com/photo-1596285508419-8faef7c8b9b7?auto=format&fit=crop&w=800"]
   }
 ];
