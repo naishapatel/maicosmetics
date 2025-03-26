@@ -10,7 +10,6 @@ interface Product {
   category: string;
   link?: string;
   url?: string;
-  images?: string[];
 }
 
 interface ProductsGridProps {
@@ -31,7 +30,6 @@ export const ProductsGrid = ({ products }: ProductsGridProps) => {
           title={product.title}
           description={product.description}
           price={product.price}
-          images={product.images}
           link={product.link}
           url={product.url}
         />

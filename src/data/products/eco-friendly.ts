@@ -7,7 +7,6 @@ interface Product {
   category: string;
   link?: string;
   url?: string;
-  images?: string[];
 }
 
 export const ecoFriendlyProducts: Product[] = [
@@ -19,8 +18,7 @@ export const ecoFriendlyProducts: Product[] = [
     price: "$38",
     category: "eco-friendly beauty",
     link: "https://beautybakerie.com",
-    url: "https://beautybakerie.com/products/breakfast-in-bed-eyeshadow-palette",
-    images: ["https://images.unsplash.com/photo-1599750760297-fa56e219bb7d?auto=format&fit=crop&w=800"]
+    url: "https://beautybakerie.com/products/breakfast-in-bed-eyeshadow-palette"
   },
   // Fixed: Axiology Balmies - URL now points to specific product
   {
@@ -30,8 +28,7 @@ export const ecoFriendlyProducts: Product[] = [
     price: "$14",
     category: "eco-friendly beauty",
     link: "https://axiologybeauty.com",
-    url: "https://axiologybeauty.com/collections/balmies/products/sangiovese",
-    images: ["https://images.unsplash.com/photo-1596462502278-27bfdc403348?auto=format&fit=crop&w=800"]
+    url: "https://axiologybeauty.com/collections/balmies/products/sangiovese"
   },
   // Fixed: Elate Cosmetics Pressed Cheek Color - URL now points to specific shade
   {
@@ -41,7 +38,6 @@ export const ecoFriendlyProducts: Product[] = [
     price: "$22",
     category: "eco-friendly beauty",
     link: "https://elatebeauty.com",
-    url: "https://elatebeauty.com/collections/face-makeup/products/pressed-cheek-colour-brave",
-    images: ["https://images.unsplash.com/photo-1560910615-9eaa2e704e63?auto=format&fit=crop&w=800"]
+    url: "https://elatebeauty.com/collections/face-makeup/products/pressed-cheek-colour-brave"
   }
 ];

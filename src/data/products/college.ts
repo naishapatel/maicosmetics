@@ -7,7 +7,6 @@ interface Product {
   category: string;
   link?: string;
   url?: string;
-  images?: string[];
 }
 
 export const collegeProducts: Product[] = [
@@ -19,8 +18,7 @@ export const collegeProducts: Product[] = [
     price: "$32",
     category: "products for college kids",
     link: "https://axiologybeauty.com",
-    url: "https://axiologybeauty.com/collections/sets/products/naked-neutrals",
-    images: ["https://images.unsplash.com/photo-1617897903246-719242758050?auto=format&fit=crop&w=800"]
+    url: "https://axiologybeauty.com/collections/sets/products/naked-neutrals"
   },
   // Verified: Tower 28 BeachPlease Blush - URL is valid and points to specific product
   {
@@ -30,8 +28,7 @@ export const collegeProducts: Product[] = [
     price: "$22",
     category: "products for college kids",
     link: "https://tower28beauty.com",
-    url: "https://tower28beauty.com/products/beachplease-lip-cheek-balm",
-    images: ["https://images.unsplash.com/photo-1503236823255-94609f598e71?auto=format&fit=crop&w=800"]
+    url: "https://tower28beauty.com/products/beachplease-lip-cheek-balm"
   },
   // Verified: Kinship Supermelt Oil Cleanser - URL is valid and points to specific product
   {
@@ -41,7 +38,6 @@ export const collegeProducts: Product[] = [
     price: "$26",
     category: "products for college kids",
     link: "https://www.lovekinship.com",
-    url: "https://www.lovekinship.com/products/supermelt-vegan-jelly-oil-cleanser",
-    images: ["https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=800"]
+    url: "https://www.lovekinship.com/products/supermelt-vegan-jelly-oil-cleanser"
   }
 ];

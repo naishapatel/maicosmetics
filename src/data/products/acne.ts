@@ -7,7 +7,6 @@ interface Product {
   category: string;
   link?: string;
   url?: string;
-  images?: string[];
 }
 
 export const acneProducts: Product[] = [
@@ -19,8 +18,7 @@ export const acneProducts: Product[] = [
     price: "$28",
     category: "products for acne",
     link: "https://tower28beauty.com",
-    url: "https://tower28beauty.com/products/sos-daily-rescue-facial-spray",
-    images: ["https://images.unsplash.com/photo-1598440947619-2c35fc9aa908?auto=format&fit=crop&w=800"]
+    url: "https://tower28beauty.com/products/sos-daily-rescue-facial-spray"
   },
   // Verified: Cocokind Turmeric Spot Treatment - URL is valid and points to specific product
   {
@@ -30,7 +28,6 @@ export const acneProducts: Product[] = [
     price: "$9",
     category: "products for acne",
     link: "https://www.cocokind.com",
-    url: "https://www.cocokind.com/products/turmeric-spot-treatment",
-    images: ["https://images.unsplash.com/photo-1608248543803-ba4f8c70ae0b?auto=format&fit=crop&w=800"]
+    url: "https://www.cocokind.com/products/turmeric-spot-treatment"
   }
 ];

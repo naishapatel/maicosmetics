@@ -7,7 +7,6 @@ interface Product {
   category: string;
   link?: string;
   url?: string;
-  images?: string[];
 }
 
 export const sustainableProducts: Product[] = [
@@ -19,8 +18,7 @@ export const sustainableProducts: Product[] = [
     price: "$34",
     category: "sustainable beauty",
     link: "https://dewmighty.com",
-    url: "https://dewmighty.com/products/bloom-jelly-serum-bar",
-    images: ["https://images.unsplash.com/photo-1566958769312-82cef41d19ef?auto=format&fit=crop&w=800"]
+    url: "https://dewmighty.com/products/bloom-jelly-serum-bar"
   },
   // Fixed: River Organics Lip Butter - confirmed working product page
   {
@@ -30,7 +28,6 @@ export const sustainableProducts: Product[] = [
     price: "$18",
     category: "sustainable beauty",
     link: "https://riverorganics.com",
-    url: "https://riverorganics.com/collections/lip-products/products/lip-butter-stick",
-    images: ["https://images.unsplash.com/photo-1594125311687-3b1b3eafa9f4?auto=format&fit=crop&w=800"]
+    url: "https://riverorganics.com/collections/lip-products/products/lip-butter-stick"
   }
 ];
