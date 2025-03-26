@@ -1,4 +1,3 @@
-
 import { Navbar } from "@/components/Navbar";
 import { ProductsHeader } from "@/components/products/ProductsHeader";
 import { ProductsGrid } from "@/components/products/ProductsGrid";
@@ -60,8 +59,7 @@ const Products = () => {
                   price: product.price,
                   category: product.category,
                   link: product.link,
-                  url: product.url,
-                  images: product.images
+                  url: product.url
                 });
                 
               if (error) {
