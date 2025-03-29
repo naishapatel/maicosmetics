@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { motion } from "framer-motion";
 import { useSession } from "@supabase/auth-helpers-react";
@@ -37,16 +37,6 @@ export const Navbar = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const session = useSession();
-  const [isScrolled, setIsScrolled] = useState(false);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
 
   const handleAuthClick = async () => {
     try {
@@ -73,14 +63,9 @@ export const Navbar = () => {
 
   return (
     <motion.nav 
-      initial={{ y: -100 }}
+      initial={{ y: 0 }}
       animate={{ y: 0 }}
-      transition={{ duration: 0.6 }}
-      className={`fixed w-full z-50 transition-all duration-300 ${
-        isScrolled 
-          ? "bg-white/80 backdrop-blur-md shadow-sm" 
-          : "bg-transparent"
-      }`}
+      className="fixed w-full z-50 bg-white shadow-sm"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
