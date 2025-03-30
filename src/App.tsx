@@ -15,6 +15,7 @@ import About from "./pages/About";
 import Sustainability from "./pages/Sustainability";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
+import NotFound from "./pages/NotFound";
 import { supabase } from "./integrations/supabase/client";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
@@ -66,6 +67,7 @@ const AppRoutes = () => {
             path="/admin" 
             element={session ? <Admin /> : <Navigate to="/auth" replace />} 
           />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
       <Footer />
