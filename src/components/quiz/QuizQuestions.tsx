@@ -103,8 +103,8 @@ const QuizQuestions = ({
   const isLastTab = currentTab === tabOrder[tabOrder.length - 1];
 
   return (
-    <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
-      <TabsList className="w-full mb-8">
+    <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full max-w-[98%] mx-auto">
+      <TabsList className="w-full mb-8 mx-auto">
         <TabsTrigger value="makeup" className="flex-1">Makeup Type</TabsTrigger>
         <TabsTrigger value="type" className="flex-1">Skin Type</TabsTrigger>
         <TabsTrigger value="concerns" className="flex-1">Skin Concerns</TabsTrigger>
