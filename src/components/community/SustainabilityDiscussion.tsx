@@ -16,7 +16,8 @@ interface SustainabilityPost {
   user_id: string;
   content: string;
   created_at: string;
-  profiles?: {
+  // Make profiles optional since we'll fetch it separately
+  user_profile?: {
     username: string | null;
     avatar_url: string | null;
   } | null;
@@ -39,23 +40,40 @@ export function SustainabilityDiscussion({ user, onAuthRedirect }: Sustainabilit
 
   const fetchPosts = async () => {
     try {
-      const { data, error } = await supabase
+      // First, get all sustainability posts
+      const { data: postsData, error: postsError } = await supabase
         .from("sustainability_posts")
-        .select("*, profiles(username, avatar_url)")
+        .select("*")
         .order("created_at", { ascending: false });
 
-      if (error) {
-        console.error("Error fetching posts:", error);
+      if (postsError) {
+        console.error("Error fetching posts:", postsError);
         toast({
           variant: "destructive",
           title: "Error fetching discussions",
-          description: error.message,
+          description: postsError.message,
         });
         return;
       }
 
-      if (data) {
-        setPosts(data as SustainabilityPost[]);
+      if (postsData) {
+        // Fetch profiles for each user_id
+        const postsWithProfiles = await Promise.all(
+          postsData.map(async (post) => {
+            const { data: profileData } = await supabase
+              .from("profiles")
+              .select("username, avatar_url")
+              .eq("id", post.user_id)
+              .single();
+            
+            return {
+              ...post,
+              user_profile: profileData
+            } as SustainabilityPost;
+          })
+        );
+        
+        setPosts(postsWithProfiles);
       }
     } catch (error) {
       console.error("Error in fetchPosts:", error);
@@ -192,12 +210,12 @@ export function SustainabilityDiscussion({ user, onAuthRedirect }: Sustainabilit
               <CardHeader className="flex flex-row items-start justify-between">
                 <div className="flex items-center space-x-4">
                   <Avatar>
-                    <AvatarImage src={post.profiles?.avatar_url || undefined} />
-                    <AvatarFallback>{post.profiles?.username?.[0]?.toUpperCase() || "U"}</AvatarFallback>
+                    <AvatarImage src={post.user_profile?.avatar_url || undefined} />
+                    <AvatarFallback>{post.user_profile?.username?.[0]?.toUpperCase() || "U"}</AvatarFallback>
                   </Avatar>
                   <div>
                     <CardTitle className="text-base text-mai-brown">
-                      {post.profiles?.username || "Anonymous"}
+                      {post.user_profile?.username || "Anonymous"}
                     </CardTitle>
                     <p className="text-xs text-gray-500">
                       {format(new Date(post.created_at), "MMM d, yyyy • h:mm a")}
