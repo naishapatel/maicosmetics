@@ -73,18 +73,22 @@ const AppRoutes = () => {
   );
 };
 
-const App = () => (
-  <SessionContextProvider supabaseClient={supabase}>
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
+// The main App component
+const App = () => {
+  return (
+    <SessionContextProvider supabaseClient={supabase}>
+      <QueryClientProvider client={queryClient}>
         <BrowserRouter>
-          <AppRoutes />
+          {/* Moved TooltipProvider inside the component tree */}
+          <TooltipProvider>
+            <Toaster />
+            <Sonner />
+            <AppRoutes />
+          </TooltipProvider>
         </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
-  </SessionContextProvider>
-);
+      </QueryClientProvider>
+    </SessionContextProvider>
+  );
+};
 
 export default App;

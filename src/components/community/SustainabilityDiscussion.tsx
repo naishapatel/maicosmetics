@@ -1,38 +1,37 @@
 
 import { useState, useEffect } from "react";
-import { Leaf } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Textarea } from "@/components/ui/textarea";
-import { useToast } from "@/components/ui/use-toast";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { useSession } from "@supabase/auth-helpers-react";
 import { supabase } from "@/integrations/supabase/client";
-import { User } from "@supabase/auth-helpers-react";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
 import { format } from "date-fns";
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogDescription, AlertDialogFooter, AlertDialogCancel, AlertDialogAction } from "@/components/ui/alert-dialog";
+import { Loader2, Pencil, Upload } from "lucide-react";
+import { v4 as uuidv4 } from "uuid";
 
-interface SustainabilityPost {
+interface Post {
   id: string;
   user_id: string;
   content: string;
   created_at: string;
-  // Make profiles optional since we'll fetch it separately
+  image_url: string | null;
   user_profile?: {
     username: string | null;
     avatar_url: string | null;
   } | null;
 }
 
-interface SustainabilityDiscussionProps {
-  user: User | null;
-  onAuthRedirect: () => void;
-}
-
-export function SustainabilityDiscussion({ user, onAuthRedirect }: SustainabilityDiscussionProps) {
+const SustainabilityDiscussion = () => {
+  const session = useSession();
   const { toast } = useToast();
-  const [posts, setPosts] = useState<SustainabilityPost[]>([]);
+  const [posts, setPosts] = useState<Post[]>([]);
   const [newPost, setNewPost] = useState("");
-  const [postToDelete, setPostToDelete] = useState<string | null>(null);
+  const [posting, setPosting] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetchPosts();
@@ -40,233 +39,268 @@ export function SustainabilityDiscussion({ user, onAuthRedirect }: Sustainabilit
 
   const fetchPosts = async () => {
     try {
-      // First, get all sustainability posts
-      const { data: postsData, error: postsError } = await supabase
-        .from("sustainability_posts")
-        .select("*")
+      setLoading(true);
+      // Updated to use blog_posts table instead of sustainability_posts
+      const { data, error } = await supabase
+        .from("blog_posts")
+        .select(`*, user_profile:profiles(username, avatar_url)`)
+        .eq("approved", true) // Only show approved posts
         .order("created_at", { ascending: false });
 
-      if (postsError) {
-        console.error("Error fetching posts:", postsError);
-        toast({
-          variant: "destructive",
-          title: "Error fetching discussions",
-          description: postsError.message,
-        });
-        return;
+      if (error) {
+        throw error;
       }
 
-      if (postsData) {
-        // Fetch profiles for each user_id
-        const postsWithProfiles = await Promise.all(
-          postsData.map(async (post) => {
-            const { data: profileData } = await supabase
-              .from("profiles")
-              .select("username, avatar_url")
-              .eq("id", post.user_id)
-              .single();
-            
-            return {
-              ...post,
-              user_profile: profileData
-            } as SustainabilityPost;
-          })
-        );
-        
-        setPosts(postsWithProfiles);
-      }
+      const postsWithProfiles = data.map((post: any) => ({
+        id: post.id,
+        content: post.content,
+        created_at: post.created_at,
+        user_id: post.user_id,
+        image_url: post.image_url,
+        user_profile: post.user_profile,
+      }));
+      
+      setPosts(postsWithProfiles);
     } catch (error) {
-      console.error("Error in fetchPosts:", error);
+      console.error("Error fetching posts:", error);
       toast({
         variant: "destructive",
-        title: "Error fetching discussions",
-        description: "Failed to fetch sustainability discussions",
+        title: "Error fetching posts",
+        description: "Could not load blog posts. Please try again later.",
       });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setSelectedImage(file);
+      
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setImagePreview(event.target?.result as string);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
   const handleSubmitPost = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!user) {
+    if (!session) {
       toast({
-        title: "Please sign in",
-        description: "You need to be signed in to post in the community",
+        title: "Sign in required",
+        description: "Please sign in to post to the blog.",
       });
-      onAuthRedirect();
       return;
     }
-
-    try {
-      const { error } = await supabase.from("sustainability_posts").insert({
-        user_id: user.id,
-        content: newPost,
-      });
-
-      if (error) {
-        toast({
-          variant: "destructive",
-          title: "Error submitting post",
-          description: error.message,
-        });
-        return;
-      }
-
-      toast({
-        title: "Success!",
-        description: "Your post has been shared with the community.",
-      });
-
-      setNewPost("");
-      fetchPosts();
-    } catch (error) {
-      console.error("Error in handleSubmitPost:", error);
+    
+    if (!newPost.trim()) {
       toast({
         variant: "destructive",
-        title: "Error submitting post",
-        description: "Failed to submit post",
+        title: "Empty post",
+        description: "Please write something before posting.",
       });
+      return;
     }
-  };
-
-  const handleDeletePost = async (postId: string) => {
-    if (!user) return;
-
+    
     try {
+      setPosting(true);
+      
+      let imageUrl = null;
+      
+      // Upload image if selected
+      if (selectedImage) {
+        const fileExt = selectedImage.name.split('.').pop();
+        const filePath = `${uuidv4()}.${fileExt}`;
+        
+        const { error: uploadError, data } = await supabase.storage
+          .from('blog_images')
+          .upload(filePath, selectedImage);
+        
+        if (uploadError) {
+          throw uploadError;
+        }
+        
+        const { data: urlData } = supabase.storage
+          .from('blog_images')
+          .getPublicUrl(filePath);
+        
+        imageUrl = urlData.publicUrl;
+      }
+      
+      // Submit to the blog_post_approvals table instead of directly to blog_posts
       const { error } = await supabase
-        .from("sustainability_posts")
-        .delete()
-        .eq("id", postId)
-        .eq("user_id", user.id);
-
-      if (error) {
-        toast({
-          variant: "destructive",
-          title: "Error deleting post",
-          description: error.message,
+        .from("blog_post_approvals")
+        .insert({
+          user_id: session.user.id,
+          content: newPost,
+          image_url: imageUrl,
         });
-        return;
+      
+      if (error) {
+        throw error;
       }
-
+      
       toast({
-        title: "Post deleted",
-        description: "Your post has been removed.",
+        title: "Post submitted for approval",
+        description: "Your blog post has been submitted and will be visible after approval.",
       });
-
-      fetchPosts();
+      
+      // Reset form
+      setNewPost("");
+      setSelectedImage(null);
+      setImagePreview(null);
+      
     } catch (error) {
-      console.error("Error in handleDeletePost:", error);
+      console.error("Error posting:", error);
       toast({
         variant: "destructive",
-        title: "Error deleting post",
-        description: "Failed to delete post",
+        title: "Error posting",
+        description: "Failed to submit your post. Please try again.",
       });
+    } finally {
+      setPosting(false);
     }
-  };
-
-  const isCurrentUserPost = (postUserId: string) => {
-    return user && user.id === postUserId;
   };
 
   return (
-    <div className="space-y-8">
-      <div className="bg-mai-sage/20 rounded-lg p-6">
-        <div className="flex items-center mb-4">
-          <Leaf className="text-mai-mauve mr-2 h-6 w-6" />
-          <h2 className="text-2xl font-semibold text-mai-brown">Sustainability Discussion</h2>
-        </div>
-        <p className="text-gray-600 mb-6">
-          Share your thoughts, ideas, and experiences related to sustainable beauty practices and ethical consumption. 
-          Learn from others and contribute to a more environmentally conscious community.
-        </p>
-        
-        <form onSubmit={handleSubmitPost} className="space-y-4">
-          <Textarea
-            placeholder={user ? "Share your thoughts on sustainability in beauty..." : "Please sign in to participate in the discussion"}
-            value={newPost}
-            onChange={(e) => setNewPost(e.target.value)}
-            disabled={!user}
-            className="min-h-[120px]"
-            required
-          />
-          {user ? (
-            <Button type="submit">Share with Community</Button>
-          ) : (
-            <Button type="button" onClick={onAuthRedirect}>Sign In to Participate</Button>
-          )}
+    <div className="space-y-6">
+      <Card>
+        <form onSubmit={handleSubmitPost}>
+          <CardHeader>
+            <h3 className="text-lg font-medium">Share your thoughts</h3>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Textarea
+              placeholder="Write your blog post here..."
+              value={newPost}
+              onChange={(e) => setNewPost(e.target.value)}
+              className="min-h-[120px]"
+            />
+            
+            {/* Image preview */}
+            {imagePreview && (
+              <div className="relative mt-2">
+                <img 
+                  src={imagePreview} 
+                  alt="Preview" 
+                  className="max-h-[200px] rounded-md object-contain" 
+                />
+                <Button
+                  type="button"
+                  variant="destructive"
+                  size="sm"
+                  className="absolute top-2 right-2"
+                  onClick={() => {
+                    setSelectedImage(null);
+                    setImagePreview(null);
+                  }}
+                >
+                  Remove
+                </Button>
+              </div>
+            )}
+            
+            {/* Image upload button */}
+            <div className="flex items-center gap-2">
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={() => document.getElementById('image-upload')?.click()}
+              >
+                <Upload className="h-4 w-4 mr-2" />
+                Add Image
+              </Button>
+              <span className="text-xs text-gray-500">
+                Supported formats: JPEG, PNG, GIF (max 5MB)
+              </span>
+              <input
+                id="image-upload"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageChange}
+              />
+            </div>
+          </CardContent>
+          <CardFooter>
+            <Button 
+              type="submit" 
+              className="ml-auto"
+              disabled={posting || !newPost.trim()}
+            >
+              {posting ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Submitting...
+                </>
+              ) : (
+                <>
+                  <Pencil className="mr-2 h-4 w-4" />
+                  Submit for Review
+                </>
+              )}
+            </Button>
+          </CardFooter>
         </form>
-      </div>
+      </Card>
 
-      <div className="space-y-4">
-        {posts.length === 0 ? (
-          <Card className="bg-white">
-            <CardContent className="pt-6 text-center">
-              <p className="text-gray-500">Be the first to start a discussion about sustainability!</p>
-            </CardContent>
-          </Card>
-        ) : (
-          posts.map((post) => (
-            <Card key={post.id} className="bg-white">
-              <CardHeader className="flex flex-row items-start justify-between">
-                <div className="flex items-center space-x-4">
+      {loading ? (
+        <div className="flex justify-center p-8">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      ) : posts.length === 0 ? (
+        <Card>
+          <CardContent className="p-8 text-center">
+            <p className="text-muted-foreground">No blog posts yet. Be the first to share!</p>
+          </CardContent>
+        </Card>
+      ) : (
+        <div className="space-y-4">
+          {posts.map((post) => (
+            <Card key={post.id} className="overflow-hidden">
+              <CardHeader className="pb-3">
+                <div className="flex items-center space-x-3">
                   <Avatar>
-                    <AvatarImage src={post.user_profile?.avatar_url || undefined} />
-                    <AvatarFallback>{post.user_profile?.username?.[0]?.toUpperCase() || "U"}</AvatarFallback>
+                    <AvatarImage 
+                      src={post.user_profile?.avatar_url || undefined} 
+                      alt={post.user_profile?.username || "User"} 
+                    />
+                    <AvatarFallback>
+                      {(post.user_profile?.username?.[0] || "U").toUpperCase()}
+                    </AvatarFallback>
                   </Avatar>
                   <div>
-                    <CardTitle className="text-base text-mai-brown">
-                      {post.user_profile?.username || "Anonymous"}
-                    </CardTitle>
-                    <p className="text-xs text-gray-500">
-                      {format(new Date(post.created_at), "MMM d, yyyy • h:mm a")}
+                    <p className="font-medium">{post.user_profile?.username || "Anonymous"}</p>
+                    <p className="text-xs text-muted-foreground">
+                      {format(new Date(post.created_at), "MMMM d, yyyy 'at' h:mm a")}
                     </p>
                   </div>
                 </div>
-                {isCurrentUserPost(post.user_id) && (
-                  <AlertDialog>
-                    <AlertDialogTrigger asChild>
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => setPostToDelete(post.id)}
-                        className="text-gray-500 hover:text-red-500"
-                      >
-                        Delete
-                      </Button>
-                    </AlertDialogTrigger>
-                    <AlertDialogContent>
-                      <AlertDialogHeader>
-                        <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-                        <AlertDialogDescription>
-                          This will permanently delete your post from the community discussion.
-                        </AlertDialogDescription>
-                      </AlertDialogHeader>
-                      <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction
-                          className="bg-red-500 hover:bg-red-600" 
-                          onClick={() => handleDeletePost(post.id)}
-                        >
-                          Delete
-                        </AlertDialogAction>
-                      </AlertDialogFooter>
-                    </AlertDialogContent>
-                  </AlertDialog>
-                )}
               </CardHeader>
-              <CardContent>
-                <p className="text-gray-700 whitespace-pre-line">{post.content}</p>
+              <CardContent className="pb-4 pt-0">
+                <div className="whitespace-pre-line">{post.content}</div>
+                
+                {post.image_url && (
+                  <div className="mt-4">
+                    <img 
+                      src={post.image_url} 
+                      alt="Post image" 
+                      className="max-h-[400px] w-auto rounded-md object-contain" 
+                    />
+                  </div>
+                )}
               </CardContent>
-              <CardFooter className="flex justify-between border-t pt-4">
-                <div className="flex items-center text-sm text-gray-500">
-                  <Leaf className="h-4 w-4 mr-1 text-mai-mauve" />
-                  <span>Sustainability Discussion</span>
-                </div>
-              </CardFooter>
             </Card>
-          ))
-        )}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
-}
+};
+
+export default SustainabilityDiscussion;
