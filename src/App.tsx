@@ -12,6 +12,7 @@ import Products from "./pages/Products";
 import Businesses from "./pages/Businesses";
 import Community from "./pages/Community";
 import About from "./pages/About";
+import Sustainability from "./pages/Sustainability";
 import Auth from "./pages/Auth";
 import { supabase } from "./integrations/supabase/client";
 import { Navbar } from "./components/Navbar";
@@ -50,6 +51,7 @@ const AppRoutes = () => {
           <Route path="/quiz" element={<Quiz />} />
           <Route path="/products" element={<Products />} />
           <Route path="/businesses" element={<Businesses />} />
+          <Route path="/sustainability" element={<Sustainability />} />
           <Route 
             path="/community" 
             element={session ? <Community /> : <Navigate to="/auth" replace />} 
