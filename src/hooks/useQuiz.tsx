@@ -1,8 +1,9 @@
+
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { ProductRecommendation, QuizSelections } from "@/types/quiz";
-import { getPersonalizedRecommendations } from "@/utils/quizScoring";
+import { getPersonalizedRecommendations, getAllRecommendations } from "@/utils/quizScoring";
 
 export const useQuiz = () => {
   const [currentTab, setCurrentTab] = useState("makeup");
@@ -45,7 +46,7 @@ export const useQuiz = () => {
     });
   };
 
-  const getRecommendations = async () => {
+  const getRecommendations = async (showAll: boolean = false) => {
     if (!selections.makeupType.length) {
       toast({
         variant: "destructive",
@@ -56,14 +57,24 @@ export const useQuiz = () => {
     }
 
     try {
-      const personalizedRecommendations = await getPersonalizedRecommendations(supabase, selections);
+      let personalizedRecommendations;
+      
+      if (showAll) {
+        personalizedRecommendations = await getAllRecommendations(supabase, selections);
+        toast({
+          title: "All Results",
+          description: "Showing all products that match your preferences.",
+        });
+      } else {
+        personalizedRecommendations = await getPersonalizedRecommendations(supabase, selections);
+        toast({
+          title: "Quiz completed!",
+          description: "Here are your personalized recommendations based on your preferences.",
+        });
+      }
+      
       setRecommendations(personalizedRecommendations);
       setShowResults(true);
-      
-      toast({
-        title: "Quiz completed!",
-        description: "Here are your personalized recommendations based on your preferences.",
-      });
     } catch (error) {
       console.error("Error fetching recommendations:", error);
       toast({

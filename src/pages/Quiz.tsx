@@ -1,3 +1,4 @@
+
 import { Navbar } from "@/components/Navbar";
 import { AboutSection } from "@/components/quiz/AboutSection";
 import QuizQuestions from "@/components/quiz/QuizQuestions";

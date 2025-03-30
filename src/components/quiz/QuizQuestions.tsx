@@ -11,7 +11,7 @@ interface QuizQuestionsProps {
   currentTab: string;
   setCurrentTab: (tab: string) => void;
   handleSelection: (category: keyof QuizSelections, item: string) => void;
-  getRecommendations: () => void;
+  getRecommendations: (showAll?: boolean) => void;
 }
 
 const QuizQuestions = ({
@@ -60,7 +60,7 @@ const QuizQuestions = ({
         setCurrentTab(tabOrder[currentIndex + 1]);
       }
     } else if (currentIndex === tabOrder.length - 1) {
-      validateSelections() && getRecommendations();
+      validateSelections() && getRecommendations(false);
     }
   };
 
@@ -90,7 +90,13 @@ const QuizQuestions = ({
 
   const handleGetRecommendations = () => {
     if (validateSelections()) {
-      getRecommendations();
+      getRecommendations(false);
+    }
+  };
+  
+  const handleGetAllRecommendations = () => {
+    if (validateSelections()) {
+      getRecommendations(true);
     }
   };
 
@@ -171,7 +177,7 @@ const QuizQuestions = ({
           </Button>
           {isLastTab && (
             <Button
-              onClick={handleGetRecommendations}
+              onClick={handleGetAllRecommendations}
               className="bg-mai-coral hover:bg-mai-darkRed text-white transition-colors"
             >
               See All Results

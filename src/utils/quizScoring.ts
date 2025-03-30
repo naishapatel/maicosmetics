@@ -1,3 +1,4 @@
+
 import { SupabaseClient } from '@supabase/supabase-js';
 import { Database } from '@/integrations/supabase/types';
 import { QuizSelections, ProductRecommendation } from '@/types/quiz';
@@ -133,19 +134,37 @@ export const getPersonalizedRecommendations = async (
       score: calculateProductScore(product, expandedSelections.preferences, [])
     })).sort((a, b) => b.score - a.score);
 
+    // Ensure at least one recommendation per makeup type
     const recommendations: typeof scoredProducts = [];
     const usedBrands = new Set<string>();
+    
+    // First, get one top product for each makeup type
+    for (const type of expandedSelections.makeupType) {
+      const typeLower = type.toLowerCase();
+      const bestProductForType = scoredProducts.find(p => 
+        p.makeup_type === typeLower && !recommendations.some(r => r.id === p.id)
+      );
+      
+      if (bestProductForType) {
+        recommendations.push(bestProductForType);
+        usedBrands.add(bestProductForType.brand);
+      }
+    }
+    
+    // Then fill up to a reasonable number with highest scored products
+    // ensuring brand diversity
     const maxRecommendations = Math.max(4, expandedSelections.makeupType.length);
-
+    
     for (const product of scoredProducts) {
       if (recommendations.length >= maxRecommendations) break;
       
-      if (!usedBrands.has(product.brand)) {
+      if (!recommendations.some(r => r.id === product.id) && !usedBrands.has(product.brand)) {
         recommendations.push(product);
         usedBrands.add(product.brand);
       }
     }
 
+    // If we still have space, add more top products regardless of brand
     if (recommendations.length < maxRecommendations) {
       const remainingProducts = scoredProducts
         .filter(p => !recommendations.some(r => r.id === p.id))
@@ -159,6 +178,83 @@ export const getPersonalizedRecommendations = async (
     return recommendations.map(mapDatabaseToProductRecommendation);
   } catch (error) {
     console.error('Error getting personalized recommendations:', error);
+    throw error;
+  }
+};
+
+// New function to get all relevant recommendations
+export const getAllRecommendations = async (
+  supabase: SupabaseClient<Database>,
+  selections: QuizSelections
+): Promise<ProductRecommendation[]> => {
+  try {
+    // Use the same setup as the personalized recommendations
+    const allMakeupTypes = ["Foundation", "Concealer", "Blush", "Bronzer", "Eyeshadow", "Mascara", "Lipstick"];
+    const allSkinTypes = ["Normal", "Dry", "Oily", "Combination", "Sensitive", "Scaly", "Not sure"];
+    const allFinishTypes = ["Matte", "Dewy", "Natural"];
+    const allCoverageLevels = ["Minimal", "Light", "Medium", "Maximum"];
+    const allPreferences = ["Fragrance-free", "Oil-free", "Non-comedogenic", "Natural ingredients", "Cruelty-free"];
+
+    // Expand selections if "No preference" is selected
+    const expandedSelections = {
+      makeupType: expandNoPreferenceSelections(selections.makeupType, allMakeupTypes),
+      skinType: expandNoPreferenceSelections(selections.skinType, allSkinTypes),
+      concerns: selections.concerns.includes('No concerns') ? [] : selections.concerns,
+      preferences: expandNoPreferenceSelections(selections.preferences, allPreferences),
+      finish: expandNoPreferenceSelections(selections.finish, allFinishTypes),
+      coverage: expandNoPreferenceSelections(selections.coverage, allCoverageLevels)
+    };
+
+    console.log('Expanded selections for all results:', expandedSelections);
+
+    const hasNoPreferenceMakeup = selections.makeupType.includes('No preference');
+    const productsPromises = expandedSelections.makeupType.map(type => 
+      getRecommendationsByType(supabase, type, hasNoPreferenceMakeup)
+    );
+    
+    const productsByType = await Promise.all(productsPromises);
+    const allProducts = productsByType.flat();
+
+    console.log('Found all products:', allProducts.length);
+
+    // Score all products but don't limit the results
+    const scoredProducts = allProducts.map(product => ({
+      ...product,
+      score: calculateProductScore(product, expandedSelections.preferences, [])
+    })).filter(product => product.score >= 0) // Only include products with a positive score
+      .sort((a, b) => b.score - a.score);
+    
+    // Make sure we have at least one product per makeup type
+    const recommendationsByType: Record<string, typeof scoredProducts> = {};
+    
+    for (const type of expandedSelections.makeupType) {
+      const typeLower = type.toLowerCase();
+      recommendationsByType[typeLower] = scoredProducts.filter(p => p.makeup_type === typeLower);
+    }
+    
+    // Create a final list ensuring each makeup type has representation
+    const finalRecommendations: typeof scoredProducts = [];
+    
+    // First add at least one product per makeup type if available
+    for (const type of Object.keys(recommendationsByType)) {
+      const productsOfType = recommendationsByType[type];
+      if (productsOfType.length > 0) {
+        finalRecommendations.push(productsOfType[0]);
+      }
+    }
+    
+    // Then add all remaining products that aren't already included
+    for (const product of scoredProducts) {
+      if (!finalRecommendations.some(p => p.id === product.id)) {
+        finalRecommendations.push(product);
+      }
+    }
+
+    console.log('Final all recommendations:', finalRecommendations.length);
+
+    return finalRecommendations.map(mapDatabaseToProductRecommendation);
+  } catch (error) {
+    console.error('Error getting all recommendations:', error);
     throw error;
   }
 };
