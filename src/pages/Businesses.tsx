@@ -1,4 +1,4 @@
-import { Navbar } from "@/components/Navbar";
+
 import { motion } from "framer-motion";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -26,15 +26,14 @@ const businesses = [
 const Businesses = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-mai-cream to-mai-sage/20">
-      <Navbar />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="text-center mb-12"
-        >
-          <h1 className="text-4xl font-bold text-mai-brown mb-4 relative inline-block">
+      <motion.div
+        initial={{ opacity: 0, y: -20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="text-center py-12 pt-24 bg-gradient-to-b from-mai-blushPink to-white"
+      >
+        <div className="max-w-4xl mx-auto px-4">
+          <h1 className="text-4xl md:text-5xl font-bold text-mai-darkRed mb-4 relative inline-block">
             Small Business Partners
             <motion.div
               className="absolute -bottom-2 left-0 w-full h-1 bg-mai-coral/30"
@@ -46,8 +45,10 @@ const Businesses = () => {
           <p className="text-gray-600 max-w-2xl mx-auto">
             Discover and support independent beauty brands that share our commitment to ethical and sustainable practices
           </p>
-        </motion.div>
+        </div>
+      </motion.div>
 
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {businesses.map((business, index) => (
             <motion.div
