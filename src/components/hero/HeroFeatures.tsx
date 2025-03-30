@@ -1,5 +1,4 @@
 
-import { motion } from "framer-motion";
 import { Heart, Shield, Sparkles } from "lucide-react";
 
 const features = [
@@ -22,55 +21,36 @@ const features = [
 
 export const HeroFeatures = () => {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, delay: 0.8 }}
-      className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-24 max-w-5xl mx-auto"
-    >
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mt-24 max-w-5xl mx-auto">
       {features.map((feature, index) => (
-        <motion.div
+        <div
           key={index}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: index * 0.2 }}
-          whileHover={{ y: -5 }}
           className="relative group cursor-pointer"
         >
-          <motion.div
+          <div
             className="glass-card p-8 transition-all duration-300 border border-white/20 backdrop-blur-md relative z-10"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
           >
-            <motion.div
+            <div
               className="w-12 h-12 bg-gradient-to-br from-mai-blushPink/60 to-mai-mauve/40 rounded-xl flex items-center justify-center mb-6 mx-auto transition-transform duration-300"
-              whileHover={{ rotate: 5, scale: 1.1 }}
             >
-              <motion.div
-                initial={{ rotate: 0 }}
-                whileHover={{ rotate: [0, -5, 5, 0] }}
-                transition={{ duration: 0.3 }}
-              >
+              <div>
                 {feature.icon}
-              </motion.div>
-            </motion.div>
-            <motion.h3
+              </div>
+            </div>
+            <h3
               className="text-lg font-semibold text-mai-darkRed mb-3"
-              whileHover={{ scale: 1.05 }}
             >
               {feature.title}
-            </motion.h3>
+            </h3>
             <p className="text-gray-600">
               {feature.description}
             </p>
-          </motion.div>
-          <motion.div
+          </div>
+          <div
             className="absolute inset-0 bg-gradient-to-br from-mai-blushPink/30 to-mai-mauve/30 blur-xl opacity-0 group-hover:opacity-70 transition-opacity duration-300"
-            initial={{ scale: 0.8 }}
-            whileHover={{ scale: 1 }}
           />
-        </motion.div>
+        </div>
       ))}
-    </motion.div>
+    </div>
   );
 };

@@ -1,6 +1,5 @@
-import { Navbar } from "@/components/Navbar";
+
 import { Hero } from "@/components/Hero";
-import { motion } from "framer-motion";
 import { Sparkles, Leaf, Store } from "lucide-react";
 
 const features = [
@@ -24,40 +23,21 @@ const features = [
 const Index = () => {
   return (
     <div className="min-h-screen bg-white">
-      <Navbar />
       <Hero />
-      <motion.section
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.8 }}
-        className="py-32 bg-gradient-to-b from-mai-sand to-white"
-      >
+      <section className="py-32 bg-gradient-to-b from-mai-sand to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
-            <motion.h2 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8 }}
-              className="text-4xl font-bold text-mai-brown mb-6"
-            >
+            <h2 className="text-4xl font-bold text-mai-brown mb-6">
               Why Choose <span className="text-mai-coral">mai.</span>
-            </motion.h2>
-            <motion.p 
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-gray-600 max-w-2xl mx-auto text-lg leading-relaxed"
-            >
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto text-lg leading-relaxed">
               We understand that every skin is unique. Our recommendations are carefully curated to match your specific needs and preferences.
-            </motion.p>
+            </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {features.map((feature, index) => (
-              <motion.div
+              <div
                 key={feature.title}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.8 + index * 0.2 }}
                 className="bg-white p-8 rounded-3xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100"
               >
                 <div className="text-mai-coral mb-6 bg-mai-rose/20 p-4 rounded-2xl inline-block">
@@ -65,11 +45,11 @@ const Index = () => {
                 </div>
                 <h3 className="text-2xl font-semibold text-mai-brown mb-4">{feature.title}</h3>
                 <p className="text-gray-600 leading-relaxed">{feature.description}</p>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
-      </motion.section>
+      </section>
     </div>
   );
 };
