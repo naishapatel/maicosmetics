@@ -1,8 +1,10 @@
+
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { QuizSelections } from "@/types/quiz";
 import QuizTabContent from "./QuizTabContent";
 import { useToast } from "@/components/ui/use-toast";
+import { ChevronRight } from "lucide-react";
 
 interface QuizQuestionsProps {
   selections: QuizSelections;
@@ -26,6 +28,41 @@ const QuizQuestions = ({
   const preferences = ["Fragrance-free", "Oil-free", "Non-comedogenic", "Natural ingredients", "Cruelty-free", "No preference"];
   const finishTypes = ["Matte", "Dewy", "Natural", "No preference"];
   const coverageLevels = ["Minimal", "Light", "Medium", "Maximum", "No preference"];
+
+  const tabOrder = ["makeup", "type", "concerns", "finish", "coverage", "preferences"];
+  
+  const validateTabSelection = (category: string): boolean => {
+    const categoryMap: Record<string, keyof QuizSelections> = {
+      makeup: "makeupType",
+      type: "skinType",
+      concerns: "concerns",
+      finish: "finish",
+      coverage: "coverage",
+      preferences: "preferences"
+    };
+    
+    const selectionKey = categoryMap[category];
+    if (selections[selectionKey].length === 0) {
+      toast({
+        variant: "destructive",
+        title: "Please make a selection",
+        description: `Please select at least one option before moving to the next question.`,
+      });
+      return false;
+    }
+    return true;
+  };
+
+  const handleNextQuestion = () => {
+    const currentIndex = tabOrder.indexOf(currentTab);
+    if (currentIndex >= 0 && currentIndex < tabOrder.length - 1) {
+      if (validateTabSelection(currentTab)) {
+        setCurrentTab(tabOrder[currentIndex + 1]);
+      }
+    } else if (currentIndex === tabOrder.length - 1) {
+      validateSelections() && getRecommendations();
+    }
+  };
 
   const validateSelections = () => {
     const categories = [
@@ -56,6 +93,8 @@ const QuizQuestions = ({
       getRecommendations();
     }
   };
+
+  const isLastTab = currentTab === tabOrder[tabOrder.length - 1];
 
   return (
     <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full">
@@ -116,13 +155,29 @@ const QuizQuestions = ({
         handleSelection={handleSelection}
       />
 
-      <div className="mt-8 flex justify-end">
-        <Button
-          onClick={handleGetRecommendations}
-          className="bg-mai-mauve hover:bg-mai-mauveDark text-white transition-colors"
-        >
-          Get Recommendations
-        </Button>
+      <div className="mt-8 flex justify-between">
+        <div></div> {/* Empty div to push buttons to the right */}
+        <div className="flex gap-4">
+          <Button
+            onClick={handleNextQuestion}
+            className="bg-mai-mauve hover:bg-mai-mauveDark text-white transition-colors"
+          >
+            {isLastTab ? "Get Recommendations" : (
+              <>
+                Next Question
+                <ChevronRight className="w-4 h-4 ml-1" />
+              </>
+            )}
+          </Button>
+          {isLastTab && (
+            <Button
+              onClick={handleGetRecommendations}
+              className="bg-mai-coral hover:bg-mai-darkRed text-white transition-colors"
+            >
+              See All Results
+            </Button>
+          )}
+        </div>
       </div>
     </Tabs>
   );
