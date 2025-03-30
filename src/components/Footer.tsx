@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import { Copyright, Github, Instagram, Linkedin } from "lucide-react";
+import { Copyright } from "lucide-react";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -118,36 +118,8 @@ export const Footer = () => {
           </div>
         </div>
 
-        {/* Social Links */}
-        <div className="mt-12 pt-8 border-t border-mai-cream/20 flex flex-col md:flex-row items-center justify-between">
-          <div className="flex space-x-4 mb-4 md:mb-0">
-            <a
-              href="https://github.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-mai-cream/80 hover:text-mai-mauve transition-colors"
-            >
-              <Github className="w-5 h-5" />
-            </a>
-            <a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-mai-cream/80 hover:text-mai-mauve transition-colors"
-            >
-              <Instagram className="w-5 h-5" />
-            </a>
-            <a
-              href="https://linkedin.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-mai-cream/80 hover:text-mai-mauve transition-colors"
-            >
-              <Linkedin className="w-5 h-5" />
-            </a>
-          </div>
-
-          {/* Copyright */}
+        {/* Copyright */}
+        <div className="mt-12 pt-8 border-t border-mai-cream/20 flex justify-center">
           <div className="flex items-center space-x-2 text-sm text-mai-cream/60">
             <Copyright className="w-4 h-4" />
             <span>{new Date().getFullYear()} mai. All rights reserved.</span>
