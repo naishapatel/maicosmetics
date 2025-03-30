@@ -102,7 +102,7 @@ const SustainabilitySection = () => {
           The beauty industry is evolving towards more sustainable and ethical practices. 
           We regularly update our platform with the latest news, developments, and ways you can contribute.
         </p>
-        <Link to="/community?tab=sustainability">
+        <Link to="/community?tab=blogs">
           <motion.button 
             className="inline-flex items-center gap-2 bg-mai-mauve text-white px-6 py-3 rounded-full font-medium hover:bg-mai-darkRed transition-all duration-300"
             whileHover={{ 
@@ -112,7 +112,7 @@ const SustainabilitySection = () => {
             }}
             whileTap={{ scale: 0.95 }}
           >
-            Join Our Community Discussion
+            Join Our Blog Community
           </motion.button>
         </Link>
       </motion.div>

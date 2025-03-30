@@ -11,7 +11,7 @@ import { ReviewForm } from "@/components/community/ReviewForm";
 import { RecommendationForm } from "@/components/community/RecommendationForm";
 import { ReviewList } from "@/components/community/ReviewList";
 import { ProfileCard } from "@/components/community/ProfileCard";
-import { SustainabilityDiscussion } from "@/components/community/SustainabilityDiscussion";
+import { BlogPost } from "@/components/community/BlogPost";
 
 const Community = () => {
   const { toast } = useToast();
@@ -118,7 +118,7 @@ const Community = () => {
           <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="reviews">Community Reviews</TabsTrigger>
             <TabsTrigger value="recommendations">Recommend a Product</TabsTrigger>
-            <TabsTrigger value="sustainability">Sustainability</TabsTrigger>
+            <TabsTrigger value="blogs">Blogs</TabsTrigger>
           </TabsList>
 
           {session && userProfile && (
@@ -201,9 +201,9 @@ const Community = () => {
             </div>
           </TabsContent>
 
-          <TabsContent value="sustainability">
+          <TabsContent value="blogs">
             <div className="mt-6">
-              <SustainabilityDiscussion 
+              <BlogPost 
                 user={session?.user || null} 
                 onAuthRedirect={handleAuthRedirect}
               />

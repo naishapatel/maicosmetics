@@ -3,6 +3,8 @@ import React from 'react';
 import { Navigate } from 'react-router-dom';
 import { useSession } from '@supabase/auth-helpers-react';
 import NewsletterAdmin from '@/components/admin/NewsletterAdmin';
+import BlogPostAdmin from '@/components/admin/BlogPostAdmin';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const Admin = () => {
   const session = useSession();
@@ -18,9 +20,20 @@ const Admin = () => {
         Admin Dashboard
       </h1>
       
-      <div className="mb-12">
-        <NewsletterAdmin />
-      </div>
+      <Tabs defaultValue="newsletter">
+        <TabsList className="mb-8">
+          <TabsTrigger value="newsletter">Newsletter</TabsTrigger>
+          <TabsTrigger value="blog-posts">Blog Posts</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="newsletter">
+          <NewsletterAdmin />
+        </TabsContent>
+        
+        <TabsContent value="blog-posts">
+          <BlogPostAdmin />
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };
