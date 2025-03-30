@@ -262,6 +262,27 @@ export type Database = {
           },
         ]
       }
+      sustainability_posts: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_analytics: {
         Row: {
           first_seen: string

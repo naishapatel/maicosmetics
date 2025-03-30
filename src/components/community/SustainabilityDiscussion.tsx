@@ -55,7 +55,7 @@ export function SustainabilityDiscussion({ user, onAuthRedirect }: Sustainabilit
       }
 
       if (data) {
-        setPosts(data);
+        setPosts(data as SustainabilityPost[]);
       }
     } catch (error) {
       console.error("Error in fetchPosts:", error);
@@ -80,12 +80,10 @@ export function SustainabilityDiscussion({ user, onAuthRedirect }: Sustainabilit
     }
 
     try {
-      const { error } = await supabase.from("sustainability_posts").insert([
-        {
-          user_id: user.id,
-          content: newPost,
-        },
-      ]);
+      const { error } = await supabase.from("sustainability_posts").insert({
+        user_id: user.id,
+        content: newPost,
+      });
 
       if (error) {
         toast({
