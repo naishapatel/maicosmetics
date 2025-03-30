@@ -1,5 +1,6 @@
+
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
@@ -10,15 +11,29 @@ import { ReviewForm } from "@/components/community/ReviewForm";
 import { RecommendationForm } from "@/components/community/RecommendationForm";
 import { ReviewList } from "@/components/community/ReviewList";
 import { ProfileCard } from "@/components/community/ProfileCard";
+import { SustainabilityDiscussion } from "@/components/community/SustainabilityDiscussion";
 
 const Community = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const session = useSession();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [reviews, setReviews] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [userProfile, setUserProfile] = useState<any>(null);
+  
+  // Get the tab from URL or default to "reviews"
+  const defaultTab = searchParams.get("tab") || "reviews";
+  const [activeTab, setActiveTab] = useState(defaultTab);
+
+  useEffect(() => {
+    // Update URL when tab changes
+    if (activeTab) {
+      searchParams.set("tab", activeTab);
+      setSearchParams(searchParams);
+    }
+  }, [activeTab, searchParams, setSearchParams]);
 
   useEffect(() => {
     fetchReviews();
@@ -99,10 +114,11 @@ const Community = () => {
   return (
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
-        <Tabs defaultValue="reviews" className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
+        <Tabs defaultValue={defaultTab} value={activeTab} onValueChange={setActiveTab} className="w-full">
+          <TabsList className="grid w-full grid-cols-3">
             <TabsTrigger value="reviews">Community Reviews</TabsTrigger>
             <TabsTrigger value="recommendations">Recommend a Product</TabsTrigger>
+            <TabsTrigger value="sustainability">Sustainability</TabsTrigger>
           </TabsList>
 
           {session && userProfile && (
@@ -182,6 +198,15 @@ const Community = () => {
                   <Button onClick={handleAuthRedirect}>Sign In</Button>
                 </div>
               )}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="sustainability">
+            <div className="mt-6">
+              <SustainabilityDiscussion 
+                user={session?.user || null} 
+                onAuthRedirect={handleAuthRedirect}
+              />
             </div>
           </TabsContent>
         </Tabs>

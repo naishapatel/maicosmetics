@@ -2,6 +2,7 @@
 import { motion } from "framer-motion";
 import { ExternalLink, Leaf, GlobeIcon, Heart } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Link } from "react-router-dom";
 
 const SustainabilitySection = () => {
   const nonprofits = [
@@ -101,18 +102,19 @@ const SustainabilitySection = () => {
           The beauty industry is evolving towards more sustainable and ethical practices. 
           We regularly update our platform with the latest news, developments, and ways you can contribute.
         </p>
-        <motion.a 
-          href="/community"
-          className="inline-flex items-center gap-2 bg-mai-mauve text-white px-6 py-3 rounded-full font-medium hover:bg-mai-darkRed transition-all duration-300"
-          whileHover={{ 
-            scale: 1.05,
-            backgroundColor: "var(--mai-darkRed)",
-            boxShadow: "0 10px 25px -5px rgba(86, 12, 12, 0.3)"
-          }}
-          whileTap={{ scale: 0.95 }}
-        >
-          Join Our Community Discussion
-        </motion.a>
+        <Link to="/community?tab=sustainability">
+          <motion.button 
+            className="inline-flex items-center gap-2 bg-mai-mauve text-white px-6 py-3 rounded-full font-medium hover:bg-mai-darkRed transition-all duration-300"
+            whileHover={{ 
+              scale: 1.05,
+              backgroundColor: "var(--mai-darkRed)",
+              boxShadow: "0 10px 25px -5px rgba(86, 12, 12, 0.3)"
+            }}
+            whileTap={{ scale: 0.95 }}
+          >
+            Join Our Community Discussion
+          </motion.button>
+        </Link>
       </motion.div>
     </motion.section>
   );
