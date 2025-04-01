@@ -1,26 +1,29 @@
 
 import { useState } from "react";
 import { User } from "@supabase/auth-helpers-react";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/components/ui/use-toast";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { EthicalValuesSelect } from "@/components/community/EthicalValuesSelect";
-import { ImagePlus, Loader2 } from "lucide-react";
-import { v4 as uuidv4 } from 'uuid';
+import { Label } from "@/components/ui/label";
+import { Loader2, Upload } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+import { EthicalValuesSelect } from "./EthicalValuesSelect";
+import { v4 as uuidv4 } from "uuid";
+
+interface Profile {
+  id: string;
+  username: string | null;
+  avatar_url: string | null;
+  bio: string | null;
+  ethical_interests?: string[] | null;
+}
 
 interface ProfileEditProps {
   user: User;
-  profile: {
-    id: string;
-    username: string | null;
-    avatar_url: string | null;
-    bio: string | null;
-    ethical_interests: string[] | null;
-  };
+  profile: Profile;
   onSave: () => void;
   onCancel: () => void;
 }
@@ -29,175 +32,159 @@ export function ProfileEdit({ user, profile, onSave, onCancel }: ProfileEditProp
   const { toast } = useToast();
   const [username, setUsername] = useState(profile.username || "");
   const [bio, setBio] = useState(profile.bio || "");
-  const [avatarUrl, setAvatarUrl] = useState(profile.avatar_url || "");
-  const [avatarFile, setAvatarFile] = useState<File | null>(null);
-  const [selectedEthicalValues, setSelectedEthicalValues] = useState<string[]>(
+  const [ethicalInterests, setEthicalInterests] = useState<string[]>(
     profile.ethical_interests || []
   );
-  const [isUploading, setIsUploading] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
+  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [avatarPreview, setAvatarPreview] = useState<string | null>(
+    profile.avatar_url || null
+  );
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    // File size validation (2MB max)
-    if (file.size > 2 * 1024 * 1024) {
-      toast({
-        variant: "destructive",
-        title: "File too large",
-        description: "Avatar must be less than 2MB",
-      });
-      return;
-    }
-
-    // Preview the image
-    const objectUrl = URL.createObjectURL(file);
-    setAvatarUrl(objectUrl);
-    setAvatarFile(file);
-  };
-
-  const uploadAvatar = async () => {
-    if (!avatarFile) return avatarUrl;
-    
-    setIsUploading(true);
-    
-    try {
-      // Create a unique filename using UUID
-      const fileExt = avatarFile.name.split('.').pop();
-      const fileName = `${uuidv4()}.${fileExt}`;
-      const filePath = `avatars/${fileName}`;
-
-      // Upload the file to Supabase Storage
-      const { error: uploadError } = await supabase.storage
-        .from('avatars')
-        .upload(filePath, avatarFile);
-
-      if (uploadError) {
-        throw uploadError;
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      
+      // Validate file type
+      if (!file.type.startsWith("image/")) {
+        toast({
+          variant: "destructive",
+          title: "Invalid file type",
+          description: "Please upload an image file",
+        });
+        return;
       }
-
-      // Get the public URL
-      const { data } = supabase.storage
-        .from('avatars')
-        .getPublicUrl(filePath);
-
-      return data.publicUrl;
-    } catch (error) {
-      console.error("Error uploading avatar:", error);
-      toast({
-        variant: "destructive",
-        title: "Upload failed",
-        description: "There was an error uploading your avatar",
-      });
-      return avatarUrl;
-    } finally {
-      setIsUploading(false);
+      
+      // Validate file size (max 2MB)
+      if (file.size > 2 * 1024 * 1024) {
+        toast({
+          variant: "destructive",
+          title: "File too large",
+          description: "Image must be less than 2MB",
+        });
+        return;
+      }
+      
+      setAvatarFile(file);
+      
+      // Preview image
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setAvatarPreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
-  const handleEthicalValueChange = (value: string, checked: boolean) => {
-    if (checked) {
-      setSelectedEthicalValues([...selectedEthicalValues, value]);
-    } else {
-      setSelectedEthicalValues(selectedEthicalValues.filter(v => v !== value));
-    }
+  const handleEthicalInterestsChange = (values: string[]) => {
+    setEthicalInterests(values);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSaving(true);
+    setIsLoading(true);
 
     try {
-      // Upload avatar if a new one was selected
-      const finalAvatarUrl = avatarFile ? await uploadAvatar() : avatarUrl;
-      
-      // Update profile in the database
+      let avatarUrl = profile.avatar_url;
+
+      // Upload new avatar if selected
+      if (avatarFile) {
+        const fileExt = avatarFile.name.split(".").pop();
+        const filePath = `${user.id}/${uuidv4()}.${fileExt}`;
+
+        const { error: uploadError } = await supabase.storage
+          .from("avatars")
+          .upload(filePath, avatarFile);
+
+        if (uploadError) {
+          throw uploadError;
+        }
+
+        // Get public URL for the avatar
+        const { data: urlData } = supabase.storage
+          .from("avatars")
+          .getPublicUrl(filePath);
+
+        avatarUrl = urlData.publicUrl;
+      }
+
+      // Update profile in Supabase
       const { error } = await supabase
-        .from('profiles')
+        .from("profiles")
         .update({
           username,
           bio,
-          avatar_url: finalAvatarUrl,
-          ethical_interests: selectedEthicalValues
+          avatar_url: avatarUrl,
+          ethical_interests: ethicalInterests,
+          updated_at: new Date().toISOString(),
         })
-        .eq('id', user.id);
+        .eq("id", user.id);
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
 
       toast({
         title: "Profile updated",
-        description: "Your profile has been updated successfully",
+        description: "Your profile has been successfully updated.",
       });
       
       onSave();
-    } catch (error: any) {
+    } catch (error) {
+      console.error("Error updating profile:", error);
       toast({
         variant: "destructive",
-        title: "Update failed",
-        description: error.message || "There was an error updating your profile",
+        title: "Error updating profile",
+        description: "Failed to update your profile. Please try again.",
       });
     } finally {
-      setIsSaving(false);
+      setIsLoading(false);
     }
   };
 
   return (
-    <Card>
+    <Card className="w-full">
       <form onSubmit={handleSubmit}>
         <CardHeader>
-          <CardTitle>Edit Profile</CardTitle>
+          <h3 className="text-lg font-medium">Edit Your Profile</h3>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="space-y-2">
-            <Label htmlFor="avatar">Profile Picture</Label>
-            <div className="flex items-center space-x-4">
-              <div className="relative h-24 w-24 rounded-full overflow-hidden border border-gray-200">
-                {avatarUrl ? (
-                  <img 
-                    src={avatarUrl} 
-                    alt="Avatar preview" 
-                    className="h-full w-full object-cover"
-                  />
-                ) : (
-                  <div className="h-full w-full bg-gray-100 flex items-center justify-center">
-                    <span className="text-2xl font-semibold text-gray-400">
-                      {username?.[0]?.toUpperCase() || "?"}
-                    </span>
-                  </div>
-                )}
-              </div>
-              <div>
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  onClick={() => document.getElementById('avatar-upload')?.click()}
-                  disabled={isUploading}
-                  className="relative"
+          <div className="flex flex-col items-center space-y-4">
+            <Avatar className="h-24 w-24">
+              <AvatarImage src={avatarPreview || undefined} />
+              <AvatarFallback>{username?.[0]?.toUpperCase() || "?"}</AvatarFallback>
+            </Avatar>
+            
+            <div className="flex items-center">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => document.getElementById("avatar-upload")?.click()}
+                className="flex items-center"
+              >
+                <Upload className="h-4 w-4 mr-2" /> Upload Photo
+              </Button>
+              <Input
+                id="avatar-upload"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleFileChange}
+              />
+              
+              {avatarPreview && avatarPreview !== profile.avatar_url && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  className="text-red-500 ml-2"
+                  onClick={() => {
+                    setAvatarFile(null);
+                    setAvatarPreview(profile.avatar_url);
+                  }}
                 >
-                  {isUploading ? (
-                    <>
-                      <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                      <span>Uploading...</span>
-                    </>
-                  ) : (
-                    <>
-                      <ImagePlus className="h-4 w-4 mr-2" />
-                      <span>Change Picture</span>
-                    </>
-                  )}
+                  Cancel
                 </Button>
-                <Input
-                  id="avatar-upload"
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleAvatarChange}
-                />
-                <p className="text-xs text-gray-500 mt-1">
-                  JPG, PNG or GIF. 2MB max.
-                </p>
-              </div>
+              )}
             </div>
           </div>
 
@@ -207,7 +194,7 @@ export function ProfileEdit({ user, profile, onSave, onCancel }: ProfileEditProp
               id="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="Your display name"
+              placeholder="Your username"
             />
           </div>
 
@@ -217,33 +204,31 @@ export function ProfileEdit({ user, profile, onSave, onCancel }: ProfileEditProp
               id="bio"
               value={bio}
               onChange={(e) => setBio(e.target.value)}
-              placeholder="Tell the community about yourself..."
+              placeholder="Tell us about yourself..."
               className="min-h-[100px]"
             />
           </div>
 
-          <EthicalValuesSelect
-            selectedValues={selectedEthicalValues}
-            onValueChange={handleEthicalValueChange}
-          />
+          <div className="space-y-2">
+            <Label>Ethical Interests</Label>
+            <EthicalValuesSelect 
+              selected={ethicalInterests} 
+              onChange={handleEthicalInterestsChange} 
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              Select your ethical interests to help us show you relevant content
+            </p>
+          </div>
         </CardContent>
         <CardFooter className="flex justify-end space-x-2">
-          <Button 
-            type="button" 
-            variant="outline" 
-            onClick={onCancel}
-            disabled={isSaving}
-          >
+          <Button type="button" variant="ghost" onClick={onCancel}>
             Cancel
           </Button>
-          <Button 
-            type="submit" 
-            disabled={isSaving}
-          >
-            {isSaving ? (
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? (
               <>
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                <span>Saving...</span>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Saving...
               </>
             ) : (
               "Save Changes"

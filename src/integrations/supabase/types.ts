@@ -246,6 +246,7 @@ export type Database = {
           avatar_url: string | null
           bio: string | null
           created_at: string
+          ethical_interests: string[] | null
           id: string
           recommendation_count: number | null
           review_count: number | null
@@ -256,6 +257,7 @@ export type Database = {
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
+          ethical_interests?: string[] | null
           id: string
           recommendation_count?: number | null
           review_count?: number | null
@@ -266,6 +268,7 @@ export type Database = {
           avatar_url?: string | null
           bio?: string | null
           created_at?: string
+          ethical_interests?: string[] | null
           id?: string
           recommendation_count?: number | null
           review_count?: number | null
