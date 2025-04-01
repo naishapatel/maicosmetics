@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
@@ -40,17 +41,20 @@ export function RecommendationForm({
     setIsSubmitting(true);
 
     try {
+      // Insert into product_recommendations table instead of community_reviews
       const { data, error } = await supabase
-        .from("community_reviews")
-        .insert([
-          {
-            user_id: user.id,
-            product_name: productName,
-            brand_name: brandName,
-            review_text: reviewText,
-            categories: categories,
-          },
-        ])
+        .from("product_recommendations")
+        .insert({
+          user_id: user.id,
+          product_name: productName,
+          brand: brandName,
+          description: reviewText,
+          category: categories.length > 0 ? categories[0] : "Other", // Use first category as main category
+          ethical_values: sustainabilityFeatures,
+          price: "Not specified", // Required field in the schema
+          makeup_type: "Not specified", // Required field in the schema
+          // Add any other required fields for the product_recommendations table
+        })
         .select();
 
       if (error) {
