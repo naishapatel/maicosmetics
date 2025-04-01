@@ -1,77 +1,60 @@
 import { useState } from "react";
-import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 import { supabase } from "@/integrations/supabase/client";
 import { User } from "@supabase/auth-helpers-react";
-import { ProductDetailsFields } from "./ProductDetailsFields";
 import { EthicalValuesSelect } from "./EthicalValuesSelect";
-import { SkinBenefitsSelect } from "./SkinBenefitsSelect";
 
 interface RecommendationFormProps {
-  user: User;
+  user: User | null;
   onRecommendationSubmitted: () => void;
 }
 
-export function RecommendationForm({ user, onRecommendationSubmitted }: RecommendationFormProps) {
+export function RecommendationForm({
+  user,
+  onRecommendationSubmitted,
+}: RecommendationFormProps) {
   const { toast } = useToast();
-  const [recommendation, setRecommendation] = useState({
-    product_name: "",
-    brand: "",
-    category: "",
-    description: "",
-    makeup_type: "none",
-    price: "0",
-    ethical_values: [] as string[],
-    skin_benefits: [] as string[],
-  });
+  const [productName, setProductName] = useState("");
+  const [brandName, setBrandName] = useState("");
+  const [reviewText, setReviewText] = useState("");
+  const [categories, setCategories] = useState<string[]>([]);
+  const [sustainabilityFeatures, setSustainabilityFeatures] = useState<string[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleFieldChange = (field: string, value: string) => {
-    setRecommendation(prev => ({
-      ...prev,
-      [field]: value
-    }));
-  };
-
-  const handleEthicalValueChange = (value: string, checked: boolean) => {
-    setRecommendation(prev => ({
-      ...prev,
-      ethical_values: checked
-        ? [...prev.ethical_values, value]
-        : prev.ethical_values.filter(v => v !== value)
-    }));
-  };
-
-  const handleSkinBenefitChange = (value: string, checked: boolean) => {
-    setRecommendation(prev => ({
-      ...prev,
-      skin_benefits: checked
-        ? [...prev.skin_benefits, value]
-        : prev.skin_benefits.filter(v => v !== value)
-    }));
-  };
-
-  const handleSubmitRecommendation = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!user) {
       toast({
         variant: "destructive",
-        title: "Authentication required",
-        description: "Please sign in to submit a recommendation.",
+        title: "Not authenticated",
+        description: "You must be signed in to submit a recommendation.",
       });
       return;
     }
 
+    setIsSubmitting(true);
+
     try {
-      const { error } = await supabase.from("product_recommendations").insert([
-        {
-          user_id: user.id,
-          ...recommendation,
-        },
-      ]);
+      const { data, error } = await supabase
+        .from("community_reviews")
+        .insert([
+          {
+            user_id: user.id,
+            product_name: productName,
+            brand_name: brandName,
+            review_text: reviewText,
+            categories: categories,
+          },
+        ])
+        .select();
 
       if (error) {
-        console.error("Error details:", error);
+        console.error("Error submitting recommendation:", error);
         toast({
           variant: "destructive",
           title: "Error submitting recommendation",
@@ -80,48 +63,87 @@ export function RecommendationForm({ user, onRecommendationSubmitted }: Recommen
         return;
       }
 
+      setProductName("");
+      setBrandName("");
+      setReviewText("");
+      setCategories([]);
+      setSustainabilityFeatures([]);
+
       toast({
-        title: "Success!",
-        description: "Your recommendation has been submitted successfully.",
+        title: "Recommendation submitted",
+        description: "Your recommendation has been successfully submitted.",
       });
 
-      setRecommendation({
-        product_name: "",
-        brand: "",
-        category: "",
-        description: "",
-        makeup_type: "none",
-        price: "0",
-        ethical_values: [],
-        skin_benefits: [],
-      });
-      
       onRecommendationSubmitted();
     } catch (error) {
-      console.error("Error in handleSubmitRecommendation:", error);
+      console.error("Error in handleSubmit:", error);
       toast({
         variant: "destructive",
         title: "Error submitting recommendation",
-        description: "Failed to submit recommendation. Please try again.",
+        description: "Failed to submit recommendation",
       });
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmitRecommendation} className="space-y-4">
-      <ProductDetailsFields 
-        values={recommendation}
-        onChange={handleFieldChange}
-      />
-      <EthicalValuesSelect
-        selectedValues={recommendation.ethical_values}
-        onValueChange={handleEthicalValueChange}
-      />
-      <SkinBenefitsSelect
-        selectedValues={recommendation.skin_benefits}
-        onValueChange={handleSkinBenefitChange}
-      />
-      <Button type="submit">Submit Recommendation</Button>
+    <form onSubmit={handleSubmit} className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="productName">Product Name</Label>
+        <Input
+          id="productName"
+          type="text"
+          value={productName}
+          onChange={(e) => setProductName(e.target.value)}
+          required
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="brandName">Brand Name</Label>
+        <Input
+          id="brandName"
+          type="text"
+          value={brandName}
+          onChange={(e) => setBrandName(e.target.value)}
+          required
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="reviewText">Review</Label>
+        <Textarea
+          id="reviewText"
+          value={reviewText}
+          onChange={(e) => setReviewText(e.target.value)}
+          rows={4}
+          required
+        />
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="categories">Categories</Label>
+        <Input
+          id="categories"
+          type="text"
+          value={categories.join(", ")}
+          onChange={(e) => setCategories(e.target.value.split(",").map((s) => s.trim()))}
+          placeholder="e.g., Skincare, Cruelty-free"
+        />
+      </div>
+      
+      <div className="space-y-2">
+        <Label htmlFor="sustainabilityFeatures">Sustainability & Ethical Values</Label>
+        <EthicalValuesSelect 
+          selected={sustainabilityFeatures}
+          onChange={setSustainabilityFeatures}
+        />
+      </div>
+
+      <Button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? "Submitting..." : "Submit Recommendation"}
+      </Button>
     </form>
   );
 }

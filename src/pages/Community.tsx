@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -23,7 +24,7 @@ const Community = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [userProfile, setUserProfile] = useState<any>(null);
   
-  const defaultTab = searchParams.get("tab") || "reviews";
+  const defaultTab = searchParams.get("tab") || "profile";
   const [activeTab, setActiveTab] = useState(defaultTab);
 
   useEffect(() => {
@@ -113,29 +114,40 @@ const Community = () => {
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
         <Tabs defaultValue={defaultTab} value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-5">
+            <TabsTrigger value="profile">Your Profile</TabsTrigger>
             <TabsTrigger value="reviews">Community Reviews</TabsTrigger>
             <TabsTrigger value="recommendations">Recommend a Product</TabsTrigger>
             <TabsTrigger value="blogs">Blogs</TabsTrigger>
             <TabsTrigger value="profiles">Find Friends</TabsTrigger>
           </TabsList>
 
-          {session && userProfile && (
-            <div className="my-8">
-              <h2 className="text-2xl font-semibold text-mai-brown mb-4">Your Profile</h2>
-              <ProfileCard
-                username={userProfile.username}
-                avatarUrl={userProfile.avatar_url}
-                bio={userProfile.bio}
-                reviewCount={userProfile.review_count || 0}
-                recommendationCount={userProfile.recommendation_count || 0}
-                currentUser={session.user}
-                userId={userProfile.id}
-                ethicalInterests={userProfile.ethical_interests}
-                onProfileUpdated={fetchUserProfile}
-              />
-            </div>
-          )}
+          <TabsContent value="profile">
+            {session && userProfile ? (
+              <div className="my-8">
+                <h2 className="text-2xl font-semibold text-mai-brown mb-4">Your Profile</h2>
+                <ProfileCard
+                  username={userProfile.username}
+                  avatarUrl={userProfile.avatar_url}
+                  bio={userProfile.bio}
+                  reviewCount={userProfile.review_count || 0}
+                  recommendationCount={userProfile.recommendation_count || 0}
+                  currentUser={session.user}
+                  userId={userProfile.id}
+                  ethicalInterests={userProfile.ethical_interests}
+                  onProfileUpdated={fetchUserProfile}
+                />
+              </div>
+            ) : (
+              <div className="my-8 text-center p-8 bg-mai-sage/20 rounded-lg">
+                <h3 className="text-xl font-semibold mb-4">Sign In to Access Your Profile</h3>
+                <p className="text-gray-600 mb-6">
+                  Create an account or sign in to view and edit your profile.
+                </p>
+                <Button onClick={handleAuthRedirect}>Sign In</Button>
+              </div>
+            )}
+          </TabsContent>
 
           <TabsContent value="reviews" className="space-y-8">
             <div className="bg-mai-sage/20 rounded-lg p-6 mt-6">
