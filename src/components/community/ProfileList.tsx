@@ -79,30 +79,31 @@ export function ProfileList() {
           const enhancedProfiles = await Promise.all(
             data.map(async (profile) => {
               // Get follower count
-              const { data: followerCount } = await supabase.rpc(
-                "get_follower_count", 
-                { user_id: profile.id }
-              );
+              const { count: followerCount } = await supabase
+                .from("user_follows")
+                .select("*", { count: "exact", head: true })
+                .eq("following_id", profile.id);
               
               // Get following count
-              const { data: followingCount } = await supabase.rpc(
-                "get_following_count", 
-                { user_id: profile.id }
-              );
+              const { count: followingCount } = await supabase
+                .from("user_follows")
+                .select("*", { count: "exact", head: true })
+                .eq("follower_id", profile.id);
               
               // Check if current user is following this profile
-              const { data: isFollowing } = await supabase.rpc(
-                "is_following", 
-                { 
-                  follower: session.user.id,
-                  following: profile.id
-                }
-              );
+              const { data: followData, error: followError } = await supabase
+                .from("user_follows")
+                .select("*")
+                .eq("follower_id", session.user.id)
+                .eq("following_id", profile.id)
+                .single();
+              
+              const isFollowing = !!followData;
               
               return {
                 ...profile,
-                follower_count: followerCount,
-                following_count: followingCount,
+                follower_count: followerCount || 0,
+                following_count: followingCount || 0,
                 is_following: isFollowing
               };
             })
@@ -140,10 +141,8 @@ export function ProfileList() {
         const { error } = await supabase
           .from("user_follows")
           .delete()
-          .match({ 
-            follower_id: session.user.id, 
-            following_id: profileId 
-          });
+          .eq("follower_id", session.user.id)
+          .eq("following_id", profileId);
           
         if (error) throw error;
         
