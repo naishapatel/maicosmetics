@@ -3,11 +3,11 @@ import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
 
 interface EthicalValuesSelectProps {
-  selected: string[];
-  onChange: (values: string[]) => void;
+  selectedValues: string[];
+  onValueChange: (value: string, checked: boolean) => void;
 }
 
-export function EthicalValuesSelect({ selected, onChange }: EthicalValuesSelectProps) {
+export function EthicalValuesSelect({ selectedValues, onValueChange }: EthicalValuesSelectProps) {
   const [searchValue, setSearchValue] = useState("");
   
   const availableValues = [
@@ -39,11 +39,8 @@ export function EthicalValuesSelect({ selected, onChange }: EthicalValuesSelectP
     : availableValues;
   
   const handleToggle = (value: string) => {
-    if (selected.includes(value)) {
-      onChange(selected.filter(v => v !== value));
-    } else {
-      onChange([...selected, value]);
-    }
+    const checked = !selectedValues.includes(value);
+    onValueChange(value, checked);
   };
 
   return (
@@ -57,7 +54,7 @@ export function EthicalValuesSelect({ selected, onChange }: EthicalValuesSelectP
       />
       
       <div className="flex flex-wrap gap-2 mt-2">
-        {selected.map(value => (
+        {selectedValues.map(value => (
           <Badge 
             key={value} 
             className="bg-mai-mauve hover:bg-mai-mauveDark cursor-pointer"
@@ -71,7 +68,7 @@ export function EthicalValuesSelect({ selected, onChange }: EthicalValuesSelectP
       <div className="max-h-36 overflow-y-auto p-2 border rounded-md">
         <div className="flex flex-wrap gap-2">
           {filteredValues
-            .filter(value => !selected.includes(value))
+            .filter(value => !selectedValues.includes(value))
             .map(value => (
               <Badge 
                 key={value} 
