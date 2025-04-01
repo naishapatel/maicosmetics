@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -23,12 +22,10 @@ const Community = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [userProfile, setUserProfile] = useState<any>(null);
   
-  // Get the tab from URL or default to "reviews"
   const defaultTab = searchParams.get("tab") || "reviews";
   const [activeTab, setActiveTab] = useState(defaultTab);
 
   useEffect(() => {
-    // Update URL when tab changes
     if (activeTab) {
       searchParams.set("tab", activeTab);
       setSearchParams(searchParams);
@@ -128,8 +125,12 @@ const Community = () => {
                 username={userProfile.username}
                 avatarUrl={userProfile.avatar_url}
                 bio={userProfile.bio}
-                reviewCount={userProfile.review_count}
-                recommendationCount={userProfile.recommendation_count}
+                reviewCount={userProfile.review_count || 0}
+                recommendationCount={userProfile.recommendation_count || 0}
+                currentUser={session.user}
+                userId={userProfile.id}
+                ethicalInterests={userProfile.ethical_interests}
+                onProfileUpdated={fetchUserProfile}
               />
             </div>
           )}
