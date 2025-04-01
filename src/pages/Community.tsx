@@ -11,6 +11,7 @@ import { RecommendationForm } from "@/components/community/RecommendationForm";
 import { ReviewList } from "@/components/community/ReviewList";
 import { ProfileCard } from "@/components/community/ProfileCard";
 import { BlogPost } from "@/components/community/BlogPost";
+import { ProfileList } from "@/components/community/ProfileList";
 
 const Community = () => {
   const { toast } = useToast();
@@ -112,10 +113,11 @@ const Community = () => {
     <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-12">
         <Tabs defaultValue={defaultTab} value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="reviews">Community Reviews</TabsTrigger>
             <TabsTrigger value="recommendations">Recommend a Product</TabsTrigger>
             <TabsTrigger value="blogs">Blogs</TabsTrigger>
+            <TabsTrigger value="profiles">Find Friends</TabsTrigger>
           </TabsList>
 
           {session && userProfile && (
@@ -208,6 +210,22 @@ const Community = () => {
                 user={session?.user || null} 
                 onAuthRedirect={handleAuthRedirect}
               />
+            </div>
+          </TabsContent>
+          
+          <TabsContent value="profiles">
+            <div className="mt-6">
+              {session ? (
+                <ProfileList />
+              ) : (
+                <div className="text-center p-8 bg-mai-sage/20 rounded-lg">
+                  <h3 className="text-xl font-semibold mb-4">Connect with Community Members</h3>
+                  <p className="text-gray-600 mb-6">
+                    Sign in to discover and follow other members with similar ethical interests.
+                  </p>
+                  <Button onClick={handleAuthRedirect}>Sign In</Button>
+                </div>
+              )}
             </div>
           </TabsContent>
         </Tabs>

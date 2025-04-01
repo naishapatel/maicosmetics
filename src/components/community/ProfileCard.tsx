@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardHeader, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Pencil } from "lucide-react";
+import { Pencil, UserPlus, UserMinus, Users } from "lucide-react";
 import { ProfileEdit } from "./ProfileEdit";
 
 interface ProfileCardProps {
@@ -18,6 +18,10 @@ interface ProfileCardProps {
   userId: string;
   ethicalInterests?: string[] | null;
   onProfileUpdated?: () => void;
+  followerCount?: number;
+  followingCount?: number;
+  isFollowing?: boolean;
+  onFollowToggle?: (userId: string, isFollowing: boolean) => void;
 }
 
 export function ProfileCard({ 
@@ -29,7 +33,11 @@ export function ProfileCard({
   currentUser,
   userId,
   ethicalInterests = [],
-  onProfileUpdated
+  onProfileUpdated,
+  followerCount,
+  followingCount,
+  isFollowing,
+  onFollowToggle
 }: ProfileCardProps) {
   const [isEditing, setIsEditing] = useState(false);
   
@@ -39,6 +47,12 @@ export function ProfileCard({
     setIsEditing(false);
     if (onProfileUpdated) {
       onProfileUpdated();
+    }
+  };
+
+  const handleFollowClick = () => {
+    if (onFollowToggle && !isOwnProfile) {
+      onFollowToggle(userId, !!isFollowing);
     }
   };
 
@@ -68,18 +82,47 @@ export function ProfileCard({
         </Avatar>
         <div className="flex-1">
           <div className="flex items-center justify-between">
-            <h3 className="text-2xl font-semibold text-mai-brown">{username || 'Anonymous'}</h3>
-            {isOwnProfile && (
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                onClick={() => setIsEditing(true)}
-                className="h-8 px-2"
-              >
-                <Pencil className="h-4 w-4 mr-1" />
-                Edit Profile
-              </Button>
-            )}
+            <div>
+              <h3 className="text-2xl font-semibold text-mai-brown">{username || 'Anonymous'}</h3>
+              {followerCount !== undefined && followingCount !== undefined && (
+                <div className="flex gap-4 text-sm text-gray-500 mt-1">
+                  <span>{followerCount} follower{followerCount !== 1 ? 's' : ''}</span>
+                  <span>{followingCount} following</span>
+                </div>
+              )}
+            </div>
+            <div className="flex gap-2">
+              {isOwnProfile ? (
+                <Button 
+                  variant="ghost" 
+                  size="sm" 
+                  onClick={() => setIsEditing(true)}
+                  className="h-8 px-2"
+                >
+                  <Pencil className="h-4 w-4 mr-1" />
+                  Edit Profile
+                </Button>
+              ) : currentUser && onFollowToggle ? (
+                <Button
+                  variant={isFollowing ? "outline" : "default"}
+                  size="sm"
+                  onClick={handleFollowClick}
+                  className="h-8"
+                >
+                  {isFollowing ? (
+                    <>
+                      <UserMinus className="h-4 w-4 mr-1" />
+                      Unfollow
+                    </>
+                  ) : (
+                    <>
+                      <UserPlus className="h-4 w-4 mr-1" />
+                      Follow
+                    </>
+                  )}
+                </Button>
+              ) : null}
+            </div>
           </div>
           {bio && <p className="text-gray-600 mt-1">{bio}</p>}
         </div>
