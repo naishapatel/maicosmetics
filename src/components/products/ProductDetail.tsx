@@ -3,12 +3,14 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useSession } from "@supabase/auth-helpers-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
-import { Bookmark, BookmarkCheck, ChevronLeft, Star } from "lucide-react";
-import { Textarea } from "@/components/ui/textarea";
+import { ChevronLeft } from "lucide-react";
 import { ProductRecommendation } from "@/types/quiz";
+import { ProductHeader } from "./ProductHeader";
+import { ProductInfo } from "./ProductInfo";
+import { ProductReviewForm } from "./ProductReviewForm";
+import { SimilarProducts } from "./SimilarProducts";
 
 export function ProductDetail() {
   const { productId } = useParams<{ productId: string }>();
@@ -205,102 +207,23 @@ export function ProductDetail() {
         <ChevronLeft className="w-4 h-4 mr-2" /> Back
       </Button>
       
-      <Card className="mb-8">
-        <CardHeader>
-          <div className="flex justify-between items-start">
-            <div>
-              <CardTitle className="text-2xl font-bold text-mai-brown">{product.name}</CardTitle>
-              <p className="text-gray-500">{product.brand}</p>
-            </div>
-            <Button 
-              variant="outline" 
-              size="sm" 
-              onClick={handleSaveProduct}
-              className="flex items-center gap-2"
-            >
-              {isSaved ? (
-                <>
-                  <BookmarkCheck className="h-4 w-4 text-mai-mauve" />
-                  Saved
-                </>
-              ) : (
-                <>
-                  <Bookmark className="h-4 w-4" />
-                  Save
-                </>
-              )}
-            </Button>
-          </div>
-        </CardHeader>
-        <CardContent className="space-y-6">
-          <div>
-            <p className="text-xl font-medium text-mai-mauve">{product.price}</p>
-            <p className="mt-4 text-gray-700">{product.description}</p>
-          </div>
-          
-          <div>
-            <h3 className="font-medium mb-2">Category</h3>
-            <p className="inline-block px-3 py-1 bg-mai-sand rounded-full text-sm">
-              {product.category}
-            </p>
-          </div>
-          
-          <div>
-            <h3 className="font-medium mb-2">Ethical Values</h3>
-            <div className="flex flex-wrap gap-2">
-              {product.ethical_values && product.ethical_values.map((value, i) => (
-                <span 
-                  key={i}
-                  className="px-3 py-1 bg-mai-mauve/10 text-mai-mauve rounded-full text-sm"
-                >
-                  {value}
-                </span>
-              ))}
-            </div>
-          </div>
-          
-          {session && (
-            <div className="border-t pt-6 mt-6">
-              <h3 className="font-medium mb-3">Leave a Review</h3>
-              <Textarea
-                value={userReview}
-                onChange={(e) => setUserReview(e.target.value)}
-                placeholder="Share your experience with this product..."
-                rows={4}
-                className="mb-4"
-              />
-              <Button 
-                onClick={handleSubmitReview} 
-                disabled={isSubmittingReview}
-                className="bg-mai-mauve hover:bg-mai-mauveDark"
-              >
-                {isSubmittingReview ? "Submitting..." : "Submit Review"}
-              </Button>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+      <ProductHeader 
+        product={product} 
+        isSaved={isSaved} 
+        onSave={handleSaveProduct} 
+      />
       
-      {similarProducts.length > 0 && (
-        <div className="mt-12">
-          <h2 className="text-xl font-bold text-mai-brown mb-4">Similar Products</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {similarProducts.map((item) => (
-              <Card 
-                key={item.id} 
-                className="hover:shadow-md transition-shadow cursor-pointer"
-                onClick={() => navigate(`/products/${item.id}`)}
-              >
-                <CardContent className="p-4">
-                  <h3 className="font-semibold text-mai-brown">{item.name}</h3>
-                  <p className="text-sm text-gray-500">{item.brand}</p>
-                  <p className="text-mai-mauve mt-1">{item.price}</p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      )}
+      <ProductInfo product={product} />
+      
+      <ProductReviewForm 
+        session={session}
+        userReview={userReview}
+        isSubmittingReview={isSubmittingReview}
+        onReviewChange={setUserReview}
+        onSubmitReview={handleSubmitReview}
+      />
+      
+      <SimilarProducts products={similarProducts} />
     </div>
   );
 }
