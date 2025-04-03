@@ -34,10 +34,16 @@ const NavLink = ({ to, children, className }: NavLinkProps) => (
   </motion.div>
 );
 
+// List of admin email addresses
+const ADMIN_EMAILS = ["naisha.r.patel@gmail.com", "naishapatelofficial@gmail.com"];
+
 export const Navbar = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const session = useSession();
+
+  // Check if the current user is an admin
+  const isAdmin = session?.user?.email && ADMIN_EMAILS.includes(session.user.email);
 
   const handleAuthClick = async () => {
     try {
@@ -80,7 +86,7 @@ export const Navbar = () => {
             <NavLink to="/sustainability">Sustainability</NavLink>
             <NavLink to="/community">Community</NavLink>
             <NavLink to="/about">About Us</NavLink>
-            {session && (
+            {isAdmin && (
               <NavLink to="/admin" className="text-mai-mauveDark font-medium">
                 <span className="flex items-center">
                   <ShieldCheck className="w-4 h-4 mr-1" />
