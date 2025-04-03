@@ -84,14 +84,15 @@ const mapDatabaseToProductRecommendation = (
 
   return {
     id: dbProduct.id,
-    name: dbProduct.product_name,
+    name: dbProduct.product_name, // Map product_name to name
     brand: dbProduct.brand,
     price: dbProduct.price,
     description: dbProduct.description,
     makeup_type: dbProduct.makeup_type,
     category: dbProduct.category,
     ethical_values: dbProduct.ethical_values,
-    imageUrl: imageUrl.publicUrl
+    imageUrl: imageUrl.publicUrl,
+    business_tags: dbProduct.business_tags
   };
 };
 

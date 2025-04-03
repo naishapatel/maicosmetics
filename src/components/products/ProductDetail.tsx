@@ -42,7 +42,21 @@ export function ProductDetail() {
       if (error) throw error;
       
       if (data) {
-        setProduct(data);
+        // Map database result to match ProductRecommendation type
+        const mappedProduct: ProductRecommendation = {
+          id: data.id,
+          name: data.product_name, // Map product_name to name
+          brand: data.brand,
+          price: data.price,
+          description: data.description,
+          makeup_type: data.makeup_type,
+          category: data.category,
+          ethical_values: data.ethical_values,
+          business_tags: data.business_tags,
+          imageUrl: data.images?.[0] // Use first image as imageUrl if available
+        };
+        
+        setProduct(mappedProduct);
         
         // Fetch similar products (same category or brand)
         const { data: similarData, error: similarError } = await supabase
@@ -53,7 +67,21 @@ export function ProductDetail() {
           .limit(3);
           
         if (!similarError && similarData) {
-          setSimilarProducts(similarData);
+          // Map similar products to match ProductRecommendation type
+          const mappedSimilarProducts = similarData.map(item => ({
+            id: item.id,
+            name: item.product_name,
+            brand: item.brand,
+            price: item.price,
+            description: item.description,
+            makeup_type: item.makeup_type,
+            category: item.category,
+            ethical_values: item.ethical_values,
+            business_tags: item.business_tags,
+            imageUrl: item.images?.[0]
+          }));
+          
+          setSimilarProducts(mappedSimilarProducts);
         }
         
         // Check if user has saved this product (in a real implementation)

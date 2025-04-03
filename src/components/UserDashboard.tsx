@@ -39,11 +39,22 @@ export function UserDashboard() {
 
       if (recsError) throw recsError;
       
-      // In a real implementation, you would fetch saved items from a user_saved_items table
-      // For now, we'll just use the first few recommendations as an example
+      // Map database results to match ProductRecommendation type
+      const mappedRecommendations = recsData?.map(item => ({
+        id: item.id,
+        name: item.product_name, // Map product_name to name
+        brand: item.brand,
+        price: item.price,
+        description: item.description,
+        makeup_type: item.makeup_type,
+        category: item.category,
+        ethical_values: item.ethical_values,
+        business_tags: item.business_tags,
+        imageUrl: item.images?.[0] // Use first image as imageUrl if available
+      })) || [];
       
-      setRecommendations(recsData || []);
-      setSavedItems(recsData?.slice(0, 2) || []);
+      setRecommendations(mappedRecommendations);
+      setSavedItems(mappedRecommendations.slice(0, 2)); // For now, just use first few items as saved
     } catch (error) {
       console.error("Error fetching user data:", error);
       toast({

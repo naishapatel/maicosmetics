@@ -3,11 +3,12 @@ import { ProductCard } from "./ProductCard";
 import { motion } from "framer-motion";
 
 interface Product {
-  id: string;
-  title: string;
-  description: string;
+  id?: string;
+  title?: string;
+  name?: string;
+  description?: string;
   price: string;
-  category: string;
+  category?: string;
   link?: string;
   url?: string;
 }
@@ -26,10 +27,10 @@ export const ProductsGrid = ({ products }: ProductsGridProps) => {
     >
       {products.map((product) => (
         <ProductCard
-          key={product.id}
+          key={product.id || Math.random().toString()}
           id={product.id}
-          title={product.title}
-          description={product.description}
+          title={product.title || product.name || ""}
+          description={product.description || ""}
           price={product.price}
           link={product.link}
           url={product.url}

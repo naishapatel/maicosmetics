@@ -1,3 +1,4 @@
+
 export interface QuizSelections {
   skinType: string[];
   concerns: string[];
@@ -18,4 +19,10 @@ export interface ProductRecommendation {
   ethical_values: string[];
   imageUrl?: string;
   business_tags?: string[];
+  // We can add these to match the database structure but not require them
+  product_name?: string;
+  skin_benefits?: string[];
+  user_id?: string;
+  images?: string[];
+  created_at?: string;
 }
