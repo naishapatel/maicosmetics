@@ -1,9 +1,11 @@
+
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { QuizSelections } from "@/types/quiz";
 import QuizTabContent from "./QuizTabContent";
 import { useToast } from "@/components/ui/use-toast";
 import { ChevronRight } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface QuizQuestionsProps {
   selections: QuizSelections;
@@ -21,6 +23,7 @@ const QuizQuestions = ({
   getRecommendations,
 }: QuizQuestionsProps) => {
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   const makeupTypes = ["Foundation", "Concealer", "Blush", "Bronzer", "Eyeshadow", "Mascara", "Lipstick", "No preference"];
   const skinTypes = ["Normal", "Dry", "Oily", "Combination", "Sensitive", "Scaly", "Not sure", "No preference"];
   const skinConcerns = ["Acne", "Redness", "Dark spots", "Fine lines", "Uneven texture", "No concerns"];
@@ -101,15 +104,28 @@ const QuizQuestions = ({
 
   const isLastTab = currentTab === tabOrder[tabOrder.length - 1];
 
+  // Map user-friendly tab labels for display
+  const tabLabels: Record<string, string> = {
+    makeup: "Makeup",
+    type: "Skin Type",
+    concerns: "Concerns",
+    finish: "Finish",
+    coverage: "Coverage",
+    preferences: "Prefs"
+  };
+
   return (
     <Tabs value={currentTab} onValueChange={setCurrentTab} className="w-full max-w-[98%] mx-auto">
-      <TabsList className="w-full mb-8 mx-auto">
-        <TabsTrigger value="makeup" className="flex-1">Makeup Type</TabsTrigger>
-        <TabsTrigger value="type" className="flex-1">Skin Type</TabsTrigger>
-        <TabsTrigger value="concerns" className="flex-1">Skin Concerns</TabsTrigger>
-        <TabsTrigger value="finish" className="flex-1">Finish</TabsTrigger>
-        <TabsTrigger value="coverage" className="flex-1">Coverage</TabsTrigger>
-        <TabsTrigger value="preferences" className="flex-1">Preferences</TabsTrigger>
+      <TabsList className={`w-full mb-8 mx-auto ${isMobile ? 'flex flex-wrap gap-1' : ''}`}>
+        {tabOrder.map((tab) => (
+          <TabsTrigger 
+            key={tab} 
+            value={tab} 
+            className={`${isMobile ? 'text-xs py-1 px-2' : 'flex-1'}`}
+          >
+            {isMobile ? tabLabels[tab] : tabLabels[tab] === "Prefs" ? "Preferences" : tabLabels[tab]}
+          </TabsTrigger>
+        ))}
       </TabsList>
 
       <QuizTabContent
@@ -160,12 +176,12 @@ const QuizQuestions = ({
         handleSelection={handleSelection}
       />
 
-      <div className="mt-8 flex justify-between">
-        <div></div> {/* Empty div to push buttons to the right */}
-        <div className="flex gap-4">
+      <div className={`mt-8 flex ${isMobile ? 'justify-center' : 'justify-between'}`}>
+        {!isMobile && <div></div>} {/* Empty div to push buttons to the right on desktop */}
+        <div className={`flex ${isMobile ? 'flex-col w-full' : 'gap-4'}`}>
           <Button
             onClick={handleNextQuestion}
-            className="bg-mai-darkRed hover:bg-mai-darkRed/90 text-white transition-colors"
+            className="bg-mai-darkRed hover:bg-mai-darkRed/90 text-white transition-colors mb-2"
           >
             {isLastTab ? "Get Recommendations" : (
               <>
