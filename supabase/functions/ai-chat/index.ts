@@ -18,15 +18,19 @@ serve(async (req) => {
   try {
     // Check if API key is available
     if (!openAIApiKey) {
+      console.error('OpenAI API key not found');
       throw new Error('OpenAI API key not found');
     }
 
     const { message } = await req.json();
 
     if (!message) {
+      console.error('No message provided');
       throw new Error('No message provided');
     }
 
+    console.log('Calling OpenAI API with message:', message);
+    
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -46,7 +50,15 @@ serve(async (req) => {
       }),
     });
 
+    if (!response.ok) {
+      const errorData = await response.text();
+      console.error('OpenAI API error:', response.status, errorData);
+      throw new Error(`OpenAI API error: ${response.status}`);
+    }
+
     const data = await response.json();
+    console.log('OpenAI API response:', data);
+    
     const generatedMessage = data.choices[0].message.content;
 
     return new Response(JSON.stringify({ response: generatedMessage }), {

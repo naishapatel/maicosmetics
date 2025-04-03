@@ -6,6 +6,7 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { MessageCircle, Send, X } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
 
 interface Message {
   id: string;
@@ -20,7 +21,7 @@ export const ChatWidget = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome",
-      content: "Hi there! How can I help you today?",
+      content: "Hi there! I'm Mai Assistant. How can I help you with your beauty and skincare questions today?",
       isUser: false,
       timestamp: new Date(),
     },
@@ -53,12 +54,19 @@ export const ChatWidget = () => {
     setIsLoading(true);
     
     try {
+      console.log("Sending message to AI chat function:", input);
+      
       // Call Supabase Edge Function to get AI response
       const { data, error } = await supabase.functions.invoke("ai-chat", {
         body: { message: input },
       });
       
-      if (error) throw error;
+      if (error) {
+        console.error("Error from Edge Function:", error);
+        throw error;
+      }
+      
+      console.log("Received response from AI chat function:", data);
       
       const aiResponse: Message = {
         id: crypto.randomUUID(),
@@ -70,6 +78,12 @@ export const ChatWidget = () => {
       setMessages((prev) => [...prev, aiResponse]);
     } catch (error) {
       console.error("Error calling AI service:", error);
+      
+      toast({
+        title: "Chat Error",
+        description: "We're having trouble connecting to our assistant. Please try again later.",
+        variant: "destructive",
+      });
       
       const errorMessage: Message = {
         id: crypto.randomUUID(),
