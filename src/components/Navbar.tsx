@@ -6,6 +6,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { motion } from "framer-motion";
 import { useSession } from "@supabase/auth-helpers-react";
 import { useToast } from "@/components/ui/use-toast";
+import { ShieldCheck } from "lucide-react";
 
 interface NavLinkProps {
   to: string;
@@ -79,6 +80,14 @@ export const Navbar = () => {
             <NavLink to="/sustainability">Sustainability</NavLink>
             <NavLink to="/community">Community</NavLink>
             <NavLink to="/about">About Us</NavLink>
+            {session && (
+              <NavLink to="/admin" className="text-mai-mauveDark font-medium">
+                <span className="flex items-center">
+                  <ShieldCheck className="w-4 h-4 mr-1" />
+                  Admin
+                </span>
+              </NavLink>
+            )}
           </div>
           <Button
             variant="ghost"
