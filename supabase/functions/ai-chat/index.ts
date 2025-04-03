@@ -32,6 +32,7 @@ serve(async (req) => {
     console.log('Calling OpenAI API with message:', message);
     
     try {
+      // Using gpt-3.5-turbo instead of gpt-4o-mini to reduce costs
       const response = await fetch('https://api.openai.com/v1/chat/completions', {
         method: 'POST',
         headers: {
@@ -39,7 +40,7 @@ serve(async (req) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          model: 'gpt-4o-mini',
+          model: 'gpt-3.5-turbo',
           messages: [
             { 
               role: 'system', 
@@ -47,7 +48,7 @@ serve(async (req) => {
             },
             { role: 'user', content: message }
           ],
-          max_tokens: 300,
+          max_tokens: 150,
         }),
       });
 
