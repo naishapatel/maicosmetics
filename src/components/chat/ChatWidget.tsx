@@ -63,14 +63,19 @@ export const ChatWidget = () => {
       
       if (error) {
         console.error("Error from Edge Function:", error);
-        throw error;
+        throw new Error(`Edge Function error: ${error.message}`);
       }
       
       console.log("Received response from AI chat function:", data);
       
+      if (!data || !data.response) {
+        console.error("Invalid response format from Edge Function:", data);
+        throw new Error("Invalid response from assistant");
+      }
+      
       const aiResponse: Message = {
         id: crypto.randomUUID(),
-        content: data.response || "I'm having trouble understanding. Please try again.",
+        content: data.response,
         isUser: false,
         timestamp: new Date(),
       };
