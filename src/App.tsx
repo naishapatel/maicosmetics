@@ -21,6 +21,7 @@ import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { initAnalytics, updateUserActivity } from "./utils/analytics";
 import { ProductDetail } from "./components/products/ProductDetail";
+import { ChatWidget } from "./components/chat/ChatWidget";
 
 const queryClient = new QueryClient();
 
@@ -73,6 +74,7 @@ const AppRoutes = () => {
         </Routes>
       </div>
       <Footer />
+      <ChatWidget />
     </div>
   );
 };
