@@ -20,16 +20,7 @@ export const collegeProducts: Product[] = [
     link: "https://axiologybeauty.com",
     url: "https://axiologybeauty.com/collections/sets/products/naked-neutrals"
   },
-  // Verified: Tower 28 BeachPlease Blush - URL is valid and points to specific product
-  {
-    id: "c2",
-    title: "Tower 28 BeachPlease Blush",
-    description: "Easy-to-use cream blush",
-    price: "$22",
-    category: "products for college kids",
-    link: "https://tower28beauty.com",
-    url: "https://tower28beauty.com/products/beachplease-lip-cheek-balm"
-  },
+  // Removed: Tower 28 BeachPlease Blush
   // Verified: Kinship Supermelt Oil Cleanser - URL is valid and points to specific product
   {
     id: "c3",

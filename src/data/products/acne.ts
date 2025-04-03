@@ -10,16 +10,7 @@ interface Product {
 }
 
 export const acneProducts: Product[] = [
-  // Verified: Tower 28 SOS Daily Rescue Spray - URL is valid and points to specific product
-  {
-    id: "a1",
-    title: "Tower 28 SOS Daily Rescue Spray",
-    description: "Hypochlorous acid spray for acne-prone skin",
-    price: "$28",
-    category: "products for acne",
-    link: "https://tower28beauty.com",
-    url: "https://tower28beauty.com/products/sos-daily-rescue-facial-spray"
-  },
+  // Removed: Tower 28 SOS Daily Rescue Spray
   // Verified: Cocokind Turmeric Spot Treatment - URL is valid and points to specific product
   {
     id: "a2",
