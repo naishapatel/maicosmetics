@@ -31,11 +31,8 @@ export const HeroContent = () => {
       <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-6">
         <Link to="/quiz">
           <div>
-            <Button className="group bg-mai-mauve hover:bg-mai-darkRed text-white px-8 py-6 rounded-full transition-all duration-300 transform shadow-lg hover:shadow-xl w-full sm:w-auto relative overflow-hidden">
-              <span className="relative z-10 flex items-center">
-                Take the Skin Quiz
-              </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-mai-mauve to-mai-darkRed" />
+            <Button className="bg-mai-darkRed hover:bg-mai-darkRed/90 text-white px-8 py-6 rounded-full transition-all duration-300 transform shadow-lg hover:shadow-xl w-full sm:w-auto">
+              Take the Skin Quiz
             </Button>
           </div>
         </Link>
