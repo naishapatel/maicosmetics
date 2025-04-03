@@ -68,19 +68,30 @@ export const ChatWidget = () => {
       
       console.log("Received response from AI chat function:", data);
       
-      if (!data || !data.response) {
+      // If we have a response, use it (even if there's an API quota error)
+      if (data && data.response) {
+        const aiResponse: Message = {
+          id: crypto.randomUUID(),
+          content: data.response,
+          isUser: false,
+          timestamp: new Date(),
+        };
+        
+        setMessages((prev) => [...prev, aiResponse]);
+        
+        // If there was an API quota error specifically, show a toast
+        if (data.error === 'API quota exceeded') {
+          toast({
+            title: "Service Limitation",
+            description: "Our AI assistant is temporarily unavailable due to high demand. We're working to restore service.",
+            variant: "destructive",
+          });
+        }
+      } else {
+        // Only throw an error if we didn't get any response
         console.error("Invalid response format from Edge Function:", data);
         throw new Error("Invalid response from assistant");
       }
-      
-      const aiResponse: Message = {
-        id: crypto.randomUUID(),
-        content: data.response,
-        isUser: false,
-        timestamp: new Date(),
-      };
-      
-      setMessages((prev) => [...prev, aiResponse]);
     } catch (error) {
       console.error("Error calling AI service:", error);
       

@@ -31,47 +31,70 @@ serve(async (req) => {
 
     console.log('Calling OpenAI API with message:', message);
     
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: [
-          { 
-            role: 'system', 
-            content: 'You are a helpful beauty assistant for mai., a company focused on vegan, sustainable beauty products. Your name is Mai Assistant. Keep responses brief, friendly, and focused on beauty advice, especially for skincare. Only recommend vegan and sustainable products. If asked about non-beauty topics, politely redirect the conversation to beauty and skincare. You are an AI assistant created by mai. to help users find skincare products and learn about sustainable beauty practices.' 
-          },
-          { role: 'user', content: message }
-        ],
-        max_tokens: 300,
-      }),
-    });
+    try {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${openAIApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'gpt-4o-mini',
+          messages: [
+            { 
+              role: 'system', 
+              content: 'You are a helpful beauty assistant for mai., a company focused on vegan, sustainable beauty products. Your name is Mai Assistant. Keep responses brief, friendly, and focused on beauty advice, especially for skincare. Only recommend vegan and sustainable products. If asked about non-beauty topics, politely redirect the conversation to beauty and skincare. You are an AI assistant created by mai. to help users find skincare products and learn about sustainable beauty practices.' 
+            },
+            { role: 'user', content: message }
+          ],
+          max_tokens: 300,
+        }),
+      });
 
-    if (!response.ok) {
-      const errorData = await response.text();
-      console.error('OpenAI API error:', response.status, errorData);
-      throw new Error(`OpenAI API error: ${response.status}`);
+      const responseText = await response.text();
+      
+      // Check for API errors
+      if (!response.ok) {
+        console.error('OpenAI API error:', response.status, responseText);
+        
+        // Handle quota exceeded error specifically
+        if (responseText.includes('insufficient_quota')) {
+          return new Response(JSON.stringify({ 
+            error: 'API quota exceeded',
+            response: "I'm currently unavailable due to service limitations. Our team has been notified and is working to restore full functionality. Please try again later."
+          }), {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          });
+        }
+        
+        throw new Error(`OpenAI API error: ${response.status}`);
+      }
+      
+      // Parse the JSON response after confirming it's valid
+      const data = JSON.parse(responseText);
+      console.log('OpenAI API response received successfully');
+      
+      if (!data || !data.choices || !data.choices[0] || !data.choices[0].message) {
+        console.error('Unexpected OpenAI API response format:', data);
+        throw new Error('Unexpected OpenAI API response format');
+      }
+      
+      const generatedMessage = data.choices[0].message.content;
+
+      return new Response(JSON.stringify({ response: generatedMessage }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+      
+    } catch (apiError) {
+      console.error('Error calling OpenAI API:', apiError);
+      throw apiError;
     }
-
-    const data = await response.json();
-    console.log('OpenAI API response received successfully');
-    
-    if (!data || !data.choices || !data.choices[0] || !data.choices[0].message) {
-      console.error('Unexpected OpenAI API response format:', data);
-      throw new Error('Unexpected OpenAI API response format');
-    }
-    
-    const generatedMessage = data.choices[0].message.content;
-
-    return new Response(JSON.stringify({ response: generatedMessage }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
   } catch (error) {
     console.error('Error in AI chat function:', error);
-    return new Response(JSON.stringify({ error: error.message }), {
+    return new Response(JSON.stringify({ 
+      error: error.message,
+      response: "I'm having technical difficulties right now. Please try again later or contact support if the issue persists."
+    }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
