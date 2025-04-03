@@ -1,6 +1,8 @@
 
 import { Hero } from "@/components/Hero";
 import { Sparkles, Leaf, Store } from "lucide-react";
+import { UserDashboard } from "@/components/UserDashboard";
+import { useSession } from "@supabase/auth-helpers-react";
 
 const features = [
   {
@@ -21,9 +23,24 @@ const features = [
 ];
 
 const Index = () => {
+  const session = useSession();
+  const isReturningUser = !!session;
+
   return (
     <div className="min-h-screen bg-white">
       <Hero />
+      
+      {isReturningUser && (
+        <section className="py-16 bg-gradient-to-b from-white to-mai-sand/30">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-bold text-mai-brown mb-8 text-center">
+              Welcome Back
+            </h2>
+            <UserDashboard />
+          </div>
+        </section>
+      )}
+      
       <section className="py-32 bg-gradient-to-b from-mai-sand to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">

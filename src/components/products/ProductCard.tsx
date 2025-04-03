@@ -1,9 +1,10 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface ProductCardProps {
+  id?: string;
   title: string;
   description: string;
   price: string;
@@ -11,12 +12,20 @@ interface ProductCardProps {
   url?: string;
 }
 
-export const ProductCard = ({ title, description, price, link, url }: ProductCardProps) => {
+export const ProductCard = ({ id, title, description, price, link, url }: ProductCardProps) => {
+  const navigate = useNavigate();
   // Prioritize URL if available, otherwise fallback to link
   const productUrl = url || link;
   const isValidUrl = productUrl ? true : false;
   
   const handleCardClick = () => {
+    // If we have an internal ID, navigate to product detail
+    if (id) {
+      navigate(`/products/${id}`);
+      return;
+    }
+    
+    // Otherwise try to open external URL if available
     if (productUrl && isValidUrl) {
       window.open(productUrl, '_blank', 'noopener,noreferrer');
     }
@@ -29,7 +38,7 @@ export const ProductCard = ({ title, description, price, link, url }: ProductCar
       className="h-full"
     >
       <Card 
-        className={`h-full hover:shadow-lg transition-all duration-300 ${productUrl && isValidUrl ? 'cursor-pointer' : ''}`}
+        className="h-full hover:shadow-lg transition-all duration-300 cursor-pointer"
         onClick={handleCardClick}
       >
         <CardHeader>

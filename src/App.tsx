@@ -20,6 +20,7 @@ import { supabase } from "./integrations/supabase/client";
 import { Navbar } from "./components/Navbar";
 import { Footer } from "./components/Footer";
 import { initAnalytics, updateUserActivity } from "./utils/analytics";
+import { ProductDetail } from "./components/products/ProductDetail";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +53,7 @@ const AppRoutes = () => {
           <Route path="/" element={<Index />} />
           <Route path="/quiz" element={<Quiz />} />
           <Route path="/products" element={<Products />} />
+          <Route path="/products/:productId" element={<ProductDetail />} />
           <Route path="/businesses" element={<Businesses />} />
           <Route path="/sustainability" element={<Sustainability />} />
           <Route 
