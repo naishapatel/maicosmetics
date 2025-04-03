@@ -19,7 +19,7 @@ export interface ProductRecommendation {
   ethical_values: string[];
   imageUrl?: string;
   business_tags?: string[];
-  // We can add these to match the database structure but not require them
+  // Database fields
   product_name?: string;
   skin_benefits?: string[];
   user_id?: string;

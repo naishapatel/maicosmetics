@@ -45,15 +45,19 @@ export function ProductDetail() {
         // Map database result to match ProductRecommendation type
         const mappedProduct: ProductRecommendation = {
           id: data.id,
-          name: data.product_name, // Map product_name to name
+          name: data.product_name || data.name, // Map product_name to name with fallback
           brand: data.brand,
           price: data.price,
           description: data.description,
           makeup_type: data.makeup_type,
           category: data.category,
-          ethical_values: data.ethical_values,
+          ethical_values: data.ethical_values || [],
           business_tags: data.business_tags,
-          imageUrl: data.images?.[0] // Use first image as imageUrl if available
+          imageUrl: data.images?.[0], // Use first image as imageUrl if available
+          product_name: data.product_name, // Include both fields
+          skin_benefits: data.skin_benefits,
+          user_id: data.user_id,
+          images: data.images
         };
         
         setProduct(mappedProduct);
@@ -70,15 +74,19 @@ export function ProductDetail() {
           // Map similar products to match ProductRecommendation type
           const mappedSimilarProducts = similarData.map(item => ({
             id: item.id,
-            name: item.product_name,
+            name: item.product_name || item.name, // Map with fallback
             brand: item.brand,
             price: item.price,
             description: item.description,
             makeup_type: item.makeup_type,
             category: item.category,
-            ethical_values: item.ethical_values,
+            ethical_values: item.ethical_values || [],
             business_tags: item.business_tags,
-            imageUrl: item.images?.[0]
+            imageUrl: item.images?.[0],
+            product_name: item.product_name,
+            skin_benefits: item.skin_benefits,
+            user_id: item.user_id,
+            images: item.images
           }));
           
           setSimilarProducts(mappedSimilarProducts);
@@ -240,7 +248,7 @@ export function ProductDetail() {
           <div>
             <h3 className="font-medium mb-2">Ethical Values</h3>
             <div className="flex flex-wrap gap-2">
-              {product.ethical_values.map((value, i) => (
+              {product.ethical_values && product.ethical_values.map((value, i) => (
                 <span 
                   key={i}
                   className="px-3 py-1 bg-mai-mauve/10 text-mai-mauve rounded-full text-sm"
