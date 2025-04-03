@@ -6,6 +6,7 @@ interface Product {
   id?: string;
   title?: string;
   name?: string;
+  product_name?: string;
   description?: string;
   price: string;
   category?: string;
@@ -29,7 +30,9 @@ export const ProductsGrid = ({ products }: ProductsGridProps) => {
         <ProductCard
           key={product.id || Math.random().toString()}
           id={product.id}
-          title={product.title || product.name || ""}
+          title={product.title}
+          name={product.name}
+          product_name={product.product_name}
           description={product.description || ""}
           price={product.price}
           link={product.link}

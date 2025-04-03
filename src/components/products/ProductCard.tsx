@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
@@ -5,18 +6,23 @@ import { useNavigate } from "react-router-dom";
 
 interface ProductCardProps {
   id?: string;
-  title: string;
+  title?: string;
+  name?: string;
+  product_name?: string;
   description: string;
   price: string;
   link?: string;
   url?: string;
 }
 
-export const ProductCard = ({ id, title, description, price, link, url }: ProductCardProps) => {
+export const ProductCard = ({ id, title, name, product_name, description, price, link, url }: ProductCardProps) => {
   const navigate = useNavigate();
   // Prioritize URL if available, otherwise fallback to link
   const productUrl = url || link;
   const isValidUrl = productUrl ? true : false;
+  
+  // Determine which name property to use, with fallbacks
+  const displayName = title || name || product_name || "";
   
   const handleCardClick = () => {
     // If we have an internal ID, navigate to product detail
@@ -42,7 +48,7 @@ export const ProductCard = ({ id, title, description, price, link, url }: Produc
         onClick={handleCardClick}
       >
         <CardHeader>
-          <CardTitle className="text-xl font-semibold text-mai-brown">{title}</CardTitle>
+          <CardTitle className="text-xl font-semibold text-mai-brown">{displayName}</CardTitle>
           <p className="text-lg font-medium text-mai-coral">{price}</p>
         </CardHeader>
         <CardContent>

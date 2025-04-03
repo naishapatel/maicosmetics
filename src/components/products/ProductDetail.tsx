@@ -45,7 +45,7 @@ export function ProductDetail() {
         // Map database result to match ProductRecommendation type
         const mappedProduct: ProductRecommendation = {
           id: data.id,
-          name: data.product_name || data.name, // Map product_name to name with fallback
+          name: data.product_name, // Use product_name as name
           brand: data.brand,
           price: data.price,
           description: data.description,
@@ -74,7 +74,7 @@ export function ProductDetail() {
           // Map similar products to match ProductRecommendation type
           const mappedSimilarProducts = similarData.map(item => ({
             id: item.id,
-            name: item.product_name || item.name, // Map with fallback
+            name: item.product_name, // Use product_name as name
             brand: item.brand,
             price: item.price,
             description: item.description,
