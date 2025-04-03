@@ -1,7 +1,6 @@
 
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { motion } from "framer-motion";
 import { useSession } from "@supabase/auth-helpers-react";
@@ -21,7 +20,7 @@ const NavLink = ({ to, children, className }: NavLinkProps) => (
   >
     <Link
       to={to}
-      className={`px-4 py-2 rounded-full text-gray-600 relative overflow-hidden group ${className || ''}`}
+      className={`px-3 py-2 rounded-full text-gray-600 relative overflow-hidden group ${className || ''}`}
     >
       <span className="relative z-10">{children}</span>
       <motion.div
@@ -69,17 +68,13 @@ export const Navbar = () => {
   };
 
   return (
-    <motion.nav 
-      initial={{ y: 0 }}
-      animate={{ y: 0 }}
-      className="fixed w-full z-50 bg-white shadow-sm"
-    >
+    <div className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           <Link to="/" className="text-2xl font-bold text-mai-brown hover:text-mai-mauveDark transition-colors">
             mai.
           </Link>
-          <div className="hidden sm:flex space-x-1">
+          <div className="hidden sm:flex items-center space-x-1">
             <NavLink to="/quiz">Skin Quiz</NavLink>
             <NavLink to="/products">Products</NavLink>
             <NavLink to="/businesses">Small Businesses</NavLink>
@@ -97,7 +92,7 @@ export const Navbar = () => {
           </div>
           <Button
             variant="ghost"
-            className={`rounded-full px-6 transition-all duration-300 ${
+            className={`rounded-full px-4 transition-all duration-300 ${
               session 
                 ? "text-mai-brown hover:text-mai-mauveDark" 
                 : "bg-mai-darkRed text-white hover:bg-mai-darkRed/80"
@@ -108,7 +103,7 @@ export const Navbar = () => {
           </Button>
         </div>
       </div>
-    </motion.nav>
+    </div>
   );
 };
 

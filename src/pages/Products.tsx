@@ -1,4 +1,3 @@
-import { Navbar } from "@/components/Navbar";
 import { ProductsHeader } from "@/components/products/ProductsHeader";
 import { ProductsGrid } from "@/components/products/ProductsGrid";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -13,20 +12,18 @@ const Products = () => {
   
   const categories = [
     "sustainable beauty",
-    "eco-friendly beauty",
+    "eco-friendly beauty", 
     "vegan beauty",
     "products for acne",
     "products for college kids"
   ];
 
-  // Sync local products with Supabase when component loads
   useEffect(() => {
     const syncProductsWithSupabase = async () => {
       try {
         setIsSyncing(true);
         setSyncError(null);
         
-        // First check if products already exist in Supabase
         const { data: existingProducts, error: fetchError } = await supabase
           .from('products')
           .select('id');
@@ -38,17 +35,12 @@ const Products = () => {
           return;
         }
         
-        // Only sync if no products exist
         if (!existingProducts || existingProducts.length === 0) {
           console.log('Syncing products with Supabase...');
-          
-          // Remove the RPC call for RLS policy as it's not available
-          // Instead, we'll rely on the default RLS policies set up in Supabase
           
           let successCount = 0;
           let errorCount = 0;
           
-          // Insert all categorized products
           for (const product of categorizedProducts) {
             try {
               const { error } = await supabase
@@ -96,7 +88,6 @@ const Products = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-mai-cream to-white">
-      <Navbar />
       <ProductsHeader />
       <div className="max-w-7xl mx-auto px-4 py-8">
         {syncError && (

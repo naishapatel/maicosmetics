@@ -48,7 +48,7 @@ const AppRoutes = () => {
   return (
     <div className="min-h-screen flex flex-col">
       <Navbar />
-      <div className="flex-grow">
+      <div className="flex-grow pt-16"> {/* Added padding-top to account for fixed navbar */}
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/quiz" element={<Quiz />} />
