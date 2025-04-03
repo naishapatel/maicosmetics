@@ -70,11 +70,11 @@ export const Navbar = () => {
   return (
     <div className="fixed top-0 left-0 right-0 z-50 bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+        <div className="flex justify-between items-center h-20"> {/* Increased height from 16 to 20 */}
           <Link to="/" className="text-2xl font-bold text-mai-brown hover:text-mai-mauveDark transition-colors">
             mai.
           </Link>
-          <div className="hidden sm:flex items-center space-x-1">
+          <div className="hidden sm:flex items-center space-x-2"> {/* Increased space-x-1 to space-x-2 */}
             <NavLink to="/quiz">Skin Quiz</NavLink>
             <NavLink to="/products">Products</NavLink>
             <NavLink to="/businesses">Small Businesses</NavLink>
