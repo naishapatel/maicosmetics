@@ -85,7 +85,7 @@ export const Navbar = () => {
             className={`rounded-full px-6 transition-all duration-300 ${
               session 
                 ? "text-mai-brown hover:text-mai-mauveDark" 
-                : "bg-mai-mauveDark text-white hover:bg-mai-mauveDark/80"
+                : "bg-mai-darkRed text-white hover:bg-mai-darkRed/80"
             }`}
             onClick={handleAuthClick}
           >

@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { QuizSelections } from "@/types/quiz";
@@ -166,7 +165,7 @@ const QuizQuestions = ({
         <div className="flex gap-4">
           <Button
             onClick={handleNextQuestion}
-            className="bg-mai-mauve hover:bg-mai-mauveDark text-white transition-colors"
+            className="bg-mai-darkRed hover:bg-mai-darkRed/90 text-white transition-colors"
           >
             {isLastTab ? "Get Recommendations" : (
               <>

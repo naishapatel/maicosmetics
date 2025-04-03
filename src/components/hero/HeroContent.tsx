@@ -14,11 +14,11 @@ export const HeroContent = () => {
       </div>
 
       <div className="relative">
-        <h1 className="text-6xl sm:text-7xl font-bold text-mai-darkRed mb-4 tracking-tight leading-tight">
+        <h1 className="text-6xl sm:text-7xl font-bold text-mai-mauve mb-4 tracking-tight leading-tight">
           Beauty that
           <span className="relative inline-block mx-3">
-            <span className="relative z-10 text-mai-mauve">Cares</span>
-            <span className="absolute inset-0 bg-mai-blushPink/40 -skew-y-3 rounded-lg" />
+            <span className="relative z-10 text-mai-darkRed">Cares</span>
+            <span className="absolute inset-0 bg-mai-mauve/40 -skew-y-3 rounded-lg" />
           </span>
         </h1>
       </div>
