@@ -21,7 +21,7 @@ export const ChatWidget = () => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: "welcome",
-      content: "Hi there! I'm Mai Assistant. How can I help you with your beauty and skincare questions today?",
+      content: "Hi there! I'm Mai, your personalized makeup advisor. Tell me about your skin type and preferences, and I'll help you find ethical beauty products perfect for you.",
       isUser: false,
       timestamp: new Date(),
     },
@@ -128,7 +128,7 @@ export const ChatWidget = () => {
         <SheetContent className="sm:max-w-[400px] p-0 flex flex-col h-[600px] max-h-[80vh]">
           <SheetHeader className="px-4 py-3 border-b">
             <div className="flex justify-between items-center">
-              <SheetTitle className="text-mai-brown">Chat Support</SheetTitle>
+              <SheetTitle className="text-mai-brown">Chat with Mai</SheetTitle>
               <Button
                 variant="ghost"
                 size="sm"
@@ -187,7 +187,7 @@ export const ChatWidget = () => {
             <Input
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Type a message..."
+              placeholder="Ask Mai about beauty products..."
               className="flex-1"
               disabled={isLoading}
             />
