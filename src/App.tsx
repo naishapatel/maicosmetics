@@ -17,14 +17,23 @@ import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
 import { supabase } from "./integrations/supabase/client";
-import { Navbar } from "./components/Navbar";
-import { Footer } from "./components/Footer";
 import { initAnalytics, updateUserActivity } from "./utils/analytics";
 import { ProductDetail } from "./components/products/ProductDetail";
 import { ChatWidget } from "./components/chat/ChatWidget";
 import { useIsMobile } from "./hooks/use-mobile";
 
 const queryClient = new QueryClient();
+
+// Protected route component to check for authentication
+const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
+  const session = useSession();
+  
+  if (!session) {
+    return <Navigate to="/auth" replace />;
+  }
+  
+  return <>{children}</>;
+};
 
 const AppRoutes = () => {
   const session = useSession();
@@ -48,9 +57,22 @@ const AppRoutes = () => {
     return () => clearInterval(activityInterval);
   }, []);
 
+  // If not authenticated, only show authentication page
+  if (!session) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <div className="flex-grow">
+          <Routes>
+            <Route path="/auth" element={<Auth />} />
+            <Route path="*" element={<Navigate to="/auth" replace />} />
+          </Routes>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
-      <Navbar />
       <div className={`flex-grow ${isMobile ? 'pt-20 px-2' : 'pt-24'}`}>
         <Routes>
           <Route path="/" element={<Index />} />
@@ -59,23 +81,20 @@ const AppRoutes = () => {
           <Route path="/products/:productId" element={<ProductDetail />} />
           <Route path="/businesses" element={<Businesses />} />
           <Route path="/sustainability" element={<Sustainability />} />
-          <Route 
-            path="/community" 
-            element={session ? <Community /> : <Navigate to="/auth" replace />} 
-          />
+          <Route path="/community" element={<Community />} />
           <Route path="/about" element={<About />} />
-          <Route 
-            path="/auth" 
-            element={!session ? <Auth /> : <Navigate to="/" replace />} 
-          />
+          <Route path="/auth" element={<Navigate to="/" replace />} />
           <Route 
             path="/admin" 
-            element={session ? <Admin /> : <Navigate to="/auth" replace />} 
+            element={
+              session?.user?.email && ["naisha.r.patel@gmail.com", "naishapatelofficial@gmail.com"].includes(session.user.email) 
+                ? <Admin /> 
+                : <Navigate to="/" replace />
+            } 
           />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
-      <Footer />
       <ChatWidget />
     </div>
   );

@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { Auth as SupabaseAuth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
 import { supabase } from "@/integrations/supabase/client";
-import { Navbar } from "@/components/Navbar";
 import { motion } from "framer-motion";
 import { Sparkles } from "lucide-react";
 import { useSession } from "@supabase/auth-helpers-react";
@@ -15,13 +14,17 @@ const Auth = () => {
 
   useEffect(() => {
     if (session) {
-      navigate("/", { replace: true });
+      // Check if there's a return path in localStorage
+      const returnPath = localStorage.getItem('returnPath') || '/';
+      // Clear it
+      localStorage.removeItem('returnPath');
+      // Navigate to the return path
+      navigate(returnPath, { replace: true });
     }
   }, [session, navigate]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-mai-cream via-mai-rose to-mai-sage">
-      <Navbar />
       <div className="max-w-7xl mx-auto px-4 pt-20 pb-16 relative">
         <div className="absolute inset-0 bg-white/5 backdrop-blur-[2px]" />
         

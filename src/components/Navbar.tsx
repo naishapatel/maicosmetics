@@ -61,6 +61,8 @@ export const Navbar = () => {
         });
         navigate("/");
       } else {
+        // Save current path before redirecting to auth
+        localStorage.setItem('returnPath', window.location.pathname);
         navigate("/auth");
       }
     } catch (error) {
