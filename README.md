@@ -1,4 +1,4 @@
-# Welcome to your Lovable project
+# Mai : Naisha and Connie
 
 ## Project info
 
