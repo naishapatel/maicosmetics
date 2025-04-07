@@ -5,7 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { SessionContextProvider, useSession } from '@supabase/auth-helpers-react';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import Index from "./pages/Index";
 import Quiz from "./pages/Quiz";
 import Products from "./pages/Products";
@@ -22,6 +22,7 @@ import { ProductDetail } from "./components/products/ProductDetail";
 import { ChatWidget } from "./components/chat/ChatWidget";
 import { useIsMobile } from "./hooks/use-mobile";
 import Navbar from "./components/Navbar";
+import { ProfileSetupModal } from "./components/auth/ProfileSetupModal";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,8 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
 const AppRoutes = () => {
   const session = useSession();
   const isMobile = useIsMobile();
+  const [showProfileSetup, setShowProfileSetup] = useState(false);
+  const [profileModalClosed, setProfileModalClosed] = useState(false);
 
   // Initialize analytics and set up activity tracking
   useEffect(() => {
@@ -79,12 +82,17 @@ const AppRoutes = () => {
               id: session.user.id, 
               username: defaultUsername
             }, { onConflict: 'id' });
+          
+          // Show profile setup modal if username is email or default
+          if (!profileModalClosed) {
+            setShowProfileSetup(true);
+          }
         }
       };
       
       checkAndUpdateUsername();
     }
-  }, [session]);
+  }, [session, profileModalClosed]);
 
   // If not authenticated, only show authentication page
   if (!session) {
@@ -126,6 +134,21 @@ const AppRoutes = () => {
         </Routes>
       </div>
       <ChatWidget />
+      
+      {session.user && showProfileSetup && (
+        <ProfileSetupModal
+          user={session.user}
+          isOpen={showProfileSetup}
+          onClose={() => {
+            setShowProfileSetup(false);
+            setProfileModalClosed(true);
+          }}
+          onComplete={() => {
+            setShowProfileSetup(false);
+            setProfileModalClosed(true);
+          }}
+        />
+      )}
     </div>
   );
 };
