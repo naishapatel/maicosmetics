@@ -21,6 +21,7 @@ import { initAnalytics, updateUserActivity } from "./utils/analytics";
 import { ProductDetail } from "./components/products/ProductDetail";
 import { ChatWidget } from "./components/chat/ChatWidget";
 import { useIsMobile } from "./hooks/use-mobile";
+import Navbar from "./components/Navbar";
 
 const queryClient = new QueryClient();
 
@@ -73,6 +74,7 @@ const AppRoutes = () => {
 
   return (
     <div className="min-h-screen flex flex-col">
+      <Navbar />
       <div className={`flex-grow ${isMobile ? 'pt-20 px-2' : 'pt-24'}`}>
         <Routes>
           <Route path="/" element={<Index />} />
