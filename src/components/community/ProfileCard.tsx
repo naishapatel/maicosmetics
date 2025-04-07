@@ -43,6 +43,14 @@ export function ProfileCard({
   
   const isOwnProfile = currentUser?.id === userId;
   
+  // Safely display username: if it's an email address, extract the username part
+  const displayName = username 
+    ? (username.includes('@') ? username.split('@')[0] : username)
+    : 'User';
+  
+  // Get first character for avatar fallback
+  const avatarFallback = displayName[0]?.toUpperCase() || 'U';
+  
   const handleEditComplete = () => {
     setIsEditing(false);
     if (onProfileUpdated) {
@@ -78,12 +86,12 @@ export function ProfileCard({
       <CardHeader className="flex flex-row items-center gap-4">
         <Avatar className="h-16 w-16">
           <AvatarImage src={avatarUrl || undefined} />
-          <AvatarFallback>{username?.[0]?.toUpperCase() || '?'}</AvatarFallback>
+          <AvatarFallback>{avatarFallback}</AvatarFallback>
         </Avatar>
         <div className="flex-1">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-2xl font-semibold text-mai-brown">{username || 'Anonymous'}</h3>
+              <h3 className="text-2xl font-semibold text-mai-brown">{displayName}</h3>
               {followerCount !== undefined && followingCount !== undefined && (
                 <div className="flex gap-4 text-sm text-gray-500 mt-1">
                   <span>{followerCount} follower{followerCount !== 1 ? 's' : ''}</span>

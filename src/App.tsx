@@ -58,6 +58,34 @@ const AppRoutes = () => {
     return () => clearInterval(activityInterval);
   }, []);
 
+  // Create/update user profile when authenticated
+  useEffect(() => {
+    if (session?.user) {
+      const checkAndUpdateUsername = async () => {
+        // Check if user has a custom username already
+        const { data: profile } = await supabase
+          .from('profiles')
+          .select('username')
+          .eq('id', session.user.id)
+          .single();
+        
+        // If no profile or username is an email, update with a default username
+        if (!profile || (profile.username && profile.username.includes('@'))) {
+          const defaultUsername = `user_${Math.floor(Math.random() * 10000)}`;
+          
+          await supabase
+            .from('profiles')
+            .upsert({ 
+              id: session.user.id, 
+              username: defaultUsername
+            }, { onConflict: 'id' });
+        }
+      };
+      
+      checkAndUpdateUsername();
+    }
+  }, [session]);
+
   // If not authenticated, only show authentication page
   if (!session) {
     return (
