@@ -40,6 +40,8 @@ export function BlogPost({ user, onAuthRedirect }: BlogPostProps) {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [pendingPosts, setPendingPosts] = useState<Array<{ id: string; content: string; image_url: string | null }>>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     fetchPosts();
@@ -50,14 +52,19 @@ export function BlogPost({ user, onAuthRedirect }: BlogPostProps) {
 
   const fetchPosts = async () => {
     try {
+      setIsLoading(true);
+      setError(null);
+      
       // Get all approved blog posts
       const { data: postsData, error: postsError } = await supabase
         .from("blog_posts")
         .select("*")
+        .eq("approved", true)
         .order("created_at", { ascending: false });
 
       if (postsError) {
         console.error("Error fetching posts:", postsError);
+        setError(postsError.message);
         toast({
           variant: "destructive",
           title: "Error fetching blog posts",
@@ -70,16 +77,24 @@ export function BlogPost({ user, onAuthRedirect }: BlogPostProps) {
         // Fetch profiles for each user_id
         const postsWithProfiles = await Promise.all(
           postsData.map(async (post) => {
-            const { data: profileData } = await supabase
-              .from("profiles")
-              .select("username, avatar_url")
-              .eq("id", post.user_id)
-              .single();
-            
-            return {
-              ...post,
-              user_profile: profileData
-            } as BlogPostItem;
+            try {
+              const { data: profileData } = await supabase
+                .from("profiles")
+                .select("username, avatar_url")
+                .eq("id", post.user_id)
+                .single();
+              
+              return {
+                ...post,
+                user_profile: profileData
+              } as BlogPostItem;
+            } catch (err) {
+              console.error("Error fetching profile for post:", err);
+              return {
+                ...post,
+                user_profile: null
+              } as BlogPostItem;
+            }
           })
         );
         
@@ -87,11 +102,16 @@ export function BlogPost({ user, onAuthRedirect }: BlogPostProps) {
       }
     } catch (error) {
       console.error("Error in fetchPosts:", error);
-      toast({
-        variant: "destructive",
-        title: "Error fetching blog posts",
-        description: "Failed to fetch blog posts",
-      });
+      if (error instanceof Error) {
+        setError(error.message);
+        toast({
+          variant: "destructive",
+          title: "Error fetching blog posts",
+          description: error.message || "Failed to fetch blog posts",
+        });
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -228,6 +248,116 @@ export function BlogPost({ user, onAuthRedirect }: BlogPostProps) {
     }
   };
 
+  const retryFetch = () => {
+    fetchPosts();
+    if (user) {
+      fetchPendingPosts();
+    }
+  };
+
+  if (error) {
+    return (
+      <div className="space-y-4">
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+          <h3 className="text-red-800 font-medium">Error fetching blog posts</h3>
+          <p className="text-red-600 mt-1">{error}</p>
+          <Button 
+            onClick={retryFetch} 
+            variant="outline" 
+            className="mt-2"
+          >
+            Try Again
+          </Button>
+        </div>
+        
+        {/* Still show the post form even if fetching posts failed */}
+        <div className="bg-mai-sage/20 rounded-lg p-6">
+          <div className="flex items-center mb-4">
+            <Newspaper className="text-mai-mauve mr-2 h-6 w-6" />
+            <h2 className="text-2xl font-semibold text-mai-brown">Blog Posts</h2>
+          </div>
+          <p className="text-gray-600 mb-6">
+            Share your thoughts, ideas, and experiences related to beauty practices and ethical consumption.
+            Your posts will be visible after approval.
+          </p>
+          
+          <form onSubmit={handleSubmitPost} className="space-y-4">
+            <Textarea
+              placeholder={user ? "Share your thoughts on beauty and sustainability..." : "Please sign in to create a blog post"}
+              value={newPost}
+              onChange={(e) => setNewPost(e.target.value)}
+              disabled={!user || isSubmitting}
+              className="min-h-[120px]"
+              required
+            />
+            
+            {user && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <Button 
+                    type="button" 
+                    variant="outline" 
+                    onClick={() => document.getElementById('image-upload')?.click()}
+                    disabled={isSubmitting}
+                  >
+                    <ImagePlus className="h-4 w-4 mr-2" />
+                    Add Image
+                  </Button>
+                  <input
+                    id="image-upload"
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleImageChange}
+                  />
+                  {imageFile && (
+                    <span className="text-sm text-gray-600">
+                      {imageFile.name} ({Math.round(imageFile.size / 1024)}KB)
+                    </span>
+                  )}
+                </div>
+                
+                {imagePreview && (
+                  <div className="relative mt-2">
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="max-h-40 rounded-md"
+                    />
+                    <Button
+                      type="button"
+                      variant="destructive"
+                      size="sm"
+                      className="absolute top-2 right-2 h-6 w-6 p-0"
+                      onClick={() => {
+                        setImageFile(null);
+                        setImagePreview(null);
+                      }}
+                    >
+                      &times;
+                    </Button>
+                  </div>
+                )}
+                
+                <Button 
+                  type="submit" 
+                  disabled={isSubmitting} 
+                  className="w-full md:w-auto"
+                >
+                  {isSubmitting ? "Submitting..." : "Submit for Review"}
+                </Button>
+              </div>
+            )}
+            
+            {!user && (
+              <Button type="button" onClick={onAuthRedirect}>Sign In to Create a Blog Post</Button>
+            )}
+          </form>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-8">
       <div className="bg-mai-sage/20 rounded-lg p-6">
@@ -344,7 +474,11 @@ export function BlogPost({ user, onAuthRedirect }: BlogPostProps) {
       )}
 
       <div className="space-y-4">
-        {posts.length === 0 ? (
+        {isLoading ? (
+          <div className="flex justify-center p-8">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-mai-mauve"></div>
+          </div>
+        ) : posts.length === 0 ? (
           <Card className="bg-white">
             <CardContent className="pt-6 text-center">
               <p className="text-gray-500">Be the first to create a blog post!</p>
