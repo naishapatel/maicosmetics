@@ -2,7 +2,6 @@
 import { HeroBackground } from "./hero/HeroBackground";
 import { HeroContent } from "./hero/HeroContent";
 import { HeroAboutSection } from "./hero/HeroAboutSection";
-import { FeaturedProducts } from "./hero/FeaturedProducts";
 
 export const Hero = () => {
   return (
@@ -12,7 +11,6 @@ export const Hero = () => {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
         <HeroContent />
         <HeroAboutSection />
-        <FeaturedProducts />
       </div>
     </div>
   );

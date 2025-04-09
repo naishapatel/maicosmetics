@@ -73,12 +73,12 @@ export function UserDashboard() {
 
   if (!session) {
     return (
-      <Card className="w-full">
+      <Card className="w-full bg-white/60 backdrop-blur-sm border border-mai-mauve/20 shadow-md">
         <CardContent className="pt-6">
           <div className="text-center space-y-4">
             <AlertCircle className="mx-auto h-12 w-12 text-mai-coral" />
-            <p className="text-lg">Sign in to see your personalized recommendations</p>
-            <Button onClick={() => navigate("/auth")} className="bg-mai-mauve hover:bg-mai-mauveDark">
+            <p className="text-lg font-serif text-mai-brown">Sign in to see your personalized recommendations</p>
+            <Button onClick={() => navigate("/auth")} className="bg-mai-mauve hover:bg-mai-mauveDark text-white px-6 py-2 rounded-full">
               Sign In
             </Button>
           </div>
@@ -89,33 +89,43 @@ export function UserDashboard() {
 
   if (isLoading) {
     return (
-      <Card className="w-full">
+      <Card className="w-full bg-white/60 backdrop-blur-sm border border-mai-mauve/20 shadow-md">
         <CardContent className="pt-6">
-          <p className="text-center">Loading your personalized content...</p>
+          <p className="text-center font-serif text-mai-brown">Loading your personalized content...</p>
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card className="w-full">
+    <Card className="w-full bg-white/60 backdrop-blur-sm border border-mai-mauve/20 shadow-md">
       <CardHeader>
-        <CardTitle className="text-2xl font-bold text-mai-brown">Your Dashboard</CardTitle>
+        <CardTitle className="text-2xl font-serif text-mai-brown">Your Dashboard</CardTitle>
       </CardHeader>
       <CardContent>
         <Tabs defaultValue={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="recommendations">Recommendations</TabsTrigger>
-            <TabsTrigger value="saved">Saved Items</TabsTrigger>
+          <TabsList className="grid w-full grid-cols-2 bg-mai-mauve/10 rounded-full p-1">
+            <TabsTrigger 
+              value="recommendations" 
+              className="rounded-full data-[state=active]:bg-mai-mauve data-[state=active]:text-white"
+            >
+              Recommendations
+            </TabsTrigger>
+            <TabsTrigger 
+              value="saved" 
+              className="rounded-full data-[state=active]:bg-mai-mauve data-[state=active]:text-white"
+            >
+              Saved Items
+            </TabsTrigger>
           </TabsList>
           
-          <TabsContent value="recommendations" className="space-y-4 mt-4">
+          <TabsContent value="recommendations" className="space-y-4 mt-6">
             {recommendations.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {recommendations.map((item) => (
-                  <Card key={item.id} className="overflow-hidden hover:shadow-md transition-shadow">
+                  <Card key={item.id} className="overflow-hidden hover:shadow-md transition-shadow bg-white/80 border-mai-mauve/10">
                     <CardContent className="p-4">
-                      <h3 className="font-semibold text-mai-brown">{item.name}</h3>
+                      <h3 className="font-serif font-semibold text-mai-brown">{item.name}</h3>
                       <p className="text-sm text-gray-500">{item.brand}</p>
                       <p className="text-mai-mauve mt-1">{item.price}</p>
                       <div className="flex mt-2 gap-1 flex-wrap">
@@ -137,24 +147,27 @@ export function UserDashboard() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-6 space-y-4">
-                <p>No recommendations yet. Take our quiz to get started!</p>
-                <Button onClick={handleQuizClick} className="bg-mai-mauve hover:bg-mai-mauveDark">
+              <div className="text-center py-6 space-y-4 bg-white/40 rounded-lg p-6">
+                <p className="font-serif text-mai-brown">No recommendations yet. Take our quiz to get started!</p>
+                <Button 
+                  onClick={handleQuizClick} 
+                  className="bg-mai-mauve hover:bg-mai-mauveDark text-white px-6 py-2 rounded-full"
+                >
                   Take Skin Quiz
                 </Button>
               </div>
             )}
           </TabsContent>
           
-          <TabsContent value="saved" className="space-y-4 mt-4">
+          <TabsContent value="saved" className="space-y-4 mt-6">
             {savedItems.length > 0 ? (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {savedItems.map((item) => (
-                  <Card key={item.id} className="overflow-hidden hover:shadow-md transition-shadow">
+                  <Card key={item.id} className="overflow-hidden hover:shadow-md transition-shadow bg-white/80 border-mai-mauve/10">
                     <CardContent className="p-4">
                       <div className="flex justify-between">
                         <div>
-                          <h3 className="font-semibold text-mai-brown">{item.name}</h3>
+                          <h3 className="font-serif font-semibold text-mai-brown">{item.name}</h3>
                           <p className="text-sm text-gray-500">{item.brand}</p>
                           <p className="text-mai-mauve mt-1">{item.price}</p>
                         </div>
@@ -178,8 +191,8 @@ export function UserDashboard() {
                 ))}
               </div>
             ) : (
-              <div className="text-center py-6">
-                <p>You haven't saved any items yet.</p>
+              <div className="text-center py-6 bg-white/40 rounded-lg p-6">
+                <p className="font-serif text-mai-brown">You haven't saved any items yet.</p>
               </div>
             )}
           </TabsContent>
