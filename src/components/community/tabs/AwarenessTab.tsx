@@ -1,5 +1,5 @@
 
-import { SustainabilityDiscussion } from "@/components/community/SustainabilityDiscussion";
+import SustainabilityDiscussion from "@/components/community/SustainabilityDiscussion";
 import { Session } from "@supabase/auth-helpers-react";
 
 interface AwarenessTabProps {
