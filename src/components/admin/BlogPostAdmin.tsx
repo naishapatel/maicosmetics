@@ -52,20 +52,28 @@ export default function BlogPostAdmin() {
         return;
       }
 
-      // Fetch user profiles
+      // Fetch user profiles - Fixed to use profiles table instead of users table
       if (data) {
         const postsWithProfiles = await Promise.all(
           data.map(async (post) => {
-            const { data: profileData } = await supabase
-              .from("profiles")
-              .select("username")
-              .eq("id", post.user_id)
-              .single();
-            
-            return {
-              ...post,
-              user_profile: profileData
-            };
+            try {
+              const { data: profileData } = await supabase
+                .from("profiles")
+                .select("username")
+                .eq("id", post.user_id)
+                .single();
+              
+              return {
+                ...post,
+                user_profile: profileData || { username: "Anonymous" }
+              };
+            } catch (error) {
+              console.error("Error fetching profile for post:", error);
+              return {
+                ...post,
+                user_profile: { username: "Anonymous" }
+              };
+            }
           })
         );
         
@@ -91,19 +99,27 @@ export default function BlogPostAdmin() {
       }
 
       if (data) {
-        // Fetch user profiles
+        // Fetch user profiles - Fixed to use profiles table instead of users table
         const postsWithProfiles = await Promise.all(
           data.map(async (post) => {
-            const { data: profileData } = await supabase
-              .from("profiles")
-              .select("username")
-              .eq("id", post.user_id)
-              .single();
-            
-            return {
-              ...post,
-              user_profile: profileData
-            };
+            try {
+              const { data: profileData } = await supabase
+                .from("profiles")
+                .select("username")
+                .eq("id", post.user_id)
+                .single();
+              
+              return {
+                ...post,
+                user_profile: profileData || { username: "Anonymous" }
+              };
+            } catch (error) {
+              console.error("Error fetching profile for post:", error);
+              return {
+                ...post,
+                user_profile: { username: "Anonymous" }
+              };
+            }
           })
         );
         

@@ -43,13 +43,18 @@ const handler = async (req: Request): Promise<Response> => {
     
     console.log(`Using Supabase URL: ${supabaseUrl}`);
     
+    if (!supabaseUrl || !supabaseKey) {
+      console.error("Missing Supabase URL or service role key");
+      throw new Error("Server configuration error");
+    }
+    
     // Get all subscribers from the database
     const subscribersResponse = await fetch(
       `${supabaseUrl}/rest/v1/newsletter_subscribers?select=email`,
       {
         headers: {
           "Content-Type": "application/json",
-          apikey: supabaseKey || "",
+          apikey: supabaseKey,
           Authorization: `Bearer ${supabaseKey}`,
         },
       }
@@ -81,6 +86,16 @@ const handler = async (req: Request): Promise<Response> => {
     // Extract subscriber emails
     const emails = subscribers.map((subscriber: { email: string }) => subscriber.email);
     console.log(`Subscriber emails: ${JSON.stringify(emails)}`);
+
+    if (emails.length === 0) {
+      return new Response(
+        JSON.stringify({ message: "No subscriber emails found" }),
+        {
+          status: 200,
+          headers: { "Content-Type": "application/json", ...corsHeaders },
+        }
+      );
+    }
 
     // Send email to all subscribers (using BCC for privacy)
     const emailResponse = await resend.emails.send({
