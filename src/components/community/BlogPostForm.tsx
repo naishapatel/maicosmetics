@@ -1,6 +1,5 @@
 
 import { useState } from "react";
-import { useSession } from "@supabase/auth-helpers-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
@@ -9,9 +8,15 @@ import { useToast } from "@/hooks/use-toast";
 import { Loader2, Pencil } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
 import { BlogPostUpload } from "./BlogPostUpload";
+import { User } from "@supabase/auth-helpers-react";
 
-export function BlogPostSubmissionForm() {
-  const session = useSession();
+interface BlogPostSubmissionFormProps {
+  user: User | null;
+  onAuthRedirect: () => void;
+  onPostSubmitted: () => void;
+}
+
+export function BlogPostSubmissionForm({ user, onAuthRedirect, onPostSubmitted }: BlogPostSubmissionFormProps) {
   const { toast } = useToast();
   const [newPost, setNewPost] = useState("");
   const [posting, setPosting] = useState(false);
@@ -35,11 +40,12 @@ export function BlogPostSubmissionForm() {
   const handleSubmitPost = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!session) {
+    if (!user) {
       toast({
         title: "Sign in required",
         description: "Please sign in to post to the blog.",
       });
+      onAuthRedirect();
       return;
     }
     
@@ -81,7 +87,7 @@ export function BlogPostSubmissionForm() {
       const { error } = await supabase
         .from("blog_post_approvals")
         .insert({
-          user_id: session.user.id,
+          user_id: user.id,
           content: newPost,
           image_url: imageUrl,
         });
@@ -99,6 +105,9 @@ export function BlogPostSubmissionForm() {
       setNewPost("");
       setSelectedImage(null);
       setImagePreview(null);
+      
+      // Call the callback
+      onPostSubmitted();
       
     } catch (error) {
       console.error("Error posting:", error);
@@ -135,7 +144,7 @@ export function BlogPostSubmissionForm() {
           <Button 
             type="submit" 
             className="ml-auto"
-            disabled={posting || !newPost.trim()}
+            disabled={posting || (!user || !newPost.trim())}
           >
             {posting ? (
               <>
@@ -145,7 +154,7 @@ export function BlogPostSubmissionForm() {
             ) : (
               <>
                 <Pencil className="mr-2 h-4 w-4" />
-                Submit for Review
+                {user ? "Submit for Review" : "Sign In to Submit"}
               </>
             )}
           </Button>

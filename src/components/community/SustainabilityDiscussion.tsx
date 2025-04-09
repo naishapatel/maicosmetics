@@ -7,6 +7,7 @@ import { Newspaper } from "lucide-react";
 import { BlogPostSubmissionForm } from "./BlogPostForm";
 import { BlogPostDisplay } from "./BlogPostDisplay";
 import { PendingPostsList } from "./PendingPostsList";
+import { useNavigate } from "react-router-dom";
 
 interface PendingPost {
   id: string;
@@ -17,6 +18,7 @@ interface PendingPost {
 const SustainabilityDiscussion = () => {
   const session = useSession();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const [pendingPosts, setPendingPosts] = useState<PendingPost[]>([]);
 
   useEffect(() => {
@@ -46,6 +48,10 @@ const SustainabilityDiscussion = () => {
     }
   };
 
+  const handleAuthRedirect = () => {
+    navigate("/auth");
+  };
+
   return (
     <div className="space-y-6">
       <div className="bg-mai-sage/20 rounded-lg p-6">
@@ -58,7 +64,11 @@ const SustainabilityDiscussion = () => {
           Your posts will be visible after approval.
         </p>
         
-        <BlogPostSubmissionForm />
+        <BlogPostSubmissionForm 
+          user={session?.user || null}
+          onAuthRedirect={handleAuthRedirect}
+          onPostSubmitted={fetchPendingPosts}
+        />
       </div>
 
       {session && <PendingPostsList posts={pendingPosts} />}
