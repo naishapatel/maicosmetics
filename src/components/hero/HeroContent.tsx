@@ -1,10 +1,7 @@
-
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
-
 export const HeroContent = () => {
-  return (
-    <div className="flex flex-col md:flex-row items-center relative z-10 py-16">
+  return <div className="flex flex-col md:flex-row items-center relative z-10 py-16">
       <div className="md:w-1/2 space-y-6">
         <h1 className="text-6xl md:text-7xl font-serif text-mai-brown mb-6 leading-tight">
           Beauty that 
@@ -21,17 +18,12 @@ export const HeroContent = () => {
 
         <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
           <Link to="/quiz">
-            <Button 
-              className="bg-mai-darkRed hover:bg-mai-darkRed/90 text-white px-8 py-6 rounded-full"
-            >
+            <Button className="bg-mai-darkRed hover:bg-mai-darkRed/90 text-white px-8 py-6 rounded-full">
               Take the Skin Quiz
             </Button>
           </Link>
           <Link to="/products">
-            <Button 
-              variant="outline" 
-              className="border-2 border-mai-mauve text-mai-mauve hover:bg-mai-mauve hover:text-white px-8 py-6 rounded-full"
-            >
+            <Button variant="outline" className="border-2 border-mai-mauve text-mai-mauve hover:bg-mai-mauve hover:text-white px-8 py-6 rounded-full">
               Browse Products
             </Button>
           </Link>
@@ -39,15 +31,11 @@ export const HeroContent = () => {
       </div>
       
       <div className="md:w-1/2 mt-12 md:mt-0 flex justify-center items-center">
-        <div className="max-w-[80%] rounded-full bg-gradient-to-br from-white via-mai-cream to-mai-mauve/20 p-8 shadow-xl">
-          <img 
-            src="/lovable-uploads/59d5171e-b0d4-44a0-a369-a7d8a4f4d167.png" 
-            alt="Lipstick color swatches in coral, pink, and deep red" 
-            className="w-full h-auto rounded-lg"
-            style={{ mixBlendMode: 'multiply' }}
-          />
+        <div className="max-w-[80%] bg-gradient-to-br from-white via-mai-cream to-mai-mauve/20 p-8 shadow-xl">
+          <img src="/lovable-uploads/59d5171e-b0d4-44a0-a369-a7d8a4f4d167.png" alt="Lipstick color swatches in coral, pink, and deep red" style={{
+          mixBlendMode: 'multiply'
+        }} className="w-full h-auto " />
         </div>
       </div>
-    </div>
-  );
+    </div>;
 };
