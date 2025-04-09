@@ -1,15 +1,18 @@
+
 import { HeroBackground } from "./hero/HeroBackground";
 import { HeroContent } from "./hero/HeroContent";
-import { HeroFeatures } from "./hero/HeroFeatures";
+import { HeroAboutSection } from "./hero/HeroAboutSection";
+import { FeaturedProducts } from "./hero/FeaturedProducts";
 
 export const Hero = () => {
   return (
     <div className="relative min-h-screen overflow-hidden">
       <HeroBackground />
       
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-32 pb-16">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">
         <HeroContent />
-        <HeroFeatures />
+        <HeroAboutSection />
+        <FeaturedProducts />
       </div>
     </div>
   );

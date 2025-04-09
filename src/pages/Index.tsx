@@ -3,6 +3,8 @@ import { Hero } from "@/components/Hero";
 import { Sparkles, Leaf, Store } from "lucide-react";
 import { UserDashboard } from "@/components/UserDashboard";
 import { useSession } from "@supabase/auth-helpers-react";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const features = [
   {
@@ -44,7 +46,7 @@ const Index = () => {
       <section className="py-32 bg-gradient-to-b from-mai-sand to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-20">
-            <h2 className="text-4xl font-bold text-mai-brown mb-6">
+            <h2 className="text-4xl font-serif text-mai-brown mb-6">
               Why Choose <span className="text-mai-coral">mai.</span>
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto text-lg leading-relaxed">
@@ -65,6 +67,22 @@ const Index = () => {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+      
+      <section className="py-24 bg-mai-sand">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <h2 className="text-4xl font-serif text-mai-brown mb-6">
+            Join Our Community
+          </h2>
+          <p className="text-gray-600 max-w-2xl mx-auto mb-8">
+            Connect with like-minded individuals who share your passion for ethical and sustainable beauty products.
+          </p>
+          <Link to="/community">
+            <Button className="bg-mai-darkRed hover:bg-mai-darkRed/90 text-white px-8 py-6 rounded-full">
+              Visit Community
+            </Button>
+          </Link>
         </div>
       </section>
     </div>
