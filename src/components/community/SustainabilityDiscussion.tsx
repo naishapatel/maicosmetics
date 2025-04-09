@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { useSession } from "@supabase/auth-helpers-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
-import { Newspaper } from "lucide-react";
+import { Globe } from "lucide-react";
 import { BlogPostSubmissionForm } from "./BlogPostForm";
 import { BlogPostDisplay } from "./BlogPostDisplay";
 import { PendingPostsList } from "./PendingPostsList";
@@ -56,8 +56,8 @@ const SustainabilityDiscussion = () => {
     <div className="space-y-6">
       <div className="bg-mai-sage/20 rounded-lg p-6">
         <div className="flex items-center mb-4">
-          <Newspaper className="text-mai-mauve mr-2 h-6 w-6" />
-          <h2 className="text-2xl font-semibold text-mai-brown">Blog Posts</h2>
+          <Globe className="text-mai-mauve mr-2 h-6 w-6" />
+          <h2 className="text-2xl font-semibold text-mai-brown">Awareness Posts</h2>
         </div>
         <p className="text-gray-600 mb-6">
           Share your thoughts, ideas, and experiences related to beauty practices and ethical consumption.

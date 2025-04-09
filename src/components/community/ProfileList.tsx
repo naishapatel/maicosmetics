@@ -29,10 +29,40 @@ export function ProfileList() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [filterByInterests, setFilterByInterests] = useState(false);
+  const [currentUserInterests, setCurrentUserInterests] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (session?.user) {
+      fetchCurrentUserInterests();
+    }
+  }, [session]);
 
   useEffect(() => {
     fetchProfiles();
-  }, [session, searchQuery, filterByInterests]);
+  }, [session, searchQuery, filterByInterests, currentUserInterests]);
+
+  const fetchCurrentUserInterests = async () => {
+    if (!session?.user) return;
+    
+    try {
+      const { data, error } = await supabase
+        .from("profiles")
+        .select("ethical_interests")
+        .eq("id", session.user.id)
+        .single();
+        
+      if (error) {
+        console.error("Error fetching user interests:", error);
+        return;
+      }
+      
+      if (data?.ethical_interests) {
+        setCurrentUserInterests(data.ethical_interests);
+      }
+    } catch (error) {
+      console.error("Error in fetchCurrentUserInterests:", error);
+    }
+  };
 
   const fetchProfiles = async () => {
     try {
@@ -48,18 +78,9 @@ export function ProfileList() {
       }
       
       // Filter by similar interests if requested
-      if (filterByInterests && session?.user) {
-        // First get current user's interests
-        const { data: currentUser } = await supabase
-          .from("profiles")
-          .select("ethical_interests")
-          .eq("id", session.user.id)
-          .single();
-        
-        if (currentUser?.ethical_interests?.length) {
-          // Find profiles with at least one matching interest
-          query = query.contains("ethical_interests", currentUser.ethical_interests);
-        }
+      if (filterByInterests && currentUserInterests.length > 0) {
+        // Find profiles with at least one matching interest using overlap operator
+        query = query.overlaps("ethical_interests", currentUserInterests);
       }
       
       // Exclude current user from results
@@ -91,7 +112,7 @@ export function ProfileList() {
                 .eq("follower_id", profile.id);
               
               // Check if current user is following this profile
-              const { data: followData, error: followError } = await supabase
+              const { data: followData } = await supabase
                 .from("user_follows")
                 .select("*")
                 .eq("follower_id", session.user.id)

@@ -11,11 +11,11 @@ import { User } from "@supabase/auth-helpers-react";
 const CATEGORIES = [
   "Skincare",
   "Makeup",
-  "Haircare",
-  "Body Care",
-  "Fragrance",
-  "Tools",
-  "Other"
+  "Foundation",
+  "Concealer", 
+  "Lipstick",
+  "Cleanser",
+  "Moisturizer"
 ];
 
 interface ReviewFormProps {

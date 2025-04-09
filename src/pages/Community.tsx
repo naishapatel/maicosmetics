@@ -118,9 +118,9 @@ const Community = () => {
         <Tabs defaultValue={defaultTab} value={activeTab} onValueChange={setActiveTab} className="w-full">
           <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="profile">Your Profile</TabsTrigger>
-            <TabsTrigger value="reviews">Community Reviews</TabsTrigger>
+            <TabsTrigger value="reviews">Review a Product</TabsTrigger>
             <TabsTrigger value="recommendations">Recommend a Product</TabsTrigger>
-            <TabsTrigger value="blogs">Blogs</TabsTrigger>
+            <TabsTrigger value="blogs">Awareness</TabsTrigger>
             <TabsTrigger value="profiles">Find Friends</TabsTrigger>
           </TabsList>
 
@@ -244,7 +244,7 @@ const Community = () => {
               >
                 All
               </Button>
-              {["Skincare", "Makeup", "Haircare", "Body Care", "Fragrance", "Tools", "Other"].map(
+              {["Skincare", "Makeup", "Foundation", "Concealer", "Lipstick", "Cleanser", "Moisturizer"].map(
                 (category) => (
                   <Button
                     key={category}
