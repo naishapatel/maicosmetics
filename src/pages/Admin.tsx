@@ -18,9 +18,21 @@ const Admin = () => {
   // Check if the current user is an admin
   const isAdmin = session?.user?.email && ADMIN_EMAILS.includes(session.user.email);
 
+  // Log admin status for debugging
+  useEffect(() => {
+    if (session?.user) {
+      console.log("Current user email:", session.user.email);
+      console.log("Is admin?", isAdmin);
+      console.log("Admin emails list:", ADMIN_EMAILS);
+    } else {
+      console.log("No session found");
+    }
+  }, [session, isAdmin]);
+
   // Redirect non-admin users
   useEffect(() => {
     if (session && !isAdmin) {
+      console.log("Non-admin user attempting to access admin page:", session.user?.email);
       toast({
         variant: "destructive",
         title: "Access Denied",
@@ -32,14 +44,17 @@ const Admin = () => {
 
   // Redirect to login if not authenticated
   if (!session) {
+    console.log("No session, redirecting to auth");
     return <Navigate to="/auth" replace />;
   }
 
   // Redirect unauthorized users
   if (!isAdmin) {
+    console.log("Not an admin, redirecting to home");
     return <Navigate to="/" replace />;
   }
 
+  console.log("Rendering admin dashboard");
   return (
     <div className="container max-w-6xl py-12">
       <h1 className="text-3xl font-bold text-mai-darkRed mb-10 text-center">

@@ -27,6 +27,7 @@ export default function BlogPostAdmin() {
   const [approvedPosts, setApprovedPosts] = useState<any[]>([]);
   const [selectedPost, setSelectedPost] = useState<PendingPost | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
   const [previewImage, setPreviewImage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -37,6 +38,9 @@ export default function BlogPostAdmin() {
   const fetchPendingPosts = async () => {
     try {
       setIsLoading(true);
+      setFetchError(null);
+      
+      console.log("Fetching pending posts...");
       const { data, error } = await supabase
         .from("blog_post_approvals")
         .select("*")
@@ -44,6 +48,7 @@ export default function BlogPostAdmin() {
 
       if (error) {
         console.error("Error fetching pending posts:", error);
+        setFetchError(`Error fetching pending posts: ${error.message}`);
         toast({
           variant: "destructive", 
           title: "Error fetching pending posts",
@@ -52,16 +57,23 @@ export default function BlogPostAdmin() {
         return;
       }
 
+      console.log("Pending posts data:", data);
+
       // Fetch user profiles - Fixed to use profiles table instead of users table
       if (data) {
         const postsWithProfiles = await Promise.all(
           data.map(async (post) => {
             try {
-              const { data: profileData } = await supabase
+              console.log(`Fetching profile for user ID: ${post.user_id}`);
+              const { data: profileData, error: profileError } = await supabase
                 .from("profiles")
                 .select("username")
                 .eq("id", post.user_id)
                 .single();
+              
+              if (profileError) {
+                console.error(`Error fetching profile for user ${post.user_id}:`, profileError);
+              }
               
               return {
                 ...post,
@@ -78,9 +90,11 @@ export default function BlogPostAdmin() {
         );
         
         setPendingPosts(postsWithProfiles);
+        console.log("Posts with profiles:", postsWithProfiles);
       }
     } catch (error) {
       console.error("Error in fetchPendingPosts:", error);
+      setFetchError(error instanceof Error ? error.message : "Unknown error occurred");
     } finally {
       setIsLoading(false);
     }
@@ -88,6 +102,7 @@ export default function BlogPostAdmin() {
 
   const fetchApprovedPosts = async () => {
     try {
+      console.log("Fetching approved posts...");
       const { data, error } = await supabase
         .from("blog_posts")
         .select("*")
@@ -98,16 +113,22 @@ export default function BlogPostAdmin() {
         return;
       }
 
+      console.log("Approved posts data:", data);
+
       if (data) {
         // Fetch user profiles - Fixed to use profiles table instead of users table
         const postsWithProfiles = await Promise.all(
           data.map(async (post) => {
             try {
-              const { data: profileData } = await supabase
+              const { data: profileData, error: profileError } = await supabase
                 .from("profiles")
                 .select("username")
                 .eq("id", post.user_id)
                 .single();
+              
+              if (profileError) {
+                console.error(`Error fetching profile for user ${post.user_id}:`, profileError);
+              }
               
               return {
                 ...post,
@@ -124,6 +145,7 @@ export default function BlogPostAdmin() {
         );
         
         setApprovedPosts(postsWithProfiles);
+        console.log("Approved posts with profiles:", postsWithProfiles);
       }
     } catch (error) {
       console.error("Error in fetchApprovedPosts:", error);
@@ -132,6 +154,7 @@ export default function BlogPostAdmin() {
 
   const handleApprove = async (post: PendingPost) => {
     try {
+      console.log("Approving post:", post);
       // Insert into blog_posts table
       const { error: insertError } = await supabase
         .from("blog_posts")
@@ -143,6 +166,7 @@ export default function BlogPostAdmin() {
         });
 
       if (insertError) {
+        console.error("Error inserting approved post:", insertError);
         toast({
           variant: "destructive",
           title: "Error approving post",
@@ -182,12 +206,14 @@ export default function BlogPostAdmin() {
 
   const handleReject = async (postId: string) => {
     try {
+      console.log("Rejecting post:", postId);
       const { error } = await supabase
         .from("blog_post_approvals")
         .delete()
         .eq("id", postId);
 
       if (error) {
+        console.error("Error rejecting post:", error);
         toast({
           variant: "destructive",
           title: "Error rejecting post",
@@ -215,12 +241,14 @@ export default function BlogPostAdmin() {
 
   const handleDelete = async (postId: string) => {
     try {
+      console.log("Deleting post:", postId);
       const { error } = await supabase
         .from("blog_posts")
         .delete()
         .eq("id", postId);
 
       if (error) {
+        console.error("Error deleting post:", error);
         toast({
           variant: "destructive",
           title: "Error deleting post",
@@ -251,6 +279,19 @@ export default function BlogPostAdmin() {
         <Newspaper className="h-6 w-6 text-mai-mauve mr-2" />
         <h2 className="text-2xl font-bold text-mai-brown">Blog Post Management</h2>
       </div>
+
+      {fetchError && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 my-4">
+          <p className="text-red-700">{fetchError}</p>
+          <Button 
+            variant="outline" 
+            className="mt-2" 
+            onClick={() => fetchPendingPosts()}
+          >
+            Retry
+          </Button>
+        </div>
+      )}
 
       <Tabs defaultValue="pending">
         <TabsList>
