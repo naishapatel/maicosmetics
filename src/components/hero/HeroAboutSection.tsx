@@ -6,14 +6,14 @@ export const HeroAboutSection = () => {
   return (
     <section className="mt-36 mb-16">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-        <div className="overflow-hidden rounded-lg">
+        <div className="overflow-hidden rounded-lg shadow-lg">
           <img
             src="/lovable-uploads/572c87d3-5522-43eb-88f4-4c688083b6fa.png"
             alt="Elegant makeup product"
             className="w-full h-auto object-cover"
           />
         </div>
-        <div className="space-y-6">
+        <div className="space-y-6 bg-white/60 p-8 rounded-lg backdrop-blur-sm">
           <h2 className="text-4xl md:text-5xl font-serif text-mai-brown">
             About <br/><span className="text-mai-darkRed">our company</span>
           </h2>
@@ -24,7 +24,7 @@ export const HeroAboutSection = () => {
           </p>
           <Link to="/about">
             <Button 
-              className="bg-mai-brown hover:bg-mai-brown/90 text-white px-8 py-6 rounded-full mt-4"
+              className="bg-mai-mauve hover:bg-mai-mauveDark text-white px-8 py-6 rounded-full mt-4"
             >
               Learn more
             </Button>

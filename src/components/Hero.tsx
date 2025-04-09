@@ -6,7 +6,7 @@ import { FeaturedProducts } from "./hero/FeaturedProducts";
 
 export const Hero = () => {
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-b from-white via-mai-cream to-mai-mauve/10">
       <HeroBackground />
       
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-16">

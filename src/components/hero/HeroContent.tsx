@@ -10,7 +10,7 @@ export const HeroContent = () => {
           Beauty that 
           <span className="relative inline-block ml-3">
             <span className="relative z-10 text-mai-darkRed">Cares</span>
-            <span className="absolute inset-0 bg-mai-mauve/10 -skew-y-3 rounded-lg" />
+            <span className="absolute inset-0 bg-mai-mauve/30 -skew-y-3 rounded-lg" />
           </span>
         </h1>
         
@@ -40,9 +40,9 @@ export const HeroContent = () => {
       
       <div className="md:w-1/2 mt-12 md:mt-0">
         <img 
-          src="/lovable-uploads/76190154-03cc-4cf3-8ed4-f2b285cd4761.png" 
-          alt="Beauty products on pedestal" 
-          className="w-full h-auto"
+          src="/lovable-uploads/59d5171e-b0d4-44a0-a369-a7d8a4f4d167.png" 
+          alt="Lipstick color swatches in coral, pink, and deep red" 
+          className="w-full h-auto rounded-lg shadow-lg"
         />
       </div>
     </div>
