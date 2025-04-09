@@ -38,12 +38,15 @@ export const HeroContent = () => {
         </div>
       </div>
       
-      <div className="md:w-1/2 mt-12 md:mt-0">
-        <img 
-          src="/lovable-uploads/59d5171e-b0d4-44a0-a369-a7d8a4f4d167.png" 
-          alt="Lipstick color swatches in coral, pink, and deep red" 
-          className="w-full h-auto rounded-lg shadow-lg"
-        />
+      <div className="md:w-1/2 mt-12 md:mt-0 flex justify-center items-center">
+        <div className="max-w-[80%] rounded-full bg-gradient-to-br from-white via-mai-cream to-mai-mauve/20 p-8 shadow-xl">
+          <img 
+            src="/lovable-uploads/59d5171e-b0d4-44a0-a369-a7d8a4f4d167.png" 
+            alt="Lipstick color swatches in coral, pink, and deep red" 
+            className="w-full h-auto rounded-lg"
+            style={{ mixBlendMode: 'multiply' }}
+          />
+        </div>
       </div>
     </div>
   );
