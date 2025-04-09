@@ -2,7 +2,6 @@
 import { TabsContent } from "@/components/ui/tabs";
 import { QuizSelections } from "@/types/quiz";
 import QuizOptionsGrid from "./QuizOptionsGrid";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 interface QuizTabContentProps {
   value: string;
@@ -19,8 +18,6 @@ const QuizTabContent = ({
   selections,
   handleSelection,
 }: QuizTabContentProps) => {
-  const isMobile = useIsMobile();
-  
   return (
     <TabsContent value={value} className="space-y-4">
       <QuizOptionsGrid
@@ -28,7 +25,6 @@ const QuizTabContent = ({
         category={category}
         selections={selections}
         handleSelection={handleSelection}
-        isMobile={isMobile}
       />
     </TabsContent>
   );
