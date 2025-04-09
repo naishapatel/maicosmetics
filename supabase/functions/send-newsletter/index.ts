@@ -35,24 +35,38 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
+    console.log("Attempting to fetch subscribers...");
+    
+    // Get all subscribers from the database - adding more detailed logging
+    const supabaseUrl = Deno.env.get("SUPABASE_URL");
+    const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+    
+    console.log(`Using Supabase URL: ${supabaseUrl}`);
+    
     // Get all subscribers from the database
-    const { data: subscribers, error: subscribersError } = await fetch(
-      `${Deno.env.get("SUPABASE_URL")}/rest/v1/newsletter_subscribers?select=email`,
+    const subscribersResponse = await fetch(
+      `${supabaseUrl}/rest/v1/newsletter_subscribers?select=email`,
       {
         headers: {
           "Content-Type": "application/json",
-          apikey: Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") || "",
-          Authorization: `Bearer ${Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")}`,
+          apikey: supabaseKey || "",
+          Authorization: `Bearer ${supabaseKey}`,
         },
       }
-    ).then(res => res.json());
-
-    if (subscribersError) {
-      console.error("Error fetching subscribers:", subscribersError);
-      throw new Error("Failed to fetch subscribers");
+    );
+    
+    if (!subscribersResponse.ok) {
+      const errorText = await subscribersResponse.text();
+      console.error(`Failed to fetch subscribers: ${subscribersResponse.status} - ${errorText}`);
+      throw new Error(`Failed to fetch subscribers: ${subscribersResponse.status}`);
     }
+    
+    const subscribers = await subscribersResponse.json();
+    
+    console.log(`Fetched subscribers response: ${JSON.stringify(subscribers)}`);
 
     if (!subscribers || subscribers.length === 0) {
+      console.log("No subscribers found in database");
       return new Response(
         JSON.stringify({ message: "No subscribers found" }),
         {
@@ -66,6 +80,7 @@ const handler = async (req: Request): Promise<Response> => {
 
     // Extract subscriber emails
     const emails = subscribers.map((subscriber: { email: string }) => subscriber.email);
+    console.log(`Subscriber emails: ${JSON.stringify(emails)}`);
 
     // Send email to all subscribers (using BCC for privacy)
     const emailResponse = await resend.emails.send({

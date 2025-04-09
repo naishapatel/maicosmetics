@@ -29,22 +29,30 @@ const NewsletterAdmin = () => {
     setIsSending(true);
 
     try {
+      console.log("Invoking send-newsletter function...");
       const { data, error } = await supabase.functions.invoke('send-newsletter', {
         body: { subject, content },
       });
 
       if (error) {
+        console.error("Error from edge function:", error);
         throw error;
       }
 
+      console.log("Newsletter edge function response:", data);
+
       toast({
-        title: "Newsletter sent!",
-        description: data.message || "Your newsletter has been sent to all subscribers.",
+        title: data.message || "Newsletter status",
+        description: data.message?.includes("No subscribers") 
+          ? "There are no subscribers in the database. Try subscribing first via the footer form." 
+          : "Your newsletter has been sent to all subscribers.",
       });
 
       // Reset form after successful submission
-      setSubject('');
-      setContent('');
+      if (!data.message?.includes("No subscribers")) {
+        setSubject('');
+        setContent('');
+      }
     } catch (error: any) {
       console.error('Error sending newsletter:', error);
       toast({
