@@ -44,7 +44,8 @@ export default function BlogPostAdmin() {
       setFetchError(null);
       
       console.log("Fetching pending posts...");
-      console.log("Request URL:", `${supabase.supabaseUrl}/rest/v1/blog_post_approvals`);
+      // Use the Supabase REST URL from environment variables or config instead of accessing protected property
+      console.log("Requesting blog post approvals data from Supabase...");
       
       // Add detailed logging of the request
       const { data: authData } = await supabase.auth.getSession();
