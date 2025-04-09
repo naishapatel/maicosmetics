@@ -2,22 +2,23 @@
 import { QuizSelections } from "@/types/quiz";
 import QuizOption from "./QuizOption";
 import { motion } from "framer-motion";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface QuizOptionsGridProps {
   options: string[];
   category: keyof QuizSelections;
   selections: QuizSelections;
   handleSelection: (category: keyof QuizSelections, item: string) => void;
-  isMobile?: boolean; 
 }
 
 const QuizOptionsGrid = ({
   options,
   category,
   selections,
-  handleSelection,
-  isMobile = false
+  handleSelection
 }: QuizOptionsGridProps) => {
+  const isMobile = useIsMobile();
+  
   const container = {
     hidden: { opacity: 0 },
     show: {
