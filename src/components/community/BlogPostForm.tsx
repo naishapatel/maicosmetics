@@ -1,210 +1,156 @@
 
 import { useState } from "react";
-import { User } from "@supabase/auth-helpers-react";
-import { Textarea } from "@/components/ui/textarea";
-import { Button } from "@/components/ui/button";
-import { useToast } from "@/components/ui/use-toast";
+import { useSession } from "@supabase/auth-helpers-react";
 import { supabase } from "@/integrations/supabase/client";
-import { ImagePlus, Send } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
+import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/hooks/use-toast";
+import { Loader2, Pencil } from "lucide-react";
 import { v4 as uuidv4 } from "uuid";
+import { BlogPostUpload } from "./BlogPostUpload";
 
-interface BlogPostFormProps {
-  user: User | null;
-  onAuthRedirect: () => void;
-  onPostSubmitted: () => void;
-}
-
-export function BlogPostForm({ user, onAuthRedirect, onPostSubmitted }: BlogPostFormProps) {
+export function BlogPostSubmissionForm() {
+  const session = useSession();
   const { toast } = useToast();
   const [newPost, setNewPost] = useState("");
-  const [imageFile, setImageFile] = useState<File | null>(null);
+  const [posting, setPosting] = useState(false);
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    // File size validation (5MB max)
-    if (file.size > 5 * 1024 * 1024) {
-      toast({
-        variant: "destructive",
-        title: "File too large",
-        description: "Image must be less than 5MB",
-      });
-      return;
-    }
-
-    setImageFile(file);
-    const previewUrl = URL.createObjectURL(file);
-    setImagePreview(previewUrl);
-  };
-
-  const uploadImage = async (file: File) => {
-    try {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${uuidv4()}.${fileExt}`;
-      const filePath = `${fileName}`;
-
-      const { error: uploadError } = await supabase.storage
-        .from('blog_images')
-        .upload(filePath, file);
-
-      if (uploadError) {
-        throw uploadError;
-      }
-
-      const { data } = supabase.storage
-        .from('blog_images')
-        .getPublicUrl(filePath);
-
-      return data.publicUrl;
-    } catch (error) {
-      console.error("Error uploading image:", error);
-      throw error;
+  const handleImageChange = (file: File | null) => {
+    setSelectedImage(file);
+    
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        setImagePreview(event.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setImagePreview(null);
     }
   };
 
   const handleSubmitPost = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!user) {
+    if (!session) {
       toast({
-        title: "Please sign in",
-        description: "You need to be signed in to post in the community",
+        title: "Sign in required",
+        description: "Please sign in to post to the blog.",
       });
-      onAuthRedirect();
       return;
     }
-
+    
     if (!newPost.trim()) {
       toast({
         variant: "destructive",
-        title: "Blog post cannot be empty",
-        description: "Please write some content for your blog post",
+        title: "Empty post",
+        description: "Please write something before posting.",
       });
       return;
     }
-
-    setIsSubmitting(true);
-
+    
     try {
+      setPosting(true);
+      
       let imageUrl = null;
       
-      if (imageFile) {
-        imageUrl = await uploadImage(imageFile);
+      // Upload image if selected
+      if (selectedImage) {
+        const fileExt = selectedImage.name.split('.').pop();
+        const filePath = `${uuidv4()}.${fileExt}`;
+        
+        const { error: uploadError, data } = await supabase.storage
+          .from('blog_images')
+          .upload(filePath, selectedImage);
+        
+        if (uploadError) {
+          throw uploadError;
+        }
+        
+        const { data: urlData } = supabase.storage
+          .from('blog_images')
+          .getPublicUrl(filePath);
+        
+        imageUrl = urlData.publicUrl;
       }
-
-      // Submit to the approvals table
-      const { error } = await supabase.from("blog_post_approvals").insert({
-        user_id: user.id,
-        content: newPost,
-        image_url: imageUrl,
-      });
-
-      if (error) {
-        toast({
-          variant: "destructive",
-          title: "Error submitting blog post",
-          description: error.message,
+      
+      // Submit to the blog_post_approvals table
+      const { error } = await supabase
+        .from("blog_post_approvals")
+        .insert({
+          user_id: session.user.id,
+          content: newPost,
+          image_url: imageUrl,
         });
-        setIsSubmitting(false);
-        return;
+      
+      if (error) {
+        throw error;
       }
-
+      
       toast({
-        title: "Blog post submitted for review",
-        description: "Your post will be visible after approval",
+        title: "Post submitted for approval",
+        description: "Your blog post has been submitted and will be visible after approval.",
       });
-
+      
+      // Reset form
       setNewPost("");
-      setImageFile(null);
+      setSelectedImage(null);
       setImagePreview(null);
-      onPostSubmitted();
+      
     } catch (error) {
-      console.error("Error in handleSubmitPost:", error);
+      console.error("Error posting:", error);
       toast({
         variant: "destructive",
-        title: "Error submitting blog post",
-        description: "Failed to submit blog post",
+        title: "Error posting",
+        description: "Failed to submit your post. Please try again.",
       });
     } finally {
-      setIsSubmitting(false);
+      setPosting(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmitPost} className="space-y-4">
-      <Textarea
-        placeholder={user ? "Share your thoughts on beauty and sustainability..." : "Please sign in to create a blog post"}
-        value={newPost}
-        onChange={(e) => setNewPost(e.target.value)}
-        disabled={!user || isSubmitting}
-        className="min-h-[120px]"
-        required
-      />
-      
-      {user && (
-        <div className="space-y-4">
-          <div className="flex items-center gap-2">
-            <Button 
-              type="button" 
-              variant="outline" 
-              onClick={() => document.getElementById('image-upload')?.click()}
-              disabled={isSubmitting}
-            >
-              <ImagePlus className="h-4 w-4 mr-2" />
-              Add Image
-            </Button>
-            <input
-              id="image-upload"
-              type="file"
-              accept="image/*"
-              className="hidden"
-              onChange={handleImageChange}
-            />
-            {imageFile && (
-              <span className="text-sm text-gray-600">
-                {imageFile.name} ({Math.round(imageFile.size / 1024)}KB)
-              </span>
-            )}
-          </div>
+    <Card>
+      <form onSubmit={handleSubmitPost}>
+        <CardHeader>
+          <h3 className="text-lg font-medium">Share your thoughts</h3>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <Textarea
+            placeholder="Write your blog post here..."
+            value={newPost}
+            onChange={(e) => setNewPost(e.target.value)}
+            className="min-h-[120px]"
+          />
           
-          {imagePreview && (
-            <div className="relative mt-2">
-              <img
-                src={imagePreview}
-                alt="Preview"
-                className="max-h-40 rounded-md"
-              />
-              <Button
-                type="button"
-                variant="destructive"
-                size="sm"
-                className="absolute top-2 right-2 h-6 w-6 p-0"
-                onClick={() => {
-                  setImageFile(null);
-                  setImagePreview(null);
-                }}
-              >
-                &times;
-              </Button>
-            </div>
-          )}
-          
+          <BlogPostUpload 
+            onImageChange={handleImageChange}
+            imagePreview={imagePreview}
+          />
+        </CardContent>
+        <CardFooter>
           <Button 
             type="submit" 
-            disabled={isSubmitting} 
-            className="w-full md:w-auto"
+            className="ml-auto"
+            disabled={posting || !newPost.trim()}
           >
-            {isSubmitting ? "Submitting..." : "Submit for Review"}
+            {posting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Submitting...
+              </>
+            ) : (
+              <>
+                <Pencil className="mr-2 h-4 w-4" />
+                Submit for Review
+              </>
+            )}
           </Button>
-        </div>
-      )}
-      
-      {!user && (
-        <Button type="button" onClick={onAuthRedirect}>Sign In to Create a Blog Post</Button>
-      )}
-    </form>
+        </CardFooter>
+      </form>
+    </Card>
   );
 }
