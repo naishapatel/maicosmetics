@@ -1,10 +1,9 @@
-
 import { useState, useEffect } from "react";
 import { Newspaper } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/components/ui/use-toast";
 import { User } from "@supabase/auth-helpers-react";
-import { BlogPostForm } from "./BlogPostForm";
+import { BlogPostSubmissionForm } from "./BlogPostForm";
 import { PendingPostsList } from "./PendingPostsList";
 import { PublishedPostsList } from "./PublishedPostsList";
 import { BlogPostError } from "./BlogPostError";
@@ -153,7 +152,7 @@ export function BlogPost({ user, onAuthRedirect }: BlogPostProps) {
               Your posts will be visible after approval.
             </p>
             
-            <BlogPostForm 
+            <BlogPostSubmissionForm 
               user={user} 
               onAuthRedirect={onAuthRedirect} 
               onPostSubmitted={handlePostSubmitted} 
@@ -176,7 +175,7 @@ export function BlogPost({ user, onAuthRedirect }: BlogPostProps) {
           Your posts will be visible after approval.
         </p>
         
-        <BlogPostForm 
+        <BlogPostSubmissionForm 
           user={user} 
           onAuthRedirect={onAuthRedirect}
           onPostSubmitted={handlePostSubmitted} 
