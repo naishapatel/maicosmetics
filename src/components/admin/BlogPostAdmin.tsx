@@ -1,15 +1,15 @@
 
 import { useState, useEffect } from "react";
-import { Newspaper, CheckCircle, XCircle, Image, RefreshCw } from "lucide-react";
+import { Newspaper, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { useToast } from "@/components/ui/use-toast";
 import { supabase } from "@/integrations/supabase/client";
-import { format } from "date-fns";
+import { useToast } from "@/hooks/use-toast";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { BlogPostError } from "../community/BlogPostError";
+import { PendingPostsTable } from "./blog/PendingPostsTable";
+import { ApprovedPostsTable } from "./blog/ApprovedPostsTable";
+import { PostReviewDialog } from "./blog/PostReviewDialog";
+import { ImagePreviewDialog } from "./blog/ImagePreviewDialog";
 
 interface PendingPost {
   id: string;
@@ -32,7 +32,7 @@ export default function BlogPostAdmin() {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [fetchAttempts, setFetchAttempts] = useState(0);
 
-  // Fixed: Log detailed auth session info to debug authorization issues
+  // Check auth status when component loads
   useEffect(() => {
     async function checkAuthStatus() {
       const { data: authData } = await supabase.auth.getSession();
@@ -60,7 +60,6 @@ export default function BlogPostAdmin() {
       
       console.log("Fetching pending posts...");
       
-      // Fixed: Direct query for blog post approvals from public schema
       const { data, error } = await supabase
         .from("blog_post_approvals")
         .select("id, user_id, content, created_at, image_url");
@@ -81,7 +80,7 @@ export default function BlogPostAdmin() {
       console.log("Number of pending posts:", data ? data.length : 0);
 
       if (data && data.length > 0) {
-        // Fixed: Separate query for each user profile to avoid join issues
+        // Fetch user profiles for each post
         const postsWithProfiles = await Promise.all(
           data.map(async (post) => {
             try {
@@ -137,7 +136,7 @@ export default function BlogPostAdmin() {
       console.log("Approved posts data:", data);
 
       if (data) {
-        // Fixed: Separate query for each user profile to avoid join issues
+        // Fetch user profiles for each post
         const postsWithProfiles = await Promise.all(
           data.map(async (post) => {
             try {
@@ -338,253 +337,36 @@ export default function BlogPostAdmin() {
         </TabsList>
 
         <TabsContent value="pending" className="mt-6">
-          {isLoading ? (
-            <div className="flex items-center justify-center p-6">
-              <RefreshCw className="h-6 w-6 animate-spin text-mai-mauve mr-2" />
-              <span>Loading pending posts...</span>
-            </div>
-          ) : pendingPosts.length === 0 ? (
-            <Card>
-              <CardContent className="pt-6">
-                <p className="text-center text-gray-500">No pending posts to review</p>
-              </CardContent>
-            </Card>
-          ) : (
-            <div className="overflow-x-auto">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>User</TableHead>
-                    <TableHead>Date</TableHead>
-                    <TableHead>Content Preview</TableHead>
-                    <TableHead>Image</TableHead>
-                    <TableHead>Actions</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {pendingPosts.map((post) => (
-                    <TableRow key={post.id}>
-                      <TableCell className="font-medium">
-                        {post.user_profile?.username || "Anonymous"}
-                      </TableCell>
-                      <TableCell>
-                        {format(new Date(post.created_at), "MMM d, yyyy")}
-                      </TableCell>
-                      <TableCell>
-                        {post.content.length > 100
-                          ? `${post.content.substring(0, 100)}...`
-                          : post.content}
-                      </TableCell>
-                      <TableCell>
-                        {post.image_url ? (
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => {
-                              setPreviewImage(post.image_url);
-                            }}
-                          >
-                            <Image className="h-4 w-4 mr-1" /> View
-                          </Button>
-                        ) : (
-                          "No image"
-                        )}
-                      </TableCell>
-                      <TableCell>
-                        <div className="flex items-center gap-2">
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-blue-500 hover:text-blue-700"
-                            onClick={() => setSelectedPost(post)}
-                          >
-                            Review
-                          </Button>
-                        </div>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          )}
+          <PendingPostsTable 
+            posts={pendingPosts} 
+            isLoading={isLoading} 
+            onReview={setSelectedPost}
+            onPreviewImage={setPreviewImage}
+          />
         </TabsContent>
 
         <TabsContent value="approved" className="mt-6">
-          {approvedPosts.length === 0 ? (
-            <Card>
-              <CardContent className="pt-6">
-                <p className="text-center text-gray-500">No approved posts yet</p>
-              </CardContent>
-            </Card>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>User</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Content Preview</TableHead>
-                  <TableHead>Image</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {approvedPosts.map((post) => (
-                  <TableRow key={post.id}>
-                    <TableCell className="font-medium">
-                      {post.user_profile?.username || "Anonymous"}
-                    </TableCell>
-                    <TableCell>
-                      {format(new Date(post.created_at), "MMM d, yyyy")}
-                    </TableCell>
-                    <TableCell>
-                      {post.content.length > 100
-                        ? `${post.content.substring(0, 100)}...`
-                        : post.content}
-                    </TableCell>
-                    <TableCell>
-                      {post.image_url ? (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => {
-                            setPreviewImage(post.image_url);
-                          }}
-                        >
-                          <Image className="h-4 w-4 mr-1" /> View
-                        </Button>
-                      ) : (
-                        "No image"
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            className="text-red-500 hover:text-red-700"
-                          >
-                            Delete
-                          </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent>
-                          <AlertDialogHeader>
-                            <AlertDialogTitle>Delete Post</AlertDialogTitle>
-                            <AlertDialogDescription>
-                              Are you sure you want to delete this post? This action cannot be undone.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel>Cancel</AlertDialogCancel>
-                            <AlertDialogAction
-                              onClick={() => handleDelete(post.id)}
-                              className="bg-red-500 hover:bg-red-600 text-white"
-                            >
-                              Delete
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
+          <ApprovedPostsTable 
+            posts={approvedPosts} 
+            onPreviewImage={setPreviewImage}
+            onDelete={handleDelete}
+          />
         </TabsContent>
       </Tabs>
 
-      {/* Post Review Dialog */}
       {selectedPost && (
-        <AlertDialog open={!!selectedPost} onOpenChange={(open) => !open && setSelectedPost(null)}>
-          <AlertDialogContent className="max-w-3xl">
-            <AlertDialogHeader>
-              <AlertDialogTitle>Review Blog Post</AlertDialogTitle>
-            </AlertDialogHeader>
-            
-            <div className="my-4 max-h-[60vh] overflow-y-auto">
-              <div className="mb-4">
-                <h3 className="text-sm font-medium text-gray-500">Posted by</h3>
-                <p>{selectedPost.user_profile?.username || "Anonymous"}</p>
-              </div>
-              
-              <div className="mb-4">
-                <h3 className="text-sm font-medium text-gray-500">Date</h3>
-                <p>{format(new Date(selectedPost.created_at), "MMM d, yyyy • h:mm a")}</p>
-              </div>
-              
-              <div className="mb-4">
-                <h3 className="text-sm font-medium text-gray-500">Content</h3>
-                <div className="mt-2 p-4 bg-gray-50 rounded-md whitespace-pre-line">
-                  {selectedPost.content}
-                </div>
-              </div>
-              
-              {selectedPost.image_url && (
-                <div className="mb-4">
-                  <h3 className="text-sm font-medium text-gray-500">Image</h3>
-                  <div className="mt-2">
-                    <img 
-                      src={selectedPost.image_url} 
-                      alt="Post image" 
-                      className="max-w-full h-auto rounded-md" 
-                    />
-                  </div>
-                </div>
-              )}
-            </div>
-            
-            <AlertDialogFooter className="flex items-center justify-between">
-              <div>
-                <AlertDialogCancel>Cancel</AlertDialogCancel>
-              </div>
-              <div className="flex gap-2">
-                <Button 
-                  variant="outline" 
-                  className="border-red-500 text-red-500 hover:bg-red-50"
-                  onClick={() => handleReject(selectedPost.id)}
-                >
-                  <XCircle className="h-4 w-4 mr-2" />
-                  Reject
-                </Button>
-                <Button 
-                  className="bg-green-600 hover:bg-green-700"
-                  onClick={() => handleApprove(selectedPost)}
-                >
-                  <CheckCircle className="h-4 w-4 mr-2" />
-                  Approve
-                </Button>
-              </div>
-            </AlertDialogFooter>
-          </AlertDialogContent>
-        </AlertDialog>
+        <PostReviewDialog 
+          post={selectedPost}
+          onClose={() => setSelectedPost(null)}
+          onApprove={handleApprove}
+          onReject={handleReject}
+        />
       )}
 
-      {/* Image Preview Dialog */}
-      {previewImage && (
-        <AlertDialog open={!!previewImage} onOpenChange={(open) => !open && setPreviewImage(null)}>
-          <AlertDialogContent className="max-w-3xl p-2">
-            <div className="flex justify-end">
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="rounded-full h-8 w-8 p-0"
-                onClick={() => setPreviewImage(null)}
-              >
-                ✕
-              </Button>
-            </div>
-            <div className="flex justify-center">
-              <img 
-                src={previewImage} 
-                alt="Preview" 
-                className="max-w-full max-h-[80vh]" 
-              />
-            </div>
-          </AlertDialogContent>
-        </AlertDialog>
-      )}
+      <ImagePreviewDialog 
+        imageUrl={previewImage} 
+        onClose={() => setPreviewImage(null)}
+      />
     </div>
   );
 }
