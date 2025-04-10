@@ -8,6 +8,7 @@ import { BlogPostSubmissionForm } from "./BlogPostForm";
 import { BlogPostDisplay } from "./BlogPostDisplay";
 import { PendingPostsList } from "./PendingPostsList";
 import { useNavigate } from "react-router-dom";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface PendingPost {
   id: string;
@@ -19,6 +20,7 @@ const SustainabilityDiscussion = () => {
   const session = useSession();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const isMobile = useIsMobile();
   const [pendingPosts, setPendingPosts] = useState<PendingPost[]>([]);
 
   useEffect(() => {
@@ -53,13 +55,13 @@ const SustainabilityDiscussion = () => {
   };
 
   return (
-    <div className="space-y-6">
-      <div className="bg-mai-sage/20 rounded-lg p-6">
+    <div className={`space-y-${isMobile ? '4' : '6'}`}>
+      <div className={`bg-mai-sage/20 rounded-lg ${isMobile ? 'p-4' : 'p-6'}`}>
         <div className="flex items-center mb-4">
           <Globe className="text-mai-mauve mr-2 h-6 w-6" />
-          <h2 className="text-2xl font-semibold text-mai-brown">Awareness Posts</h2>
+          <h2 className={`${isMobile ? 'text-xl' : 'text-2xl'} font-semibold text-mai-brown`}>Awareness Posts</h2>
         </div>
-        <p className="text-gray-600 mb-6">
+        <p className={`text-gray-600 mb-${isMobile ? '4' : '6'}`}>
           Share your thoughts, ideas, and experiences related to beauty practices and ethical consumption.
           Your posts will be visible after approval.
         </p>

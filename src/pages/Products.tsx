@@ -1,23 +1,21 @@
+
+import { useState, useEffect } from "react";
 import { ProductsHeader } from "@/components/products/ProductsHeader";
 import { ProductsGrid } from "@/components/products/ProductsGrid";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { categorizedProducts } from "@/data/products";
-import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { Input } from "@/components/ui/input";
+import { Search } from "lucide-react";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const Products = () => {
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncError, setSyncError] = useState<string | null>(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [filteredProducts, setFilteredProducts] = useState(categorizedProducts);
+  const isMobile = useIsMobile();
   
-  const categories = [
-    "sustainable beauty",
-    "eco-friendly beauty", 
-    "vegan beauty",
-    "products for acne",
-    "products for college kids"
-  ];
-
   useEffect(() => {
     const syncProductsWithSupabase = async () => {
       try {
@@ -86,6 +84,20 @@ const Products = () => {
     syncProductsWithSupabase();
   }, []);
 
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setFilteredProducts(categorizedProducts);
+    } else {
+      const query = searchQuery.toLowerCase();
+      const results = categorizedProducts.filter(product => 
+        product.title?.toLowerCase().includes(query) || 
+        product.description?.toLowerCase().includes(query) ||
+        product.category?.toLowerCase().includes(query)
+      );
+      setFilteredProducts(results);
+    }
+  }, [searchQuery]);
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-mai-cream to-white">
       <ProductsHeader />
@@ -104,26 +116,34 @@ const Products = () => {
           </div>
         )}
         
-        <Tabs defaultValue={categories[0]} className="w-full">
-          <TabsList className="w-full flex flex-wrap gap-2 bg-transparent">
-            {categories.map((category) => (
-              <TabsTrigger
-                key={category}
-                value={category}
-                className="data-[state=active]:bg-mai-coral data-[state=active]:text-white"
-              >
-                {category.charAt(0).toUpperCase() + category.slice(1)}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-          {categories.map((category) => (
-            <TabsContent key={category} value={category}>
-              <ProductsGrid
-                products={categorizedProducts.filter(p => p.category === category)}
-              />
-            </TabsContent>
-          ))}
-        </Tabs>
+        <div className="bg-white shadow-sm rounded-lg p-6 mb-8">
+          <h2 className={`font-serif text-mai-brown ${isMobile ? 'text-2xl' : 'text-3xl'} mb-4`}>
+            Find Your Perfect Products
+          </h2>
+          <p className="text-gray-600 mb-6">
+            Search through our curated collection of ethical and sustainable beauty products.
+          </p>
+          
+          <div className="relative max-w-md mx-auto">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <Input
+              type="search"
+              placeholder="Search by product name, description, or category..."
+              className="pl-10 py-6 rounded-full"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+          
+          <div className="mt-4 text-sm text-gray-500 text-center">
+            {filteredProducts.length === 0 ? 
+              "No products found. Try a different search term." : 
+              `Showing ${filteredProducts.length} product${filteredProducts.length !== 1 ? 's' : ''}`
+            }
+          </div>
+        </div>
+        
+        <ProductsGrid products={filteredProducts} />
       </div>
     </div>
   );

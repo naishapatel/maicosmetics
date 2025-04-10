@@ -1,6 +1,5 @@
 
 import { useState, useEffect } from "react";
-import { useSession } from "@supabase/auth-helpers-react";
 import { supabase } from "@/integrations/supabase/client";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -34,25 +33,40 @@ export function BlogPostDisplay() {
       setLoading(true);
       setError(null);
       
-      // Updated to use blog_posts table
+      // Fix: Select fields individually instead of using relationship
       const { data, error } = await supabase
         .from("blog_posts")
-        .select(`*, user_profile:profiles(username, avatar_url)`)
-        .eq("approved", true) // Only show approved posts
+        .select("*")
+        .eq("approved", true)
         .order("created_at", { ascending: false });
 
       if (error) {
         throw error;
       }
 
-      const postsWithProfiles = data.map((post: any) => ({
-        id: post.id,
-        content: post.content,
-        created_at: post.created_at,
-        user_id: post.user_id,
-        image_url: post.image_url,
-        user_profile: post.user_profile,
-      }));
+      // Separately fetch user profiles
+      const postsWithProfiles = await Promise.all(
+        data.map(async (post) => {
+          try {
+            const { data: profileData } = await supabase
+              .from("profiles")
+              .select("username, avatar_url")
+              .eq("id", post.user_id)
+              .single();
+            
+            return {
+              ...post,
+              user_profile: profileData || null
+            } as Post;
+          } catch (profileError) {
+            console.error("Error fetching profile:", profileError);
+            return {
+              ...post,
+              user_profile: null
+            } as Post;
+          }
+        })
+      );
       
       setPosts(postsWithProfiles);
     } catch (error) {

@@ -32,6 +32,21 @@ export default function BlogPostAdmin() {
   const [previewImage, setPreviewImage] = useState<string | null>(null);
   const [fetchAttempts, setFetchAttempts] = useState(0);
 
+  // Fixed: Log detailed auth session info to debug authorization issues
+  useEffect(() => {
+    async function checkAuthStatus() {
+      const { data: authData } = await supabase.auth.getSession();
+      console.log("Auth session exists:", !!authData.session);
+      if (authData.session) {
+        console.log("User email:", authData.session.user.email);
+        console.log("User ID:", authData.session.user.id);
+        console.log("User role:", authData.session.user.role);
+      }
+    }
+    
+    checkAuthStatus();
+  }, []);
+
   useEffect(() => {
     console.log(`Fetch attempt #${fetchAttempts + 1} for pending posts`);
     fetchPendingPosts();
@@ -44,17 +59,11 @@ export default function BlogPostAdmin() {
       setFetchError(null);
       
       console.log("Fetching pending posts...");
-      // Use the Supabase REST URL from environment variables or config instead of accessing protected property
-      console.log("Requesting blog post approvals data from Supabase...");
       
-      // Add detailed logging of the request
-      const { data: authData } = await supabase.auth.getSession();
-      console.log("Auth session exists:", !!authData.session);
-      
+      // Fixed: Direct query for blog post approvals from public schema
       const { data, error } = await supabase
         .from("blog_post_approvals")
-        .select("*")
-        .order("created_at", { ascending: false });
+        .select("id, user_id, content, created_at, image_url");
 
       if (error) {
         console.error("Error fetching pending posts:", error);
@@ -71,24 +80,17 @@ export default function BlogPostAdmin() {
       console.log("Pending posts data:", data);
       console.log("Number of pending posts:", data ? data.length : 0);
 
-      // Fetch user profiles - Using profiles table instead of users table
       if (data && data.length > 0) {
+        // Fixed: Separate query for each user profile to avoid join issues
         const postsWithProfiles = await Promise.all(
           data.map(async (post) => {
             try {
               console.log(`Fetching profile for user ID: ${post.user_id}`);
-              const { data: profileData, error: profileError } = await supabase
+              const { data: profileData } = await supabase
                 .from("profiles")
                 .select("username")
                 .eq("id", post.user_id)
                 .single();
-              
-              if (profileError) {
-                console.error(`Error fetching profile for user ${post.user_id}:`, profileError);
-                console.error("Profile error details:", JSON.stringify(profileError));
-              } else {
-                console.log(`Profile data for user ${post.user_id}:`, profileData);
-              }
               
               return {
                 ...post,
@@ -135,19 +137,15 @@ export default function BlogPostAdmin() {
       console.log("Approved posts data:", data);
 
       if (data) {
-        // Fetch user profiles - Using profiles table instead of users table
+        // Fixed: Separate query for each user profile to avoid join issues
         const postsWithProfiles = await Promise.all(
           data.map(async (post) => {
             try {
-              const { data: profileData, error: profileError } = await supabase
+              const { data: profileData } = await supabase
                 .from("profiles")
                 .select("username")
                 .eq("id", post.user_id)
                 .single();
-              
-              if (profileError) {
-                console.error(`Error fetching profile for user ${post.user_id}:`, profileError);
-              }
               
               return {
                 ...post,
@@ -304,6 +302,14 @@ export default function BlogPostAdmin() {
         <h2 className="text-2xl font-bold text-mai-brown">Blog Post Management</h2>
       </div>
 
+      <Button 
+        onClick={() => setFetchAttempts(prev => prev + 1)}
+        className="bg-mai-mauve hover:bg-mai-mauveDark mb-4"
+      >
+        <RefreshCw className="h-4 w-4 mr-2" />
+        Refresh Posts
+      </Button>
+
       {fetchError && (
         <BlogPostError error={fetchError} onRetry={handleRetry}>
           <div className="mt-2 p-3 bg-red-50 border border-red-100 rounded text-sm">
@@ -344,61 +350,63 @@ export default function BlogPostAdmin() {
               </CardContent>
             </Card>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>User</TableHead>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Content Preview</TableHead>
-                  <TableHead>Image</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {pendingPosts.map((post) => (
-                  <TableRow key={post.id}>
-                    <TableCell className="font-medium">
-                      {post.user_profile?.username || "Anonymous"}
-                    </TableCell>
-                    <TableCell>
-                      {format(new Date(post.created_at), "MMM d, yyyy")}
-                    </TableCell>
-                    <TableCell>
-                      {post.content.length > 100
-                        ? `${post.content.substring(0, 100)}...`
-                        : post.content}
-                    </TableCell>
-                    <TableCell>
-                      {post.image_url ? (
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => {
-                            setPreviewImage(post.image_url);
-                          }}
-                        >
-                          <Image className="h-4 w-4 mr-1" /> View
-                        </Button>
-                      ) : (
-                        "No image"
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center gap-2">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="text-blue-500 hover:text-blue-700"
-                          onClick={() => setSelectedPost(post)}
-                        >
-                          Review
-                        </Button>
-                      </div>
-                    </TableCell>
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>User</TableHead>
+                    <TableHead>Date</TableHead>
+                    <TableHead>Content Preview</TableHead>
+                    <TableHead>Image</TableHead>
+                    <TableHead>Actions</TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                </TableHeader>
+                <TableBody>
+                  {pendingPosts.map((post) => (
+                    <TableRow key={post.id}>
+                      <TableCell className="font-medium">
+                        {post.user_profile?.username || "Anonymous"}
+                      </TableCell>
+                      <TableCell>
+                        {format(new Date(post.created_at), "MMM d, yyyy")}
+                      </TableCell>
+                      <TableCell>
+                        {post.content.length > 100
+                          ? `${post.content.substring(0, 100)}...`
+                          : post.content}
+                      </TableCell>
+                      <TableCell>
+                        {post.image_url ? (
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              setPreviewImage(post.image_url);
+                            }}
+                          >
+                            <Image className="h-4 w-4 mr-1" /> View
+                          </Button>
+                        ) : (
+                          "No image"
+                        )}
+                      </TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-blue-500 hover:text-blue-700"
+                            onClick={() => setSelectedPost(post)}
+                          >
+                            Review
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
           )}
         </TabsContent>
 
