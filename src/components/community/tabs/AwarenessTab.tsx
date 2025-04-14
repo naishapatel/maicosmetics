@@ -1,5 +1,5 @@
 
-import SustainabilityDiscussion from "@/components/community/SustainabilityDiscussion";
+import { BlogPost } from "@/components/community/BlogPost";
 import { Session } from "@supabase/auth-helpers-react";
 
 interface AwarenessTabProps {
@@ -10,7 +10,7 @@ interface AwarenessTabProps {
 export function AwarenessTab({ session, onAuthRedirect }: AwarenessTabProps) {
   return (
     <div className="mt-6">
-      <SustainabilityDiscussion />
+      <BlogPost user={session?.user || null} onAuthRedirect={onAuthRedirect} />
     </div>
   );
 }
