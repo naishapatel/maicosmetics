@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { ProductsHeader } from "@/components/products/ProductsHeader";
 import { ProductsGrid } from "@/components/products/ProductsGrid";
-import { categorizedProducts } from "@/data/products";
+import { categorizedProducts, Product } from "@/data/products";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
