@@ -5,17 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-
-interface ApprovedPost {
-  id: string;
-  user_id: string;
-  content: string;
-  created_at: string;
-  image_url: string | null;
-  user_profile?: {
-    username: string | null;
-  } | null;
-}
+import { ApprovedPost } from "./useBlogAdminState";
 
 interface ApprovedPostsTableProps {
   posts: ApprovedPost[];
@@ -49,7 +39,7 @@ export function ApprovedPostsTable({ posts, onPreviewImage, onDelete }: Approved
         {posts.map((post) => (
           <TableRow key={post.id}>
             <TableCell className="font-medium">
-              {post.user_profile?.username || "Anonymous"}
+              {post.user_id.substring(0, 8)}...
             </TableCell>
             <TableCell>
               {format(new Date(post.created_at), "MMM d, yyyy")}

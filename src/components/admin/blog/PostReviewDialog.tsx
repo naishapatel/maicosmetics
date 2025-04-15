@@ -3,22 +3,12 @@ import { format } from "date-fns";
 import { CheckCircle, XCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { AlertDialog, AlertDialogContent, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
-
-interface Post {
-  id: string;
-  user_id: string;
-  content: string;
-  created_at: string;
-  image_url: string | null;
-  user_profile?: {
-    username: string | null;
-  } | null;
-}
+import { PendingPost } from "./useBlogAdminState";
 
 interface PostReviewDialogProps {
-  post: Post;
+  post: PendingPost;
   onClose: () => void;
-  onApprove: (post: Post) => void;
+  onApprove: (post: PendingPost) => void;
   onReject: (postId: string) => void;
 }
 
@@ -33,7 +23,7 @@ export function PostReviewDialog({ post, onClose, onApprove, onReject }: PostRev
         <div className="my-4 max-h-[60vh] overflow-y-auto">
           <div className="mb-4">
             <h3 className="text-sm font-medium text-gray-500">Posted by</h3>
-            <p>{post.user_profile?.username || "Anonymous"}</p>
+            <p>{post.user_profile?.username || post.user_id.substring(0, 8) + "..." || "Anonymous"}</p>
           </div>
           
           <div className="mb-4">

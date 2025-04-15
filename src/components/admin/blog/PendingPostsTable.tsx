@@ -4,17 +4,7 @@ import { Image, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-
-interface PendingPost {
-  id: string;
-  user_id: string;
-  content: string;
-  created_at: string;
-  image_url: string | null;
-  user_profile?: {
-    username: string | null;
-  } | null;
-}
+import { PendingPost } from "./useBlogAdminState";
 
 interface PendingPostsTableProps {
   posts: PendingPost[];
@@ -59,7 +49,6 @@ export function PendingPostsTable({ posts, isLoading, onReview, onPreviewImage }
           {posts.map((post) => (
             <TableRow key={post.id}>
               <TableCell className="font-medium">
-                {/* Show user ID instead of username to avoid profile queries */}
                 {post.user_id.substring(0, 8)}...
               </TableCell>
               <TableCell>
