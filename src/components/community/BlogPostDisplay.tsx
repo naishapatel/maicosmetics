@@ -33,7 +33,9 @@ export function BlogPostDisplay() {
       setLoading(true);
       setError(null);
       
-      // Fix: Select fields individually instead of using relationship
+      console.log("Fetching blog posts...");
+      
+      // First get all approved blog posts
       const { data, error } = await supabase
         .from("blog_posts")
         .select("*")
@@ -41,36 +43,54 @@ export function BlogPostDisplay() {
         .order("created_at", { ascending: false });
 
       if (error) {
+        console.error("Error fetching posts:", error);
         throw error;
       }
 
-      // Separately fetch user profiles
+      console.log("Blog posts fetched:", data);
+      
+      if (!data || data.length === 0) {
+        setPosts([]);
+        setLoading(false);
+        return;
+      }
+
+      // Separately fetch user profiles for each post
       const postsWithProfiles = await Promise.all(
         data.map(async (post) => {
           try {
+            console.log("Fetching profile for user:", post.user_id);
+            
             const { data: profileData } = await supabase
               .from("profiles")
               .select("username, avatar_url")
               .eq("id", post.user_id)
-              .single();
+              .maybeSingle();
             
             return {
               ...post,
-              user_profile: profileData || null
+              user_profile: profileData || { 
+                username: "Anonymous", 
+                avatar_url: null 
+              }
             } as Post;
           } catch (profileError) {
             console.error("Error fetching profile:", profileError);
             return {
               ...post,
-              user_profile: null
+              user_profile: { 
+                username: "Anonymous", 
+                avatar_url: null 
+              }
             } as Post;
           }
         })
       );
       
+      console.log("Posts with profiles:", postsWithProfiles);
       setPosts(postsWithProfiles);
     } catch (error) {
-      console.error("Error fetching posts:", error);
+      console.error("Error in fetchPosts:", error);
       if (error instanceof Error) {
         setError(error.message);
       } else {

@@ -2,7 +2,12 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { Resend } from "npm:resend@2.0.0";
 
-const resend = new Resend(Deno.env.get("RESEND_API_KEY"));
+// Initialize Resend with the API key
+const resendApiKey = Deno.env.get("RESEND_API_KEY");
+if (!resendApiKey) {
+  console.error("RESEND_API_KEY is not set");
+}
+const resend = new Resend(resendApiKey);
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -24,6 +29,7 @@ const handler = async (req: Request): Promise<Response> => {
   try {
     // Get the request body
     const { subject, content }: NewsletterRequest = await req.json();
+    console.log("Newsletter request:", { subject, content });
 
     if (!subject || !content) {
       return new Response(
@@ -37,18 +43,17 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log("Attempting to fetch subscribers...");
     
-    // Get all subscribers from the database - adding more detailed logging
+    // Get all subscribers from the database with detailed error handling
     const supabaseUrl = Deno.env.get("SUPABASE_URL");
     const supabaseKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
     
-    console.log(`Using Supabase URL: ${supabaseUrl}`);
-    
     if (!supabaseUrl || !supabaseKey) {
-      console.error("Missing Supabase URL or service role key");
-      throw new Error("Server configuration error");
+      console.error("Missing Supabase credentials:", { supabaseUrl: !!supabaseUrl, supabaseKey: !!supabaseKey });
+      throw new Error("Server configuration error - Missing Supabase credentials");
     }
     
     // Get all subscribers from the database
+    console.log(`Making request to: ${supabaseUrl}/rest/v1/newsletter_subscribers?select=email`);
     const subscribersResponse = await fetch(
       `${supabaseUrl}/rest/v1/newsletter_subscribers?select=email`,
       {
@@ -56,6 +61,7 @@ const handler = async (req: Request): Promise<Response> => {
           "Content-Type": "application/json",
           apikey: supabaseKey,
           Authorization: `Bearer ${supabaseKey}`,
+          "X-Client-Info": "supabase-edge-function"
         },
       }
     );
@@ -63,12 +69,12 @@ const handler = async (req: Request): Promise<Response> => {
     if (!subscribersResponse.ok) {
       const errorText = await subscribersResponse.text();
       console.error(`Failed to fetch subscribers: ${subscribersResponse.status} - ${errorText}`);
-      throw new Error(`Failed to fetch subscribers: ${subscribersResponse.status}`);
+      throw new Error(`Failed to fetch subscribers: ${subscribersResponse.status} - ${errorText}`);
     }
     
     const subscribers = await subscribersResponse.json();
-    
-    console.log(`Fetched subscribers response: ${JSON.stringify(subscribers)}`);
+    console.log(`Fetched subscribers count: ${subscribers.length}`);
+    console.log(`Subscribers data: ${JSON.stringify(subscribers.slice(0, 2))}...`); // Log only first 2 for privacy
 
     if (!subscribers || subscribers.length === 0) {
       console.log("No subscribers found in database");
@@ -81,11 +87,9 @@ const handler = async (req: Request): Promise<Response> => {
       );
     }
 
-    console.log(`Sending email to ${subscribers.length} subscribers`);
-
     // Extract subscriber emails
     const emails = subscribers.map((subscriber: { email: string }) => subscriber.email);
-    console.log(`Subscriber emails: ${JSON.stringify(emails)}`);
+    console.log(`Sending newsletter to ${emails.length} subscribers`);
 
     if (emails.length === 0) {
       return new Response(
@@ -98,8 +102,9 @@ const handler = async (req: Request): Promise<Response> => {
     }
 
     // Send email to all subscribers (using BCC for privacy)
+    console.log("Sending email with Resend...");
     const emailResponse = await resend.emails.send({
-      from: "mai. <onboarding@resend.dev>",
+      from: "mai. <hello@resend.dev>", // Using approved sender domain
       bcc: emails,
       subject: subject,
       html: `
@@ -116,7 +121,7 @@ const handler = async (req: Request): Promise<Response> => {
       `,
     });
 
-    console.log("Email sending response:", emailResponse);
+    console.log("Email sending response:", JSON.stringify(emailResponse));
 
     return new Response(
       JSON.stringify({ 
@@ -131,7 +136,7 @@ const handler = async (req: Request): Promise<Response> => {
   } catch (error: any) {
     console.error("Error in send-newsletter function:", error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: error.message || "Unknown error" }),
       {
         status: 500,
         headers: { "Content-Type": "application/json", ...corsHeaders },

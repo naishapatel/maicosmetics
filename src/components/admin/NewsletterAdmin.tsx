@@ -6,12 +6,14 @@ import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2 } from 'lucide-react';
+import { Loader2, Mail, AlertCircle } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const NewsletterAdmin = () => {
   const [subject, setSubject] = useState('');
   const [content, setContent] = useState('');
   const [isSending, setIsSending] = useState(false);
+  const [responseMessage, setResponseMessage] = useState<string | null>(null);
   const { toast } = useToast();
 
   const handleSendNewsletter = async (e: React.FormEvent) => {
@@ -27,6 +29,7 @@ const NewsletterAdmin = () => {
     }
 
     setIsSending(true);
+    setResponseMessage(null);
 
     try {
       console.log("Invoking send-newsletter function...");
@@ -36,25 +39,31 @@ const NewsletterAdmin = () => {
 
       if (error) {
         console.error("Error from edge function:", error);
-        throw error;
+        throw new Error(`Edge function error: ${error.message}`);
       }
 
       console.log("Newsletter edge function response:", data);
+      
+      if (data.error) {
+        throw new Error(data.error);
+      }
 
+      setResponseMessage(data.message || "Newsletter sent successfully");
       toast({
-        title: data.message || "Newsletter status",
+        title: "Newsletter status",
         description: data.message?.includes("No subscribers") 
           ? "There are no subscribers in the database. Try subscribing first via the footer form." 
           : "Your newsletter has been sent to all subscribers.",
       });
 
-      // Reset form after successful submission
+      // Reset form after successful submission if there were subscribers
       if (!data.message?.includes("No subscribers")) {
         setSubject('');
         setContent('');
       }
     } catch (error: any) {
       console.error('Error sending newsletter:', error);
+      setResponseMessage(`Error: ${error.message || "An unexpected error occurred"}`);
       toast({
         variant: "destructive",
         title: "Failed to send newsletter",
@@ -75,6 +84,19 @@ const NewsletterAdmin = () => {
       </CardHeader>
       <form onSubmit={handleSendNewsletter}>
         <CardContent className="space-y-4">
+          {responseMessage && (
+            <Alert className={responseMessage.includes("Error") ? "bg-red-50 border-red-200" : "bg-green-50 border-green-200"}>
+              <div className="flex items-center">
+                {responseMessage.includes("Error") ? (
+                  <AlertCircle className="h-4 w-4 mr-2 text-red-500" />
+                ) : (
+                  <Mail className="h-4 w-4 mr-2 text-green-500" />
+                )}
+                <AlertDescription>{responseMessage}</AlertDescription>
+              </div>
+            </Alert>
+          )}
+          
           <div className="space-y-2">
             <label htmlFor="subject" className="text-sm font-medium">
               Subject
