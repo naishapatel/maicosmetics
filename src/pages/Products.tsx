@@ -18,7 +18,7 @@ const Products = () => {
   const [selectedBusinessTag, setSelectedBusinessTag] = useState<string | null>(null);
   const isMobile = useIsMobile();
   
-  // Get unique categories and business tags for filtering
+  // Get unique categories and business tags for filtering - safely handle potentially undefined properties
   const categories = Array.from(new Set(categorizedProducts.map(p => p.category)));
   const businessTags = Array.from(
     new Set(
@@ -114,14 +114,14 @@ const Products = () => {
       );
     }
     
-    // Apply search query filter
+    // Apply search query filter - safely handle potentially undefined properties
     if (searchQuery.trim() !== "") {
       const query = searchQuery.toLowerCase();
       results = results.filter(product => 
-        product.title?.toLowerCase().includes(query) || 
-        product.description?.toLowerCase().includes(query) ||
-        product.category?.toLowerCase().includes(query) ||
-        product.brand?.toLowerCase().includes(query) ||
+        (product.title?.toLowerCase().includes(query)) || 
+        (product.description?.toLowerCase().includes(query)) ||
+        (product.category?.toLowerCase().includes(query)) ||
+        (product.brand?.toLowerCase().includes(query)) ||
         (product.key_ingredients && product.key_ingredients.some(i => i.toLowerCase().includes(query)))
       );
     }

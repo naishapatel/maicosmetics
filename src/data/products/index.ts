@@ -30,4 +30,9 @@ export type Product = {
   certifications?: string[];
   name?: string;
   product_name?: string;
+  // Add the missing properties from small-business.ts
+  business_size?: string;
+  target_demographic?: string;
+  primary_benefits?: string[];
+  skin_benefits?: string[];
 };
