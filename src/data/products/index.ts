@@ -35,4 +35,7 @@ export type Product = {
   primary_benefits?: string[];
   skin_benefits?: string[];
   ethical_values?: string[];
+  link_status?: 'active' | 'broken' | 'discontinued' | 'redirected';
+  alternative_product_id?: string;
+  last_verified?: string;
 };
