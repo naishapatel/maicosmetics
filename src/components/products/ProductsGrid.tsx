@@ -12,6 +12,9 @@ interface Product {
   category?: string;
   link?: string;
   url?: string;
+  brand?: string;
+  business_tags?: string[];
+  certifications?: string[];
 }
 
 interface ProductsGridProps {
@@ -37,6 +40,9 @@ export const ProductsGrid = ({ products }: ProductsGridProps) => {
           price={product.price}
           link={product.link}
           url={product.url}
+          brand={product.brand}
+          business_tags={product.business_tags}
+          certifications={product.certifications}
         />
       ))}
     </motion.div>

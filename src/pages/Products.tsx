@@ -8,13 +8,26 @@ import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { Badge } from "@/components/ui/badge";
 
 const Products = () => {
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncError, setSyncError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredProducts, setFilteredProducts] = useState(categorizedProducts);
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  const [selectedBusinessTag, setSelectedBusinessTag] = useState<string | null>(null);
   const isMobile = useIsMobile();
+  
+  // Get unique categories and business tags for filtering
+  const categories = Array.from(new Set(categorizedProducts.map(p => p.category)));
+  const businessTags = Array.from(
+    new Set(
+      categorizedProducts
+        .filter(p => p.business_tags)
+        .flatMap(p => p.business_tags || [])
+    )
+  );
   
   useEffect(() => {
     const syncProductsWithSupabase = async () => {
@@ -85,18 +98,45 @@ const Products = () => {
   }, []);
 
   useEffect(() => {
-    if (searchQuery.trim() === "") {
-      setFilteredProducts(categorizedProducts);
-    } else {
+    // Apply filters based on search query, category and business tag
+    let results = categorizedProducts;
+    
+    // Apply category filter if selected
+    if (selectedCategory) {
+      results = results.filter(product => 
+        product.category?.toLowerCase() === selectedCategory.toLowerCase()
+      );
+    }
+    
+    // Apply business tag filter if selected
+    if (selectedBusinessTag) {
+      results = results.filter(product => 
+        product.business_tags?.includes(selectedBusinessTag)
+      );
+    }
+    
+    // Apply search query filter
+    if (searchQuery.trim() !== "") {
       const query = searchQuery.toLowerCase();
-      const results = categorizedProducts.filter(product => 
+      results = results.filter(product => 
         product.title?.toLowerCase().includes(query) || 
         product.description?.toLowerCase().includes(query) ||
-        product.category?.toLowerCase().includes(query)
+        product.category?.toLowerCase().includes(query) ||
+        product.brand?.toLowerCase().includes(query) ||
+        (product.key_ingredients && product.key_ingredients.some(i => i.toLowerCase().includes(query)))
       );
-      setFilteredProducts(results);
     }
-  }, [searchQuery]);
+    
+    setFilteredProducts(results);
+  }, [searchQuery, selectedCategory, selectedBusinessTag]);
+
+  const handleCategorySelect = (category: string) => {
+    setSelectedCategory(selectedCategory === category ? null : category);
+  };
+
+  const handleBusinessTagSelect = (tag: string) => {
+    setSelectedBusinessTag(selectedBusinessTag === tag ? null : tag);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-mai-cream to-white">
@@ -124,16 +164,50 @@ const Products = () => {
             Search through our curated collection of ethical and sustainable beauty products.
           </p>
           
-          <div className="relative max-w-md mx-auto">
+          <div className="relative max-w-md mx-auto mb-6">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
             <Input
               type="search"
-              placeholder="Search by product name, description, or category..."
+              placeholder="Search by product name, description, or ingredients..."
               className="pl-10 py-6 rounded-full"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
+          
+          <div className="mb-6">
+            <h3 className="text-md font-medium text-mai-brown mb-2">Filter by Category:</h3>
+            <div className="flex flex-wrap gap-2">
+              {categories.map((category, index) => (
+                <Badge 
+                  key={index}
+                  variant={selectedCategory === category ? "default" : "outline"}
+                  className={`cursor-pointer ${selectedCategory === category ? 'bg-mai-mauve hover:bg-mai-mauveDark' : ''}`}
+                  onClick={() => handleCategorySelect(category)}
+                >
+                  {category}
+                </Badge>
+              ))}
+            </div>
+          </div>
+
+          {businessTags.length > 0 && (
+            <div className="mb-6">
+              <h3 className="text-md font-medium text-mai-brown mb-2">Filter by Business Type:</h3>
+              <div className="flex flex-wrap gap-2">
+                {businessTags.map((tag, index) => (
+                  <Badge 
+                    key={index}
+                    variant={selectedBusinessTag === tag ? "default" : "outline"}
+                    className={`cursor-pointer ${selectedBusinessTag === tag ? 'bg-mai-coral hover:bg-mai-darkRed' : ''}`}
+                    onClick={() => handleBusinessTagSelect(tag)}
+                  >
+                    {tag}
+                  </Badge>
+                ))}
+              </div>
+            </div>
+          )}
           
           <div className="mt-4 text-sm text-gray-500 text-center">
             {filteredProducts.length === 0 ? 
