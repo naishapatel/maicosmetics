@@ -23,7 +23,7 @@ const Products = () => {
   const businessTags = Array.from(
     new Set(
       categorizedProducts
-        .filter(p => p.business_tags)
+        .filter(p => p.business_tags && p.business_tags.length > 0)
         .flatMap(p => p.business_tags || [])
     )
   );
