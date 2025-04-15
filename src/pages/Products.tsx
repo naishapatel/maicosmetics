@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { ProductsHeader } from "@/components/products/ProductsHeader";
 import { ProductsGrid } from "@/components/products/ProductsGrid";
@@ -19,6 +20,9 @@ const Products = () => {
   
   // Get unique categories for filtering
   const categories = Array.from(new Set(categorizedProducts.map(p => p.category)));
+  
+  // Create empty business tags array since we're not using them
+  const businessTags: string[] = [];
   
   useEffect(() => {
     const syncProductsWithSupabase = async () => {
@@ -99,8 +103,6 @@ const Products = () => {
       );
     }
     
-    // Removed business tag filter
-    
     // Apply search query filter
     if (searchQuery.trim() !== "") {
       const query = searchQuery.toLowerCase();
@@ -116,6 +118,11 @@ const Products = () => {
 
   const handleCategorySelect = (category: string) => {
     setSelectedCategory(selectedCategory === category ? null : category);
+  };
+
+  // Define this as an empty function since we're not using business tags
+  const handleBusinessTagSelect = (tag: string) => {
+    setSelectedBusinessTag(selectedBusinessTag === tag ? null : tag);
   };
 
   return (
@@ -134,6 +141,9 @@ const Products = () => {
           selectedCategory={selectedCategory}
           handleCategorySelect={handleCategorySelect}
           filteredProductsCount={filteredProducts.length}
+          businessTags={businessTags}
+          selectedBusinessTag={selectedBusinessTag}
+          handleBusinessTagSelect={handleBusinessTagSelect}
         />
         
         <ProductsGrid products={filteredProducts} />

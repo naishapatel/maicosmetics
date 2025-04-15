@@ -26,9 +26,6 @@ export const ProductsGrid = ({ products }: ProductsGridProps) => {
           price={product.price}
           link={product.link}
           url={product.url}
-          brand={product.brand}
-          business_tags={product.business_tags}
-          certifications={product.certifications}
         />
       ))}
     </motion.div>

@@ -26,6 +26,13 @@ export type Product = {
   images?: string[];
   name?: string;
   product_name?: string;
-  // Removed optional properties causing errors
+  brand?: string;
+  business_tags?: string[];
+  certifications?: string[];
+  business_size?: string;
+  target_demographic?: string;
+  key_ingredients?: string[];
+  primary_benefits?: string[];
+  skin_benefits?: string[];
+  ethical_values?: string[];
 };
-
