@@ -1,3 +1,4 @@
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { ExternalLink, Leaf, Award } from "lucide-react";
@@ -31,7 +32,7 @@ export const ProductCard = ({
   // Determine which name property to use, with fallbacks
   const displayName = title || name || product_name || "";
   
-  const handleCardClick = () => {
+  const handleCardClick = (e: React.MouseEvent) => {
     // If we have an internal ID, navigate to product detail
     if (id) {
       navigate(`/products/${id}`);
@@ -39,6 +40,14 @@ export const ProductCard = ({
     }
     
     // Otherwise try to open external URL if available
+    if (productUrl && isValidUrl) {
+      e.preventDefault();
+      window.open(productUrl, '_blank', 'noopener,noreferrer');
+    }
+  };
+  
+  const handleLinkClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent the card click event from triggering
     if (productUrl && isValidUrl) {
       window.open(productUrl, '_blank', 'noopener,noreferrer');
     }
@@ -94,7 +103,10 @@ export const ProductCard = ({
           )}
           
           {productUrl && isValidUrl && (
-            <div className="flex items-center mt-4 text-mai-mauve">
+            <div 
+              className="flex items-center mt-4 text-mai-mauve cursor-pointer hover:text-mai-mauveDark transition-colors"
+              onClick={handleLinkClick}
+            >
               <ExternalLink className="w-4 h-4 mr-1" />
               <span className="text-sm">View product</span>
             </div>
