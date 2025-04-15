@@ -632,3 +632,10 @@ export const smallBusinessProducts: Product[] = [
     business_size: "<50 employees",
     target_demographic: "All skin types with occasional breakouts",
     key_ingredients: ["Hydrocolloid", "Medical-Grade Adhesive"],
+    primary_benefits: ["Absorbs fluid", "Reduces inflammation", "Protects from bacteria"],
+    link: "https://www.herocosmetics.com",
+    url: "https://www.herocosmetics.com/products/mighty-patch-original",
+    certifications: ["Cruelty-Free", "Vegan"],
+    business_tags: ["Women-Owned", "Clean Beauty"]
+  }
+];
