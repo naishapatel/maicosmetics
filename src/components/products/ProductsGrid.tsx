@@ -1,21 +1,7 @@
 
 import { ProductCard } from "./ProductCard";
 import { motion } from "framer-motion";
-
-interface Product {
-  id?: string;
-  title?: string;
-  name?: string;
-  product_name?: string;
-  description?: string;
-  price: string;
-  category?: string;
-  link?: string;
-  url?: string;
-  brand?: string;
-  business_tags?: string[];
-  certifications?: string[];
-}
+import { Product } from "@/data/products";
 
 interface ProductsGridProps {
   products: Product[];

@@ -1,23 +1,14 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { ExternalLink, Leaf, Award } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
+import { Product } from "@/data/products";
 
-interface ProductCardProps {
-  id?: string;
-  title?: string;
-  name?: string;
-  product_name?: string;
+type ProductCardProps = Partial<Product> & {
   description: string;
   price: string;
-  link?: string;
-  url?: string;
-  brand?: string;
-  business_tags?: string[];
-  certifications?: string[];
-}
+};
 
 export const ProductCard = ({ 
   id, 

@@ -31,4 +31,6 @@ export type Product = {
   primary_benefits?: string[];
   certifications?: string[];
   business_tags?: string[];
+  name?: string;
+  product_name?: string;
 };
