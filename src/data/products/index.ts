@@ -25,12 +25,9 @@ export type Product = {
   url?: string;
   images?: string[];
   brand?: string;
-  business_size?: string;
-  target_demographic?: string;
-  key_ingredients?: string[];
-  primary_benefits?: string[];
-  certifications?: string[];
   business_tags?: string[];
+  key_ingredients?: string[];
+  certifications?: string[];
   name?: string;
   product_name?: string;
 };
