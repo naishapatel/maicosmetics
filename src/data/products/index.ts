@@ -24,15 +24,8 @@ export type Product = {
   link?: string;
   url?: string;
   images?: string[];
-  brand?: string;
-  business_tags?: string[];
-  key_ingredients?: string[];
-  certifications?: string[];
   name?: string;
   product_name?: string;
-  // Add the missing properties from small-business.ts
-  business_size?: string;
-  target_demographic?: string;
-  primary_benefits?: string[];
-  skin_benefits?: string[];
+  // Removed optional properties causing errors
 };
+

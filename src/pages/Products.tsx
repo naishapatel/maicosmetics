@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { ProductsHeader } from "@/components/products/ProductsHeader";
 import { ProductsGrid } from "@/components/products/ProductsGrid";
@@ -18,15 +17,8 @@ const Products = () => {
   const [selectedBusinessTag, setSelectedBusinessTag] = useState<string | null>(null);
   const isMobile = useIsMobile();
   
-  // Get unique categories and business tags for filtering - safely handle potentially undefined properties
+  // Get unique categories for filtering
   const categories = Array.from(new Set(categorizedProducts.map(p => p.category)));
-  const businessTags = Array.from(
-    new Set(
-      categorizedProducts
-        .filter(p => p.business_tags && p.business_tags.length > 0)
-        .flatMap(p => p.business_tags || [])
-    )
-  );
   
   useEffect(() => {
     const syncProductsWithSupabase = async () => {
@@ -97,7 +89,7 @@ const Products = () => {
   }, []);
 
   useEffect(() => {
-    // Apply filters based on search query, category and business tag
+    // Apply filters based on search query and category
     let results = categorizedProducts;
     
     // Apply category filter if selected
@@ -107,34 +99,23 @@ const Products = () => {
       );
     }
     
-    // Apply business tag filter if selected
-    if (selectedBusinessTag) {
-      results = results.filter(product => 
-        product.business_tags?.includes(selectedBusinessTag)
-      );
-    }
+    // Removed business tag filter
     
-    // Apply search query filter - safely handle potentially undefined properties
+    // Apply search query filter
     if (searchQuery.trim() !== "") {
       const query = searchQuery.toLowerCase();
       results = results.filter(product => 
         (product.title?.toLowerCase().includes(query)) || 
         (product.description?.toLowerCase().includes(query)) ||
-        (product.category?.toLowerCase().includes(query)) ||
-        (product.brand?.toLowerCase().includes(query)) ||
-        (product.key_ingredients && product.key_ingredients.some(i => i.toLowerCase().includes(query)))
+        (product.category?.toLowerCase().includes(query))
       );
     }
     
     setFilteredProducts(results);
-  }, [searchQuery, selectedCategory, selectedBusinessTag]);
+  }, [searchQuery, selectedCategory]);
 
   const handleCategorySelect = (category: string) => {
     setSelectedCategory(selectedCategory === category ? null : category);
-  };
-
-  const handleBusinessTagSelect = (tag: string) => {
-    setSelectedBusinessTag(selectedBusinessTag === tag ? null : tag);
   };
 
   return (
@@ -152,9 +133,6 @@ const Products = () => {
           categories={categories}
           selectedCategory={selectedCategory}
           handleCategorySelect={handleCategorySelect}
-          businessTags={businessTags}
-          selectedBusinessTag={selectedBusinessTag}
-          handleBusinessTagSelect={handleBusinessTagSelect}
           filteredProductsCount={filteredProducts.length}
         />
         

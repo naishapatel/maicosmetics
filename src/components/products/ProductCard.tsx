@@ -1,9 +1,7 @@
-
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
-import { ExternalLink, Leaf, Award } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { Badge } from "@/components/ui/badge";
 import { Product } from "@/data/products";
 
 type ProductCardProps = Partial<Product> & {
@@ -19,10 +17,7 @@ export const ProductCard = ({
   description, 
   price, 
   link, 
-  url,
-  brand,
-  business_tags,
-  certifications
+  url
 }: ProductCardProps) => {
   const navigate = useNavigate();
   // Prioritize URL if available, otherwise fallback to link
@@ -65,42 +60,10 @@ export const ProductCard = ({
       >
         <CardHeader>
           <CardTitle className="text-xl font-semibold text-mai-brown">{displayName}</CardTitle>
-          {brand && (
-            <p className="text-sm font-medium text-gray-600">{brand}</p>
-          )}
           <p className="text-lg font-medium text-mai-coral">{price}</p>
         </CardHeader>
         <CardContent>
           <p className="text-gray-700">{description}</p>
-          
-          {business_tags && business_tags.length > 0 && (
-            <div className="flex flex-wrap gap-1 mt-3">
-              {business_tags.map((tag, index) => (
-                <Badge 
-                  key={index} 
-                  variant="outline" 
-                  className="text-xs bg-mai-coral/10 text-mai-coral border-mai-coral/30"
-                >
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-          )}
-          
-          {certifications && certifications.length > 0 && (
-            <div className="flex flex-wrap gap-1 mt-2">
-              {certifications.map((cert, index) => (
-                <Badge 
-                  key={index} 
-                  variant="outline" 
-                  className="text-xs bg-mai-mauve/10 text-mai-mauve border-mai-mauve/30 flex items-center"
-                >
-                  <Award className="w-3 h-3 mr-1" />
-                  {cert}
-                </Badge>
-              ))}
-            </div>
-          )}
           
           {productUrl && isValidUrl && (
             <div 
