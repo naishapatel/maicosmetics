@@ -22,7 +22,10 @@ export const ProductCard = ({
   link, 
   url,
   link_status,
-  alternative_product_id
+  alternative_product_id,
+  brand,
+  business_tags,
+  certifications
 }: ProductCardProps) => {
   const navigate = useNavigate();
   const { toast } = useToast();
