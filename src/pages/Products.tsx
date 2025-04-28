@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { ProductsSyncStatus } from "@/components/products/ProductsSyncStatus";
 import { ProductsFilterContainer } from "@/components/products/ProductsFilterContainer";
+import { validateProductLinks } from "@/utils/linkValidator";
 
 const Products = () => {
   const [isSyncing, setIsSyncing] = useState(false);
@@ -16,13 +17,20 @@ const Products = () => {
   const [filteredProducts, setFilteredProducts] = useState(categorizedProducts);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedBusinessTag, setSelectedBusinessTag] = useState<string | null>(null);
+  const [isValidatingLinks, setIsValidatingLinks] = useState(false);
   const isMobile = useIsMobile();
   
   // Get unique categories for filtering
   const categories = Array.from(new Set(categorizedProducts.map(p => p.category)));
   
-  // Create empty business tags array since we're not using them
-  const businessTags: string[] = [];
+  // Create empty business tags array from products that have them
+  const businessTags = Array.from(
+    new Set(
+      categorizedProducts
+        .filter(p => p.business_tags && p.business_tags.length > 0)
+        .flatMap(p => p.business_tags || [])
+    )
+  );
   
   useEffect(() => {
     const syncProductsWithSupabase = async () => {
@@ -90,6 +98,36 @@ const Products = () => {
     };
 
     syncProductsWithSupabase();
+    
+    // Validate product links on initial load
+    const validateLinks = async () => {
+      setIsValidatingLinks(true);
+      try {
+        const validatedProducts = await validateProductLinks(categorizedProducts, 
+          (completed, total) => {
+            console.log(`Validated ${completed}/${total} product links`);
+          }
+        );
+        
+        // Update the filtered products with link validation results
+        setFilteredProducts(prevProducts => {
+          if (selectedCategory || searchQuery) {
+            // If filters are applied, only update the validated products that match the current filters
+            const validatedMap = new Map(validatedProducts.map(p => [p.id, p]));
+            return prevProducts.map(p => validatedMap.get(p.id) || p);
+          }
+          return validatedProducts;
+        });
+        
+        console.log('Link validation complete');
+      } catch (error) {
+        console.error('Error validating links:', error);
+      } finally {
+        setIsValidatingLinks(false);
+      }
+    };
+    
+    validateLinks();
   }, []);
 
   useEffect(() => {
@@ -103,24 +141,31 @@ const Products = () => {
       );
     }
     
+    // Apply business tag filter if selected
+    if (selectedBusinessTag) {
+      results = results.filter(product => 
+        product.business_tags?.includes(selectedBusinessTag)
+      );
+    }
+    
     // Apply search query filter
     if (searchQuery.trim() !== "") {
       const query = searchQuery.toLowerCase();
       results = results.filter(product => 
         (product.title?.toLowerCase().includes(query)) || 
         (product.description?.toLowerCase().includes(query)) ||
-        (product.category?.toLowerCase().includes(query))
+        (product.category?.toLowerCase().includes(query)) ||
+        (product.brand?.toLowerCase().includes(query))
       );
     }
     
     setFilteredProducts(results);
-  }, [searchQuery, selectedCategory]);
+  }, [searchQuery, selectedCategory, selectedBusinessTag]);
 
   const handleCategorySelect = (category: string) => {
     setSelectedCategory(selectedCategory === category ? null : category);
   };
 
-  // Define this as an empty function since we're not using business tags
   const handleBusinessTagSelect = (tag: string) => {
     setSelectedBusinessTag(selectedBusinessTag === tag ? null : tag);
   };
