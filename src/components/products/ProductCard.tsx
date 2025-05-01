@@ -65,14 +65,9 @@ export const ProductCard = ({
   const handleLinkClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent the card click event from triggering
     
-    if (productUrl && isValidUrl) {
-      // Always use the company homepage
-      if (companyHomepage) {
-        window.open(companyHomepage, '_blank', 'noopener,noreferrer');
-        
-        // Record link click for analytics
-        setLinkTested(true);
-      }
+    if (companyHomepage) {
+      window.open(companyHomepage, '_blank', 'noopener,noreferrer');
+      setLinkTested(true);
     }
   };
   
@@ -93,7 +88,7 @@ export const ProductCard = ({
         <CardContent>
           <p className="text-gray-700">{description}</p>
           
-          {productUrl && isValidUrl && (
+          {companyHomepage && (
             <div 
               className="flex items-center mt-4 text-mai-mauve cursor-pointer hover:text-mai-mauveDark transition-colors"
               onClick={handleLinkClick}

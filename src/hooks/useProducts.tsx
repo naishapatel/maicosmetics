@@ -125,7 +125,7 @@ export const useProducts = () => {
   }, []);
 
   useEffect(() => {
-    // Apply filters based on search query and category
+    // Apply filters based on search query, category, and business tag
     let results = categorizedProducts;
     
     // Apply category filter if selected

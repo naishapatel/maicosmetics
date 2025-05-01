@@ -5,6 +5,8 @@ import { veganProducts } from './vegan';
 import { acneProducts } from './acne';
 import { collegeProducts } from './college';
 import { smallBusinessProducts } from './small-business';
+import { mentalHealthProducts } from './mental-health';
+import { additionalSmallBusinessProducts } from './additional-small-business';
 
 // Filter out any products without valid company websites
 const filterInvalidProducts = (products: Product[]) => {
@@ -29,6 +31,8 @@ export const categorizedProducts = [
   ...filterInvalidProducts(acneProducts),
   ...filterInvalidProducts(collegeProducts),
   ...filterInvalidProducts(smallBusinessProducts),
+  ...filterInvalidProducts(mentalHealthProducts),
+  ...filterInvalidProducts(additionalSmallBusinessProducts),
 ];
 
 export type Product = {
