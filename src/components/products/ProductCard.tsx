@@ -25,7 +25,8 @@ export const ProductCard = ({
   alternative_product_id,
   brand,
   business_tags,
-  certifications
+  certifications,
+  category
 }: ProductCardProps) => {
   const navigate = useNavigate();
   const { toast } = useToast();
