@@ -1,7 +1,7 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
-import { ExternalLink, AlertCircle } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Product } from "@/data/products";
 import { useToast } from "@/components/ui/use-toast";
@@ -60,74 +60,19 @@ export const ProductCard = ({
       navigate(`/products/${id}`);
       return;
     }
-    
-    // Otherwise try to open external URL if available
-    if (productUrl && isValidUrl) {
-      e.preventDefault();
-      
-      let urlToOpen = productUrl;
-      
-      // If this link is known to be broken or redirected
-      if (link_status === 'broken' || link_status === 'redirected' || link_status === 'discontinued') {
-        toast({
-          title: link_status === 'discontinued' ? "Product discontinued" : "Link may be outdated",
-          description: link_status === 'discontinued' 
-            ? "This product appears to be discontinued. Redirecting to the company's homepage."
-            : "We're redirecting you to the company's homepage instead.",
-          variant: "destructive"
-        });
-        
-        // If the link is broken or discontinued, use the company homepage
-        if (companyHomepage) {
-          urlToOpen = companyHomepage;
-        }
-        
-        // Redirect to alternative product if it's discontinued and we have an alternative
-        if (link_status === 'discontinued' && alternative_product_id) {
-          navigate(`/products/${alternative_product_id}`);
-          return;
-        }
-      }
-      
-      window.open(urlToOpen, '_blank', 'noopener,noreferrer');
-      
-      // Record link click for analytics
-      setLinkTested(true);
-    }
   };
   
   const handleLinkClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent the card click event from triggering
     
     if (productUrl && isValidUrl) {
-      let urlToOpen = productUrl;
-      
-      // If this link is known to be broken or redirected
-      if (link_status === 'broken' || link_status === 'redirected' || link_status === 'discontinued') {
-        toast({
-          title: link_status === 'discontinued' ? "Product discontinued" : "Link may be outdated",
-          description: link_status === 'discontinued' 
-            ? "This product appears to be discontinued. Redirecting to the company's homepage."
-            : "We're redirecting you to the company's homepage instead.",
-          variant: "destructive"
-        });
+      // Always use the company homepage
+      if (companyHomepage) {
+        window.open(companyHomepage, '_blank', 'noopener,noreferrer');
         
-        // If the link is broken or discontinued, use the company homepage
-        if (companyHomepage) {
-          urlToOpen = companyHomepage;
-        }
-        
-        // Redirect to alternative product if it's discontinued and we have an alternative
-        if (link_status === 'discontinued' && alternative_product_id) {
-          navigate(`/products/${alternative_product_id}`);
-          return;
-        }
+        // Record link click for analytics
+        setLinkTested(true);
       }
-      
-      window.open(urlToOpen, '_blank', 'noopener,noreferrer');
-      
-      // Record link click for analytics
-      setLinkTested(true);
     }
   };
   
@@ -153,19 +98,8 @@ export const ProductCard = ({
               className="flex items-center mt-4 text-mai-mauve cursor-pointer hover:text-mai-mauveDark transition-colors"
               onClick={handleLinkClick}
             >
-              {link_status === 'broken' || link_status === 'discontinued' || link_status === 'redirected' ? (
-                <>
-                  <AlertCircle className="w-4 h-4 mr-1 text-amber-500" />
-                  <span className="text-sm">
-                    {link_status === 'discontinued' ? 'View company website' : 'Visit company website'}
-                  </span>
-                </>
-              ) : (
-                <>
-                  <ExternalLink className="w-4 h-4 mr-1" />
-                  <span className="text-sm">View product</span>
-                </>
-              )}
+              <ExternalLink className="w-4 h-4 mr-1" />
+              <span className="text-sm">View company website</span>
             </div>
           )}
         </CardContent>

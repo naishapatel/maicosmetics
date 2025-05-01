@@ -6,13 +6,29 @@ import { acneProducts } from './acne';
 import { collegeProducts } from './college';
 import { smallBusinessProducts } from './small-business';
 
+// Filter out any products without valid company websites
+const filterInvalidProducts = (products: Product[]) => {
+  return products.filter(product => {
+    const url = product.url || product.link;
+    if (!url) return false;
+    
+    try {
+      new URL(url);
+      return true;
+    } catch (e) {
+      console.log(`Filtering out product with invalid URL: ${product.title}`);
+      return false;
+    }
+  });
+};
+
 export const categorizedProducts = [
-  ...sustainableProducts,
-  ...ecoFriendlyProducts,
-  ...veganProducts,
-  ...acneProducts,
-  ...collegeProducts,
-  ...smallBusinessProducts,
+  ...filterInvalidProducts(sustainableProducts),
+  ...filterInvalidProducts(ecoFriendlyProducts),
+  ...filterInvalidProducts(veganProducts),
+  ...filterInvalidProducts(acneProducts),
+  ...filterInvalidProducts(collegeProducts),
+  ...filterInvalidProducts(smallBusinessProducts),
 ];
 
 export type Product = {
