@@ -36,6 +36,21 @@ export const ProductCard = ({
   const productUrl = url || link;
   const isValidUrl = productUrl ? true : false;
   
+  // Extract company homepage from URL or link if available
+  const getCompanyHomepage = () => {
+    if (!productUrl) return null;
+    
+    try {
+      const url = new URL(productUrl);
+      return `${url.protocol}//${url.hostname}`;
+    } catch (e) {
+      // If URL parsing fails, return the original URL
+      return productUrl;
+    }
+  };
+  
+  const companyHomepage = getCompanyHomepage();
+  
   // Determine which name property to use, with fallbacks
   const displayName = title || name || product_name || "";
   
@@ -50,31 +65,31 @@ export const ProductCard = ({
     if (productUrl && isValidUrl) {
       e.preventDefault();
       
-      // If this link is known to be broken or redirected
-      if (link_status === 'broken' || link_status === 'redirected') {
-        toast({
-          title: "Link may be outdated",
-          description: "We're working on fixing this link. We'll still take you to the page, but it might not lead directly to the product.",
-          variant: "destructive"
-        });
-      }
+      let urlToOpen = productUrl;
       
-      // If product is discontinued
-      if (link_status === 'discontinued') {
+      // If this link is known to be broken or redirected
+      if (link_status === 'broken' || link_status === 'redirected' || link_status === 'discontinued') {
         toast({
-          title: "Product discontinued",
-          description: "This product appears to be discontinued. We'll show you similar products instead.",
+          title: link_status === 'discontinued' ? "Product discontinued" : "Link may be outdated",
+          description: link_status === 'discontinued' 
+            ? "This product appears to be discontinued. Redirecting to the company's homepage."
+            : "We're redirecting you to the company's homepage instead.",
           variant: "destructive"
         });
         
-        // Redirect to alternative product if available
-        if (alternative_product_id) {
+        // If the link is broken or discontinued, use the company homepage
+        if (companyHomepage) {
+          urlToOpen = companyHomepage;
+        }
+        
+        // Redirect to alternative product if it's discontinued and we have an alternative
+        if (link_status === 'discontinued' && alternative_product_id) {
           navigate(`/products/${alternative_product_id}`);
           return;
         }
       }
       
-      window.open(productUrl, '_blank', 'noopener,noreferrer');
+      window.open(urlToOpen, '_blank', 'noopener,noreferrer');
       
       // Record link click for analytics
       setLinkTested(true);
@@ -85,31 +100,31 @@ export const ProductCard = ({
     e.stopPropagation(); // Prevent the card click event from triggering
     
     if (productUrl && isValidUrl) {
-      // If this link is known to be broken or redirected
-      if (link_status === 'broken' || link_status === 'redirected') {
-        toast({
-          title: "Link may be outdated",
-          description: "We're working on fixing this link. We'll still take you to the page, but it might not lead directly to the product.",
-          variant: "destructive"
-        });
-      }
+      let urlToOpen = productUrl;
       
-      // If product is discontinued
-      if (link_status === 'discontinued') {
+      // If this link is known to be broken or redirected
+      if (link_status === 'broken' || link_status === 'redirected' || link_status === 'discontinued') {
         toast({
-          title: "Product discontinued",
-          description: "This product appears to be discontinued. We'll show you similar products instead.",
+          title: link_status === 'discontinued' ? "Product discontinued" : "Link may be outdated",
+          description: link_status === 'discontinued' 
+            ? "This product appears to be discontinued. Redirecting to the company's homepage."
+            : "We're redirecting you to the company's homepage instead.",
           variant: "destructive"
         });
         
-        // Redirect to alternative product if available
-        if (alternative_product_id) {
+        // If the link is broken or discontinued, use the company homepage
+        if (companyHomepage) {
+          urlToOpen = companyHomepage;
+        }
+        
+        // Redirect to alternative product if it's discontinued and we have an alternative
+        if (link_status === 'discontinued' && alternative_product_id) {
           navigate(`/products/${alternative_product_id}`);
           return;
         }
       }
       
-      window.open(productUrl, '_blank', 'noopener,noreferrer');
+      window.open(urlToOpen, '_blank', 'noopener,noreferrer');
       
       // Record link click for analytics
       setLinkTested(true);
@@ -141,7 +156,9 @@ export const ProductCard = ({
               {link_status === 'broken' || link_status === 'discontinued' || link_status === 'redirected' ? (
                 <>
                   <AlertCircle className="w-4 h-4 mr-1 text-amber-500" />
-                  <span className="text-sm">View product details</span>
+                  <span className="text-sm">
+                    {link_status === 'discontinued' ? 'View company website' : 'Visit company website'}
+                  </span>
                 </>
               ) : (
                 <>
