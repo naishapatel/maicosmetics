@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Product } from "@/data/products";
 import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
+import { toast } from "sonner";
 
 type ProductCardProps = Partial<Product> & {
   description: string;
@@ -29,12 +30,10 @@ export const ProductCard = ({
   category
 }: ProductCardProps) => {
   const navigate = useNavigate();
-  const { toast } = useToast();
-  const [linkTested, setLinkTested] = useState(false);
+  const [linkClicked, setLinkClicked] = useState(false);
   
   // Prioritize URL if available, otherwise fallback to link
   const productUrl = url || link;
-  const isValidUrl = productUrl ? true : false;
   
   // Extract company homepage from URL or link if available
   const getCompanyHomepage = () => {
@@ -44,8 +43,9 @@ export const ProductCard = ({
       const url = new URL(productUrl);
       return `${url.protocol}//${url.hostname}`;
     } catch (e) {
-      // If URL parsing fails, return the original URL
-      return productUrl;
+      // If URL parsing fails, return null
+      console.error(`Failed to parse URL: ${productUrl}`, e);
+      return null;
     }
   };
   
@@ -65,9 +65,15 @@ export const ProductCard = ({
   const handleLinkClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent the card click event from triggering
     
+    if (!linkClicked) {
+      setLinkClicked(true);
+    }
+    
     if (companyHomepage) {
       window.open(companyHomepage, '_blank', 'noopener,noreferrer');
-      setLinkTested(true);
+      toast.success("Visiting company website");
+    } else {
+      toast.error("Company website unavailable");
     }
   };
   

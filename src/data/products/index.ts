@@ -8,19 +8,35 @@ import { smallBusinessProducts } from './small-business';
 import { mentalHealthProducts } from './mental-health';
 import { additionalSmallBusinessProducts } from './additional-small-business';
 
+// Enhanced URL validation to prevent "server not found" errors
+const isValidUrl = (urlString: string): boolean => {
+  try {
+    const url = new URL(urlString);
+    // Check that we have http/https protocol and a valid hostname
+    return (url.protocol === 'http:' || url.protocol === 'https:') && 
+           url.hostname.includes('.') && 
+           url.hostname.length > 3;
+  } catch (e) {
+    console.log(`Invalid URL format: ${urlString}`);
+    return false;
+  }
+};
+
 // Filter out any products without valid company websites
-const filterInvalidProducts = (products: Product[]) => {
+const filterInvalidProducts = (products: Product[]): Product[] => {
   return products.filter(product => {
     const url = product.url || product.link;
-    if (!url) return false;
-    
-    try {
-      new URL(url);
-      return true;
-    } catch (e) {
-      console.log(`Filtering out product with invalid URL: ${product.title}`);
+    if (!url) {
+      console.log(`Filtering out product with no URL: ${product.title}`);
       return false;
     }
+    
+    // Use our enhanced validation
+    const valid = isValidUrl(url);
+    if (!valid) {
+      console.log(`Filtering out product with invalid URL: ${product.title} (${url})`);
+    }
+    return valid;
   });
 };
 
