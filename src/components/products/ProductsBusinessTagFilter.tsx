@@ -13,10 +13,13 @@ export const ProductsBusinessTagFilter = ({
   selectedBusinessTag,
   onBusinessTagSelect
 }: ProductsBusinessTagFilterProps) => {
-  // Check if "Mental Health Advocate" is already in the list, if not add it
-  const tagsWithMentalHealth = businessTags.includes("Mental Health Advocate") 
-    ? businessTags 
-    : ["Mental Health Advocate", ...businessTags];
+  // Ensure all business tags exist and are valid
+  const validTags = businessTags.filter(tag => tag && tag.trim() !== '');
+
+  // Check if "Mental Health Advocate" is already in the list
+  const tagsWithMentalHealth = validTags.includes("Mental Health Advocate") 
+    ? validTags 
+    : ["Mental Health Advocate", ...validTags];
 
   return (
     <div className="mb-6">

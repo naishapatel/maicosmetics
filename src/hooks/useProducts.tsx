@@ -13,16 +13,22 @@ export const useProducts = () => {
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [selectedBusinessTag, setSelectedBusinessTag] = useState<string | null>(null);
   const [isValidatingLinks, setIsValidatingLinks] = useState(false);
+  const [validatedProductsMap, setValidatedProductsMap] = useState<Map<string, Product>>(new Map());
   
-  // Get unique categories for filtering
-  const categories = Array.from(new Set(categorizedProducts.map(p => p.category)));
+  // Get unique categories for filtering - ensure no empty categories
+  const categories = Array.from(new Set(
+    categorizedProducts
+      .filter(p => p.category && p.category.trim() !== '')
+      .map(p => p.category)
+  ));
   
-  // Create empty business tags array from products that have them
+  // Create business tags array from products that have them
   const businessTags = Array.from(
     new Set(
       categorizedProducts
         .filter(p => p.business_tags && p.business_tags.length > 0)
         .flatMap(p => p.business_tags || [])
+        .filter(tag => tag && tag.trim() !== '')
     )
   );
   
@@ -103,14 +109,17 @@ export const useProducts = () => {
           }
         );
         
-        // Update the filtered products with link validation results
+        // Create a map of validated products for quick lookup
+        const productMap = new Map(validatedProducts.map(p => [p.id, p]));
+        setValidatedProductsMap(productMap);
+        
+        // Update filtered products with validation results
         setFilteredProducts(prevProducts => {
-          if (selectedCategory || searchQuery) {
+          if (selectedCategory || searchQuery || selectedBusinessTag) {
             // If filters are applied, only update the validated products that match the current filters
-            const validatedMap = new Map(validatedProducts.map(p => [p.id, p]));
-            return prevProducts.map(p => validatedMap.get(p.id) || p);
+            return prevProducts.map(p => productMap.get(p.id) || p);
           }
-          return validatedProducts;
+          return validatedProducts.filter(p => p.link_status !== 'broken');
         });
         
         console.log('Link validation complete');
@@ -126,7 +135,13 @@ export const useProducts = () => {
 
   useEffect(() => {
     // Apply filters based on search query, category, and business tag
-    let results = categorizedProducts;
+    let results = [...categorizedProducts];
+    
+    // First filter out products with broken links
+    results = results.filter(product => {
+      const validatedProduct = validatedProductsMap.get(product.id);
+      return !validatedProduct || validatedProduct.link_status !== 'broken';
+    });
     
     // Apply category filter if selected
     if (selectedCategory) {
@@ -154,7 +169,7 @@ export const useProducts = () => {
     }
     
     setFilteredProducts(results);
-  }, [searchQuery, selectedCategory, selectedBusinessTag]);
+  }, [searchQuery, selectedCategory, selectedBusinessTag, validatedProductsMap]);
 
   const handleCategorySelect = (category: string) => {
     setSelectedCategory(selectedCategory === category ? null : category);
