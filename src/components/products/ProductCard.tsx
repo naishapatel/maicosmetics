@@ -2,9 +2,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { motion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
-import { useNavigate } from "react-router-dom";
 import { Product } from "@/data/products";
-import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { toast } from "sonner";
 
@@ -14,7 +12,6 @@ type ProductCardProps = Partial<Product> & {
 };
 
 export const ProductCard = ({ 
-  id, 
   title, 
   name, 
   product_name, 
@@ -29,7 +26,6 @@ export const ProductCard = ({
   certifications,
   category
 }: ProductCardProps) => {
-  const navigate = useNavigate();
   const [linkClicked, setLinkClicked] = useState(false);
   
   // Prioritize URL if available, otherwise fallback to link
@@ -54,14 +50,6 @@ export const ProductCard = ({
   // Determine which name property to use, with fallbacks
   const displayName = title || name || product_name || "";
   
-  const handleCardClick = (e: React.MouseEvent) => {
-    // If we have an internal ID, navigate to product detail
-    if (id) {
-      navigate(`/products/${id}`);
-      return;
-    }
-  };
-  
   const handleLinkClick = (e: React.MouseEvent) => {
     e.stopPropagation(); // Prevent the card click event from triggering
     
@@ -84,8 +72,7 @@ export const ProductCard = ({
       className="h-full"
     >
       <Card 
-        className="h-full hover:shadow-lg transition-all duration-300 cursor-pointer"
-        onClick={handleCardClick}
+        className="h-full hover:shadow-lg transition-all duration-300"
       >
         <CardHeader>
           <CardTitle className="text-xl font-semibold text-mai-brown">{displayName}</CardTitle>
