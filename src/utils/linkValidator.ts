@@ -4,7 +4,9 @@ import { Product } from "@/data/products";
 /**
  * Enhanced URL validation to prevent "server not found" errors
  */
-const isValidUrl = (urlString: string): boolean => {
+export const isValidUrl = (urlString: string): boolean => {
+  if (!urlString) return false;
+  
   try {
     const url = new URL(urlString);
     // Check that we have http/https protocol and a valid hostname
@@ -12,7 +14,7 @@ const isValidUrl = (urlString: string): boolean => {
            url.hostname.includes('.') && 
            url.hostname.length > 3;
   } catch (e) {
-    console.log(`Invalid URL format: ${urlString}`);
+    console.error(`Invalid URL format: ${urlString}`);
     return false;
   }
 };
@@ -183,4 +185,3 @@ export const extractCompanyHomepage = (url: string | undefined): string | null =
     return null;
   }
 };
-

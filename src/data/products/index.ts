@@ -7,20 +7,7 @@ import { collegeProducts } from './college';
 import { smallBusinessProducts } from './small-business';
 import { mentalHealthProducts } from './mental-health';
 import { additionalSmallBusinessProducts } from './additional-small-business';
-
-// Enhanced URL validation to prevent "server not found" errors
-const isValidUrl = (urlString: string): boolean => {
-  try {
-    const url = new URL(urlString);
-    // Check that we have http/https protocol and a valid hostname
-    return (url.protocol === 'http:' || url.protocol === 'https:') && 
-           url.hostname.includes('.') && 
-           url.hostname.length > 3;
-  } catch (e) {
-    console.log(`Invalid URL format: ${urlString}`);
-    return false;
-  }
-};
+import { isValidUrl } from '@/utils/linkValidator';
 
 // Filter out any products without valid company websites
 const filterInvalidProducts = (products: Product[]): Product[] => {

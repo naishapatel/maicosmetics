@@ -5,6 +5,7 @@ import { ExternalLink } from "lucide-react";
 import { Product } from "@/data/products";
 import { useState } from "react";
 import { toast } from "sonner";
+import { extractCompanyHomepage } from "@/utils/linkValidator";
 
 type ProductCardProps = Partial<Product> & {
   description: string;
@@ -31,21 +32,8 @@ export const ProductCard = ({
   // Prioritize URL if available, otherwise fallback to link
   const productUrl = url || link;
   
-  // Extract company homepage from URL or link if available
-  const getCompanyHomepage = () => {
-    if (!productUrl) return null;
-    
-    try {
-      const url = new URL(productUrl);
-      return `${url.protocol}//${url.hostname}`;
-    } catch (e) {
-      // If URL parsing fails, return null
-      console.error(`Failed to parse URL: ${productUrl}`, e);
-      return null;
-    }
-  };
-  
-  const companyHomepage = getCompanyHomepage();
+  // Extract company homepage from URL or link if available using our utility function
+  const companyHomepage = extractCompanyHomepage(productUrl);
   
   // Determine which name property to use, with fallbacks
   const displayName = title || name || product_name || "";
@@ -71,9 +59,7 @@ export const ProductCard = ({
       transition={{ duration: 0.2 }}
       className="h-full"
     >
-      <Card 
-        className="h-full hover:shadow-lg transition-all duration-300"
-      >
+      <Card className="h-full hover:shadow-lg transition-all duration-300">
         <CardHeader>
           <CardTitle className="text-xl font-semibold text-mai-brown">{displayName}</CardTitle>
           <p className="text-lg font-medium text-mai-coral">{price}</p>
