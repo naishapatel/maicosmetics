@@ -2,6 +2,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { fetchPendingPostsWithUserData, fetchApprovedPosts, approvePost, rejectPost, deletePost } from "./blogAdminUtils";
 
 export interface PendingPost {
   id: string;
@@ -46,151 +47,57 @@ export function useBlogAdminState() {
     checkAuthStatus();
   }, []);
 
+  // Fetch data when fetchAttempts changes
   useEffect(() => {
     console.log(`Fetch attempt #${fetchAttempts + 1} for pending posts`);
     fetchPendingPosts();
-    fetchApprovedPosts();
+    fetchApprovedPostsData();
   }, [fetchAttempts]);
 
+  // Fetch pending posts
   const fetchPendingPosts = async () => {
     try {
       setIsLoading(true);
       setFetchError(null);
       
-      console.log("Fetching pending posts using RLS policies...");
-      
-      // Check authentication and verification
-      const { data: adminData } = await supabase.auth.getSession();
-      console.log("Admin auth check:", !!adminData.session);
-      
-      // With proper RLS policies, this should now work for admin users
-      const { data, error } = await supabase
-        .from("blog_post_approvals")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (error) {
-        console.error("Error fetching pending posts:", error);
-        console.error("Error details:", JSON.stringify(error));
-        setFetchError(`Error fetching pending posts: ${error.message}`);
-        toast({
-          variant: "destructive", 
-          title: "Error fetching pending posts",
-          description: error.message
-        });
-        return;
-      }
-
-      console.log("Pending posts data:", data);
-      console.log("Number of pending posts:", data ? data.length : 0);
-      
-      // Attempt to get usernames for each post
-      if (data && data.length > 0) {
-        const postsWithUsernames = await Promise.all(
-          data.map(async (post) => {
-            try {
-              // Try to get the username from profiles table
-              const { data: profileData } = await supabase
-                .from("profiles")
-                .select("username")
-                .eq("id", post.user_id)
-                .maybeSingle();
-                
-              return {
-                ...post,
-                user_profile: profileData || null
-              };
-            } catch (profileError) {
-              console.error("Error fetching profile:", profileError);
-              return {
-                ...post,
-                user_profile: null
-              };
-            }
-          })
-        );
-        
-        setPendingPosts(postsWithUsernames);
-      } else {
-        setPendingPosts(data || []);
-      }
-      
+      const pendingPostsData = await fetchPendingPostsWithUserData();
+      setPendingPosts(pendingPostsData);
     } catch (error) {
       console.error("Error in fetchPendingPosts:", error);
       setFetchError(error instanceof Error ? error.message : "Unknown error occurred");
+      toast({
+        variant: "destructive", 
+        title: "Error fetching pending posts",
+        description: error instanceof Error ? error.message : "Unknown error occurred"
+      });
     } finally {
       setIsLoading(false);
     }
   };
 
-  const fetchApprovedPosts = async () => {
+  // Fetch approved posts
+  const fetchApprovedPostsData = async () => {
     try {
-      console.log("Fetching approved posts...");
-      const { data, error } = await supabase
-        .from("blog_posts")
-        .select("*")
-        .order("created_at", { ascending: false });
-
-      if (error) {
-        console.error("Error fetching approved posts:", error);
-        console.error("Error details:", JSON.stringify(error));
-        return;
-      }
-
-      console.log("Approved posts data:", data);
-
-      if (data) {
-        setApprovedPosts(data);
-      }
+      const approvedPostsData = await fetchApprovedPosts();
+      setApprovedPosts(approvedPostsData);
     } catch (error) {
-      console.error("Error in fetchApprovedPosts:", error);
+      console.error("Error in fetchApprovedPostsData:", error);
+      toast({
+        variant: "destructive",
+        title: "Error fetching approved posts",
+        description: error instanceof Error ? error.message : "Unknown error occurred"
+      });
     }
   };
 
+  // Handle post approval
   const handleApprove = async (post: PendingPost) => {
     try {
-      console.log("Approving post:", post);
-      // Insert into blog_posts table
-      const { error: insertError } = await supabase
-        .from("blog_posts")
-        .insert({
-          user_id: post.user_id,
-          content: post.content,
-          image_url: post.image_url,
-          approved: true
-        });
-
-      if (insertError) {
-        console.error("Error inserting approved post:", insertError);
-        toast({
-          variant: "destructive",
-          title: "Error approving post",
-          description: insertError.message
-        });
-        return;
-      }
-
-      // Delete from approvals table
-      const { error: deleteError } = await supabase
-        .from("blog_post_approvals")
-        .delete()
-        .eq("id", post.id);
-
-      if (deleteError) {
-        console.error("Error deleting approved post:", deleteError);
-      }
-
-      toast({
-        title: "Post approved",
-        description: "The blog post has been approved and published"
-      });
-
-      // Refresh data
+      await approvePost(post);
       fetchPendingPosts();
-      fetchApprovedPosts();
+      fetchApprovedPostsData();
       setSelectedPost(null);
     } catch (error) {
-      console.error("Error in handleApprove:", error);
       toast({
         variant: "destructive",
         title: "Error approving post",
@@ -199,33 +106,13 @@ export function useBlogAdminState() {
     }
   };
 
+  // Handle post rejection
   const handleReject = async (postId: string) => {
     try {
-      console.log("Rejecting post:", postId);
-      const { error } = await supabase
-        .from("blog_post_approvals")
-        .delete()
-        .eq("id", postId);
-
-      if (error) {
-        console.error("Error rejecting post:", error);
-        toast({
-          variant: "destructive",
-          title: "Error rejecting post",
-          description: error.message
-        });
-        return;
-      }
-
-      toast({
-        title: "Post rejected",
-        description: "The blog post has been rejected"
-      });
-
+      await rejectPost(postId);
       fetchPendingPosts();
       setSelectedPost(null);
     } catch (error) {
-      console.error("Error in handleReject:", error);
       toast({
         variant: "destructive",
         title: "Error rejecting post",
@@ -234,32 +121,12 @@ export function useBlogAdminState() {
     }
   };
 
+  // Handle post deletion
   const handleDelete = async (postId: string) => {
     try {
-      console.log("Deleting post:", postId);
-      const { error } = await supabase
-        .from("blog_posts")
-        .delete()
-        .eq("id", postId);
-
-      if (error) {
-        console.error("Error deleting post:", error);
-        toast({
-          variant: "destructive",
-          title: "Error deleting post",
-          description: error.message
-        });
-        return;
-      }
-
-      toast({
-        title: "Post deleted",
-        description: "The blog post has been deleted"
-      });
-
-      fetchApprovedPosts();
+      await deletePost(postId);
+      fetchApprovedPostsData();
     } catch (error) {
-      console.error("Error in handleDelete:", error);
       toast({
         variant: "destructive",
         title: "Error deleting post",
@@ -268,6 +135,7 @@ export function useBlogAdminState() {
     }
   };
 
+  // Handle retry of data fetch
   const handleRetry = () => {
     setFetchAttempts(prevAttempts => prevAttempts + 1);
     setFetchError(null);

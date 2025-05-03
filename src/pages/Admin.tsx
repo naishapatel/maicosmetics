@@ -5,9 +5,9 @@ import { useSession } from '@supabase/auth-helpers-react';
 import NewsletterAdmin from '@/components/admin/NewsletterAdmin';
 import BlogPostAdmin from '@/components/admin/BlogPostAdmin';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
-import { Info } from "lucide-react";
+import { Info, AlertCircle } from "lucide-react";
 import { supabase } from '@/integrations/supabase/client';
 
 // List of admin email addresses - these should match exactly with authenticated user emails

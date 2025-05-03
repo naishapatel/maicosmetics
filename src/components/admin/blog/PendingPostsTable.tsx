@@ -38,7 +38,7 @@ export function PendingPostsTable({ posts, isLoading, onReview, onPreviewImage }
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>User ID</TableHead>
+            <TableHead>User</TableHead>
             <TableHead>Date</TableHead>
             <TableHead>Content Preview</TableHead>
             <TableHead>Image</TableHead>
@@ -49,7 +49,7 @@ export function PendingPostsTable({ posts, isLoading, onReview, onPreviewImage }
           {posts.map((post) => (
             <TableRow key={post.id}>
               <TableCell className="font-medium">
-                {post.user_id.substring(0, 8)}...
+                {post.user_profile?.username || `${post.user_id.substring(0, 8)}...`}
               </TableCell>
               <TableCell>
                 {format(new Date(post.created_at), "MMM d, yyyy")}
