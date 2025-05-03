@@ -35,7 +35,7 @@ export function PublishedPostsList({ posts, isLoading }: PublishedPostsListProps
     return (
       <Card className="bg-white">
         <CardContent className="pt-6 text-center">
-          <p className="text-gray-500">Be the first to create a blog post!</p>
+          <p className="text-gray-500">No blog posts yet. Be the first to publish!</p>
         </CardContent>
       </Card>
     );

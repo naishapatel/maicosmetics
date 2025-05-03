@@ -59,10 +59,15 @@ export function useBlogAdminState() {
       
       console.log("Fetching pending posts...");
       
-      // Fetch blog post approvals directly without trying to join with profiles
+      // Add more detailed logging
+      const { data: adminData } = await supabase.auth.getSession();
+      console.log("Admin auth check:", !!adminData.session);
+      
+      // Make sure we have the RLS policy set correctly
       const { data, error } = await supabase
         .from("blog_post_approvals")
-        .select("*");
+        .select("*")
+        .order("created_at", { ascending: false });
 
       if (error) {
         console.error("Error fetching pending posts:", error);
@@ -79,7 +84,7 @@ export function useBlogAdminState() {
       console.log("Pending posts data:", data);
       console.log("Number of pending posts:", data ? data.length : 0);
 
-      // No profile data - just use the posts as they are
+      // Use the data as it is
       setPendingPosts(data || []);
       
     } catch (error) {

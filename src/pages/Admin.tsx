@@ -36,6 +36,35 @@ const Admin = () => {
     }
   }, [session, isAdmin]);
 
+  // Add effect to set permissions for admin pages
+  useEffect(() => {
+    const setupAdminPermissions = async () => {
+      if (session?.user?.email && ADMIN_EMAILS.includes(session.user.email)) {
+        console.log("Setting up admin permissions for user:", session.user.email);
+        
+        try {
+          // This will help debug any RLS policy issues
+          const { data: approvals, error: approvalsError } = await supabase
+            .from('blog_post_approvals')
+            .select('count')
+            .limit(1);
+            
+          if (approvalsError) {
+            console.error("Admin permission check failed:", approvalsError);
+          } else {
+            console.log("Admin can access approvals table:", !!approvals);
+          }
+        } catch (error) {
+          console.error("Error checking admin permissions:", error);
+        }
+      }
+    };
+    
+    if (session) {
+      setupAdminPermissions();
+    }
+  }, [session]);
+
   // Redirect non-admin users
   useEffect(() => {
     if (session && !isAdmin) {
@@ -79,7 +108,7 @@ const Admin = () => {
         </AlertDescription>
       </Alert>
       
-      <Tabs defaultValue="newsletter">
+      <Tabs defaultValue="blog-posts">
         <TabsList className="mb-8">
           <TabsTrigger value="newsletter">Newsletter</TabsTrigger>
           <TabsTrigger value="blog-posts">Blog Posts</TabsTrigger>
