@@ -15,7 +15,7 @@ export function AwarenessTab({ session, onAuthRedirect }: AwarenessTabProps) {
       
       <div>
         <h2 className="text-2xl font-serif text-mai-brown mb-4">
-          Share Your Sustainable Beauty Journey
+          Share Your Wellness Journey
         </h2>
         <BlogPost user={session?.user || null} onAuthRedirect={onAuthRedirect} />
       </div>

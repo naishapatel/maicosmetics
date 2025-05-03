@@ -1,4 +1,3 @@
-
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
@@ -111,7 +110,7 @@ export const Navbar = () => {
       <NavLink to="/quiz" onClick={onClick} isActive={isActive('/quiz')}>Skin Quiz</NavLink>
       <NavLink to="/products" onClick={onClick} isActive={isActive('/products')}>Products</NavLink>
       <NavLink to="/businesses" onClick={onClick} isActive={isActive('/businesses')}>Small Businesses</NavLink>
-      <NavLink to="/sustainability" onClick={onClick} isActive={isActive('/sustainability')}>Sustainability</NavLink>
+      <NavLink to="/awareness" onClick={onClick} isActive={isActive('/awareness')}>Awareness</NavLink>
       <NavLink to="/community" onClick={onClick} isActive={isActive('/community')}>Community</NavLink>
       <NavLink to="/about" onClick={onClick} isActive={isActive('/about')}>About Us</NavLink>
       {isAdmin && (

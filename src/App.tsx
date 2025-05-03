@@ -1,4 +1,3 @@
-
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -13,6 +12,7 @@ import Businesses from "./pages/Businesses";
 import Community from "./pages/Community";
 import About from "./pages/About";
 import Sustainability from "./pages/Sustainability";
+import Awareness from "./pages/Awareness";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
 import NotFound from "./pages/NotFound";
@@ -118,7 +118,7 @@ const AppRoutes = () => {
           <Route path="/products" element={<Products />} />
           <Route path="/products/:productId" element={<ProductDetail />} />
           <Route path="/businesses" element={<Businesses />} />
-          <Route path="/sustainability" element={<Sustainability />} />
+          <Route path="/awareness" element={<Awareness />} />
           <Route path="/community" element={<Community />} />
           <Route path="/about" element={<About />} />
           <Route path="/auth" element={<Navigate to="/" replace />} />
