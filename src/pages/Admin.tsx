@@ -10,7 +10,7 @@ import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Info } from "lucide-react";
 import { supabase } from '@/integrations/supabase/client';
 
-// List of admin email addresses - make sure these emails match exactly with the authenticated user emails
+// List of admin email addresses - these should match exactly with authenticated user emails
 const ADMIN_EMAILS = ["naisha.r.patel@gmail.com", "naishapatelofficial@gmail.com"];
 
 const Admin = () => {
@@ -36,34 +36,39 @@ const Admin = () => {
     }
   }, [session, isAdmin]);
 
-  // Add effect to set permissions for admin pages
+  // Test admin permissions with the newly created RLS policies
   useEffect(() => {
-    const setupAdminPermissions = async () => {
-      if (session?.user?.email && ADMIN_EMAILS.includes(session.user.email)) {
-        console.log("Setting up admin permissions for user:", session.user.email);
+    const testAdminPermissions = async () => {
+      if (session?.user?.email && isAdmin) {
+        console.log("Testing admin permissions for user:", session.user.email);
         
         try {
-          // This will help debug any RLS policy issues
+          // This tests if our RLS policies are working correctly
           const { data: approvals, error: approvalsError } = await supabase
             .from('blog_post_approvals')
-            .select('count')
+            .select('*')
             .limit(1);
             
           if (approvalsError) {
-            console.error("Admin permission check failed:", approvalsError);
+            console.error("Admin permission test failed:", approvalsError);
+            toast({
+              variant: "destructive",
+              title: "Permission Error",
+              description: "Admin permissions are not working correctly. Please check RLS policies.",
+            });
           } else {
-            console.log("Admin can access approvals table:", !!approvals);
+            console.log("Admin permissions verified - can access approvals:", !!approvals);
           }
         } catch (error) {
-          console.error("Error checking admin permissions:", error);
+          console.error("Error testing admin permissions:", error);
         }
       }
     };
     
     if (session) {
-      setupAdminPermissions();
+      testAdminPermissions();
     }
-  }, [session]);
+  }, [session, isAdmin, toast]);
 
   // Redirect non-admin users
   useEffect(() => {

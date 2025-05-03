@@ -57,13 +57,13 @@ export function useBlogAdminState() {
       setIsLoading(true);
       setFetchError(null);
       
-      console.log("Fetching pending posts...");
+      console.log("Fetching pending posts using RLS policies...");
       
-      // Add more detailed logging
+      // Check authentication and verification
       const { data: adminData } = await supabase.auth.getSession();
       console.log("Admin auth check:", !!adminData.session);
       
-      // Make sure we have the RLS policy set correctly
+      // With proper RLS policies, this should now work for admin users
       const { data, error } = await supabase
         .from("blog_post_approvals")
         .select("*")
@@ -83,9 +83,37 @@ export function useBlogAdminState() {
 
       console.log("Pending posts data:", data);
       console.log("Number of pending posts:", data ? data.length : 0);
-
-      // Use the data as it is
-      setPendingPosts(data || []);
+      
+      // Attempt to get usernames for each post
+      if (data && data.length > 0) {
+        const postsWithUsernames = await Promise.all(
+          data.map(async (post) => {
+            try {
+              // Try to get the username from profiles table
+              const { data: profileData } = await supabase
+                .from("profiles")
+                .select("username")
+                .eq("id", post.user_id)
+                .maybeSingle();
+                
+              return {
+                ...post,
+                user_profile: profileData || null
+              };
+            } catch (profileError) {
+              console.error("Error fetching profile:", profileError);
+              return {
+                ...post,
+                user_profile: null
+              };
+            }
+          })
+        );
+        
+        setPendingPosts(postsWithUsernames);
+      } else {
+        setPendingPosts(data || []);
+      }
       
     } catch (error) {
       console.error("Error in fetchPendingPosts:", error);

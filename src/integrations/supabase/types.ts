@@ -384,6 +384,10 @@ export type Database = {
         Args: { p_session_id: string; p_path: string }
         Returns: undefined
       }
+      is_admin: {
+        Args: { email: string }
+        Returns: boolean
+      }
       is_following: {
         Args: { follower: string; following: string }
         Returns: boolean
