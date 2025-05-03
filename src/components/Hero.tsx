@@ -2,7 +2,6 @@
 import { HeroBackground } from "./hero/HeroBackground";
 import { HeroContent } from "./hero/HeroContent";
 import { HeroAboutSection } from "./hero/HeroAboutSection";
-import { SustainableProductsShowcase } from "./home/SustainableProductsShowcase";
 import { EcoFriendlySpotlight } from "./home/EcoFriendlySpotlight";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -22,10 +21,6 @@ export const Hero = () => {
       </section>
       
       {/* Additional showcase sections - rendered as separate sections to prevent layout issues */}
-      <section className="relative z-10 bg-white">
-        <SustainableProductsShowcase />
-      </section>
-      
       <section className="relative z-10 bg-gradient-to-b from-white to-mai-cream/20">
         <EcoFriendlySpotlight />
       </section>
